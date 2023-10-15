@@ -1,27 +1,12 @@
-import '@styles/global.css';
-import Nav from '@components/Nav';
-import Provider from '@components/Provider';
-
-export const metadata = {
-	title: 'Promptopia',
-	description: 'Discover & Share AI Prompts',
-};
+// export const metadata = {
+// 	title: 'Cafe Management System',
+// 	description: 'Cafe Management System for System Admin/Owner/Manager/Staff',
+// };
 
 const RootLayout = ({ children }) => {
 	return (
 		<html lang='en'>
-			<body>
-				<Provider>
-					<div className='main'>
-						<div className='gradient' />
-					</div>
-
-					<main className='app'>
-						<Nav />
-						{children}
-					</main>
-				</Provider>
-			</body>
+			<body>{children}</body>
 		</html>
 	);
 };
