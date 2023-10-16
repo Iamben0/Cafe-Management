@@ -1,8 +1,13 @@
+import Login from '../components/Login';
+import { ChakraProvider } from '@chakra-ui/react';
+
 const Home = () => {
 	return (
-		<section className='w-full flex-center flex-col'>
-			<p>Hi</p>
-		</section>
+		<ChakraProvider>
+			<section className='w-full flex-center flex-col'>
+				<Login />
+			</section>
+		</ChakraProvider>
 	);
 };
 
