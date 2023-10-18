@@ -2,5 +2,7 @@
 <project version="4">
   <component name="JpaBuddyIdeaProjectConfig">
     <option name="renamerInitialized" value="true" />
+    <option name="reverseEngineeringLastDbConnectionId" value="77b53caa-5b75-47fb-9750-a283d9843665__postgres_public" />
+    <option name="reLastEntityCreationPackage" value="backend/src/main/java/bip/backend/Entity" />
   </component>
 </project>
