@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS work_slots;
 DROP TABLE IF EXISTS user_account;
 DROP TABLE IF EXISTS user_profile;
 
@@ -22,4 +23,3 @@ CREATE TABLE work_slots (
     end_time TIMESTAMP NOT NULL,
     user_id INTEGER REFERENCES user_account(id)
 );
-)
