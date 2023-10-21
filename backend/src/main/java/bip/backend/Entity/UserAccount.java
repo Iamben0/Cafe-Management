@@ -27,4 +27,17 @@ public class UserAccount {
     @JoinColumn(name = "up")
     private UserProfile up;
 
+
+
+/*
+MyWebsite.com
+/page.jsx {render a login, if not logged in}  --
+... login is successful
+/page.jsx {render a homepage, if already logged in}  --
+/someOtherFile {render a homepage}
+
+/Components/GenericHeader.jsx {render <HeaderManager />, if a manager, render nothing if not logged in}
+
+*/
+
 }
