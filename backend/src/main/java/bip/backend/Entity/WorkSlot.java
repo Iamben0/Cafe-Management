@@ -9,7 +9,7 @@ import java.time.OffsetDateTime;
 @Getter
 @Setter
 @Entity
-@Table(name = "work_slots")
+@Table(name = "work_slot")
 public class WorkSlot {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

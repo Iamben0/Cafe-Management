@@ -7,8 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.*;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -34,6 +33,7 @@ public class UserProfile {
     @OneToMany(mappedBy = "up")
     private Set<UserAccount> userAccounts = new LinkedHashSet<>();
 
+    // Create user profile
     public static void createUserProfile(String profileType, String jobTitle, UserProfileRepository userProfileRepository) {
         if (userProfileRepository.existsByJobTitle(jobTitle)) {
             throw new RuntimeException("Job title already exists");
@@ -46,6 +46,7 @@ public class UserProfile {
         userProfileRepository.save(userProfile);
     }
 
+    // Update user profile
     public static void updateUserProfile(String oldJobTitle, String newJobTitle, UserProfileRepository userProfileRepository) {
         if (!userProfileRepository.existsByJobTitle(oldJobTitle)) {
             throw new RuntimeException("User profile does not exist");
@@ -56,10 +57,10 @@ public class UserProfile {
 
         UserProfile userProfile = userProfileRepository.findByJobTitle(oldJobTitle);
         userProfile.setJobTitle(newJobTitle);
-
         userProfileRepository.save(userProfile);
     }
 
+    // Suspend user profile
     public static void suspendUserProfile(String jobTitle, UserProfileRepository userProfileRepository) {
         if (!userProfileRepository.existsByJobTitle(jobTitle)) {
             throw new RuntimeException("User profile does not exist");
@@ -73,4 +74,38 @@ public class UserProfile {
     public static String viewUserProfile(UserProfileRepository userProfileRepository) {
         return userProfileRepository.findAll().toString();
     }
+
+    // Search user profile by job title and return as json
+    public static String searchUserProfile(String jobTitle, UserProfileRepository userProfileRepository) {
+        return userProfileRepository.findByJobTitle(jobTitle).toString();
+    }
+
+    /*
+    // Search user profile by job title or profile type and return as json
+    public static String searchUserProfile(String jobTitle, String profileType, UserProfileRepository userProfileRepository) {
+        if (jobTitle != null) {
+            return userProfileRepository.findByJobTitle(jobTitle).toString();
+        } else if (profileType != null) {
+            return userProfileRepository.findByProfileType(profileType).toString();
+        } else {
+            return userProfileRepository.findAll().toString();
+        }
+    }
+
+
+    public static List<UserProfile> retrieveUserProfile(String profileType,
+                                                        UserProfileRepository userProfileRepository) {
+        // Option 1
+        // List<UserProfile> userProfileList = userProfileRepository.findAll();
+        // for (UserProfile userProfile : userProfileList) {
+        //     if (userProfile.getProfileType().equals(profileType)) {
+        //         return userProfile;
+        //     }
+        // }
+
+        // // Option 2
+        return userProfileRepository.findAllByProfileType(profileType);
+    }
+    */
+
 }
