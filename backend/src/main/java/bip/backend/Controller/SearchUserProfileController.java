@@ -9,19 +9,25 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
-@RequestMapping("/system-admin/view")
-public class ViewUserProfileController {
+@RequestMapping("/system-admin/search")
+public class SearchUserProfileController {
 
     private final UserProfileRepository userProfileRepository;
 
-    public ViewUserProfileController(UserProfileRepository userProfileRepository) {
+    public SearchUserProfileController(UserProfileRepository userProfileRepository)
+    {
         this.userProfileRepository = userProfileRepository;
     }
 
-    @GetMapping("/")
-    public ResponseEntity<String> viewUserProfile() {
+    // Search by job title
+    @GetMapping("/{jobTitle}")
+    public ResponseEntity<String> submitSearchCriteria(@RequestBody String json, @PathVariable String jobTitle)
+    {
+        ObjectMapper objectMapper = new ObjectMapper();
         try {
-            return ResponseEntity.ok(UserProfile.viewUserProfile(userProfileRepository));
+            JsonNode jsonNode = objectMapper.readTree(json);
+            String searchCriteria = jsonNode.get("jobTitle").asText();
+            return ResponseEntity.ok(UserProfile.searchUserProfile( searchCriteria, userProfileRepository));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

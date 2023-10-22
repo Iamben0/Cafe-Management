@@ -1,6 +1,8 @@
 package bip.backend.Entity;
 
 import bip.backend.Repository.UserProfileRepository;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -38,6 +40,10 @@ public class UserProfile {
         if (userProfileRepository.existsByJobTitle(jobTitle)) {
             throw new RuntimeException("Job title already exists");
         }
+        if (jobTitle == null) {
+            throw new RuntimeException("Job title cannot be null");
+        }
+
         UserProfile userProfile = new UserProfile();
         userProfile.setProfileType(profileType);
         userProfile.setJobTitle(jobTitle);
@@ -47,65 +53,38 @@ public class UserProfile {
     }
 
     // Update user profile
-    public static void updateUserProfile(String oldJobTitle, String newJobTitle, UserProfileRepository userProfileRepository) {
-        if (!userProfileRepository.existsByJobTitle(oldJobTitle)) {
-            throw new RuntimeException("User profile does not exist");
-        }
-        if (userProfileRepository.existsByJobTitle(newJobTitle)) {
-            throw new RuntimeException("User profile already exist");
-        }
-
-        UserProfile userProfile = userProfileRepository.findByJobTitle(oldJobTitle);
-        userProfile.setJobTitle(newJobTitle);
-        userProfileRepository.save(userProfile);
-    }
-
-    // Suspend user profile
-    public static void suspendUserProfile(String jobTitle, UserProfileRepository userProfileRepository) {
+    public static boolean updateUserProfile(String jobTitle, String newJobTitle, UserProfileRepository userProfileRepository) {
         if (!userProfileRepository.existsByJobTitle(jobTitle)) {
             throw new RuntimeException("User profile does not exist");
         }
 
+        if (userProfileRepository.existsByJobTitle(newJobTitle)) {
+            throw new RuntimeException("User profile already exist");
+        }
+
         UserProfile userProfile = userProfileRepository.findByJobTitle(jobTitle);
-        userProfile.setActive(false);
+        userProfile.setJobTitle(newJobTitle);
+        userProfileRepository.save(userProfile);
+        return true;
     }
 
-    // View all user profile and return as json
+    // Suspend user profile
+    public static void suspendUserProfile(String jobTitle, UserProfileRepository userProfileRepository) {
+        UserProfile userProfile = userProfileRepository.findByJobTitle(jobTitle);
+
+        userProfileRepository.delete(userProfile);
+    }
+
+    // View userProfile and have ViewUserProfileController return as json
     public static String viewUserProfile(UserProfileRepository userProfileRepository) {
-        return userProfileRepository.findAll().toString();
+        List<UserProfile> userProfileList = userProfileRepository.findAll();
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode arrayNode = mapper.valueToTree(userProfileList);
+        return arrayNode.toString();
     }
 
     // Search user profile by job title and return as json
     public static String searchUserProfile(String jobTitle, UserProfileRepository userProfileRepository) {
         return userProfileRepository.findByJobTitle(jobTitle).toString();
     }
-
-    /*
-    // Search user profile by job title or profile type and return as json
-    public static String searchUserProfile(String jobTitle, String profileType, UserProfileRepository userProfileRepository) {
-        if (jobTitle != null) {
-            return userProfileRepository.findByJobTitle(jobTitle).toString();
-        } else if (profileType != null) {
-            return userProfileRepository.findByProfileType(profileType).toString();
-        } else {
-            return userProfileRepository.findAll().toString();
-        }
-    }
-
-
-    public static List<UserProfile> retrieveUserProfile(String profileType,
-                                                        UserProfileRepository userProfileRepository) {
-        // Option 1
-        // List<UserProfile> userProfileList = userProfileRepository.findAll();
-        // for (UserProfile userProfile : userProfileList) {
-        //     if (userProfile.getProfileType().equals(profileType)) {
-        //         return userProfile;
-        //     }
-        // }
-
-        // // Option 2
-        return userProfileRepository.findAllByProfileType(profileType);
-    }
-    */
-
 }

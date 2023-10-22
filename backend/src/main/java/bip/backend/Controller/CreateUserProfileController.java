@@ -19,22 +19,17 @@ public class CreateUserProfileController {
         this.userProfileRepository = userProfileRepository;
     }
 
-    /** Create a {@code UserProfile} based on the given JSON. */
     @PostMapping("/")
     public ResponseEntity<String> submitUserProfileDetails(@RequestBody String json)
     {
+
         ObjectMapper objectMapper = new ObjectMapper();
         try {
-            /*
-            {
-              "profileType": "Manager",
-              "jobTitle"   : "Senior Manager",
-            }
-            */
+
             JsonNode jsonNode = objectMapper.readTree(json);
             UserProfile.createUserProfile(
-                    jsonNode.get("profileType").asText(), // "Manager"
-                    jsonNode.get("jobTitle").asText(),    // "Senior Manager"
+                    jsonNode.get("profileType").asText(),
+                    jsonNode.get("jobTitle").asText(),
                     userProfileRepository
             );
             return ResponseEntity.ok("User Profile created!");
