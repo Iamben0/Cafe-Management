@@ -30,10 +30,6 @@ const usersDetails = [
 ];
 
 const Login = () => {
-	// const formBackground = useColorModeValue('gray.200', 'gray.700');
-	// const { colorMode, toggleColorMode } = useColorMode();
-	// const isDark = colorMode === 'dark';
-
 	const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
@@ -50,14 +46,28 @@ const Login = () => {
 		);
 		if (eachUser) {
 			setMessage('Logged in successfully!');
-			setTimeout(() => {
-				router.push('/account');
-			}, 300);
+			if (eachUser.role === 'Admin') {
+				setTimeout(() => {
+					router.push('/admin');
+				}, 300);
+			} else if (eachUser.role === 'Owner') {
+				setTimeout(() => {
+					router.push('/owner');
+				}, 300);
+			} else if (eachUser.role === 'Manager') {
+				setTimeout(() => {
+					router.push('/manager');
+				}, 300);
+			} else if (eachUser.role === 'Staff') {
+				setTimeout(() => {
+					router.push('/staff');
+				}, 300);
+			}
+			// localStorage.setItem('role', role);
 		} else {
 			setMessage('Invalid User Account');
 		}
 	};
-
 	return (
 		<Flex
 			flexDirection='column'
@@ -66,7 +76,7 @@ const Login = () => {
 			justifyContent='center'
 		>
 			<h1
-				className='mb-4 text-4xl font-extrabold 
+				className='mb-4 text-4xl font-extrabold
 			leading-none tracking-tight text-gray-900 
 			md:text-5xl lg:text-6xl dark:text-white'
 			>
@@ -93,9 +103,8 @@ const Login = () => {
 							name='email'
 							type='email'
 							placeholder='Email'
-							variant='filled'
-							borderColor='silver'
-							bg='gray.700'
+							bg='white'
+							textColor='black'
 							onChange={(e) => setEmail(e.target.value)}
 						/>
 					</FormControl>
@@ -109,9 +118,8 @@ const Login = () => {
 								name='password'
 								placeholder='Password'
 								type={isPasswordVisible ? 'text' : 'password'}
-								variant='filled'
-								borderColor='silver'
-								bg='gray.700'
+								bg='white'
+								textColor='black'
 								onChange={(e) => setPassword(e.target.value)}
 							/>
 							<InputRightElement h='auto'>
@@ -133,9 +141,8 @@ const Login = () => {
 							id='role'
 							name='role'
 							placeholder='Select Role'
-							variant='filled'
-							borderColor='silver'
-							bg='gray.700'
+							bg='white'
+							color='black'
 							onChange={(e) => setRole(e.target.value)}
 						>
 							<option value='Admin'>Admin</option>
@@ -162,18 +169,11 @@ const Login = () => {
 					</Center>
 				</form>
 
-				{/* 
-				<Link mb='2' fontSize='sm' textAlign='center'>
-					Forgot Password
-				</Link> */}
-
-				<FormControl display='flex' alignItems='center' justifyContent='center'>
-					{/* <IconButton
-						isRound
-						icon={isDark ? <SunIcon /> : <MoonIcon />}
-						onClick={toggleColorMode}
-					/> */}
-				</FormControl>
+				<FormControl
+					display='flex'
+					alignItems='center'
+					justifyContent='center'
+				></FormControl>
 			</Flex>
 		</Flex>
 	);
