@@ -1,4 +1,5 @@
 import './globals.css';
+import ThemeProvider from '@/components/ThemeProvider';
 
 export const metadata = {
 	title: 'Cafe Management System',
@@ -8,9 +9,9 @@ export const metadata = {
 const RootLayout = ({ children }) => {
 	return (
 		<html lang='en'>
-			{/* Navbar here */}
-			<body>{children}</body>
-			{/* Footer here */}
+			<body>
+				<ThemeProvider>{children}</ThemeProvider>
+			</body>
 		</html>
 	);
 };

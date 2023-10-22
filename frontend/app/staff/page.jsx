@@ -1,9 +1,9 @@
 import React from 'react';
 
-// After login, will appear as localhost:3000/account
+// After login, will appear as localhost:3000/staff
 
-const Account = () => {
-	return <div>Welcome to your account!</div>;
+const Staff = () => {
+	return <div>Staff</div>;
 };
 
-export default Account;
+export default Staff;

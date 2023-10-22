@@ -2,22 +2,18 @@
 
 import {
 	Flex,
-	Link,
 	Heading,
 	Input,
 	Button,
 	FormControl,
 	Text,
-	useColorMode,
-	useColorModeValue,
-	IconButton,
 	InputGroup,
 	InputRightElement,
 	Center,
 	Select,
 } from '@chakra-ui/react';
 
-import { SunIcon, MoonIcon, ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
+import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
@@ -124,7 +120,7 @@ const Login = () => {
 							/>
 							<InputRightElement h='auto'>
 								<Button
-									variant='unstyled'
+									textColor='black'
 									onClick={() =>
 										setIsPasswordVisible((showPassword) => !showPassword)
 									}
