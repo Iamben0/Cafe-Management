@@ -28,7 +28,7 @@ const UserProfiles = () => {
 		const fetchData = async () => {
 			try {
 				const response = await fetch(
-					'http://localhost:8080/system-admin/view/'
+					'http://localhost:8080/api/system-admin/view/'
 				);
 				if (response.ok) {
 					const data = await response.json();
@@ -46,7 +46,7 @@ const UserProfiles = () => {
 	const handleSuspendProfile = async (userJobTitle) => {
 		try {
 			const response = await fetch(
-				`http://localhost:8080/system-admin/suspend/${userJobTitle}`,
+				`http://localhost:8080/api/system-admin/suspend/${userJobTitle}`,
 				{
 					method: 'DELETE', // Assuming you're using HTTP DELETE for suspension
 				}
@@ -72,7 +72,7 @@ const UserProfiles = () => {
 	const handleSearch = async () => {
 		try {
 			const response = await fetch(
-				`http://localhost:8080/system-admin/view?jobTitle=${searchTerm}`
+				`http://localhost:8080/api/system-admin/view?jobTitle=${searchTerm}`
 			);
 			if (response.ok) {
 				const data = await response.json();
@@ -92,44 +92,44 @@ const UserProfiles = () => {
 
 	return (
 		<Center>
-			<Container maxW='container.xl'>
-				<Flex justifyContent='space-between'>
-					<Heading as='h1' size='xl' mt={8} mb={4}>
+			<Container maxW="container.xl">
+				<Flex justifyContent="space-between">
+					<Heading as="h1" size="xl" mt={8} mb={4}>
 						User Profiles
 					</Heading>
 
 					<Flex
-						direction='column'
-						align='center'
-						justifyContent='space-betwen'
-						pt='8'
+						direction="column"
+						align="center"
+						justifyContent="space-betwen"
+						pt="8"
 					>
-						{responseMessage && <Text color='green'>{responseMessage}</Text>}
-						{error && <Text color='red'>{error}</Text>}
+						{responseMessage && <Text color="green">{responseMessage}</Text>}
+						{error && <Text color="red">{error}</Text>}
 					</Flex>
 
-					<Flex justifyContent='space-evenly' align='center' maxW='600'>
+					<Flex justifyContent="space-evenly" align="center" maxW="600">
 						<Input
-							w='50'
-							type='text'
-							placeholder='Search by Job Title'
+							w="50"
+							type="text"
+							placeholder="Search by Job Title"
 							value={searchTerm}
 							onChange={(e) => setSearchTerm(e.target.value)}
 						/>
-						<Button ml='2' onClick={handleSearch}>
+						<Button ml="2" onClick={handleSearch}>
 							Search
 						</Button>
 					</Flex>
 				</Flex>
 
 				{userProfile.length > 0 && (
-					<Table variant='simple'>
+					<Table variant="simple">
 						<Thead>
 							<Tr>
-								<Th color='white'>Profile Type</Th>
-								<Th color='white'>Job Title</Th>
-								<Th color='white'>Update</Th>
-								<Th color='white'>Suspend</Th>
+								<Th color="white">Profile Type</Th>
+								<Th color="white">Job Title</Th>
+								<Th color="white">Update</Th>
+								<Th color="white">Suspend</Th>
 							</Tr>
 						</Thead>
 						<Tbody>
@@ -140,7 +140,7 @@ const UserProfiles = () => {
 									<Td>
 										<Link href={`userprofiles/update/${user.jobTitle}`}>
 											<Button
-												size='sm'
+												size="sm"
 												onClick={() =>
 													localStorage.setItem('jobTitle', user.jobTitle)
 												}
@@ -151,8 +151,8 @@ const UserProfiles = () => {
 									</Td>
 									<Td>
 										<Button
-											size='sm'
-											colorScheme='red'
+											size="sm"
+											colorScheme="red"
 											onClick={() => handleSuspendProfile(user.jobTitle)}
 										>
 											Suspend

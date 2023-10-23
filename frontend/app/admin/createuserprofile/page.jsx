@@ -28,7 +28,7 @@ const CreateUserProfile = () => {
 		};
 
 		// Send userProfileData to your backend controller via an API request
-		fetch('http://localhost:8080/system-admin/create/', {
+		fetch('http://localhost:8080/api/system-admin/create/', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
@@ -51,34 +51,34 @@ const CreateUserProfile = () => {
 
 	return (
 		<Center>
-			<Container maxW='container.xl'>
-				<Heading as='h1' size='xl' mt={8} mb={4}>
+			<Container maxW="container.xl">
+				<Heading as="h1" size="xl" mt={8} mb={4}>
 					Create User Profile
 				</Heading>
-				<Box w='300px'>
+				<Box w="300px">
 					<FormControl mt={4}>
 						<FormLabel>Profile Type</FormLabel>
 						<Select
 							value={profileType}
-							placeholder='Select Profile Type'
-							bg='white'
-							color='black'
+							placeholder="Select Profile Type"
+							bg="white"
+							color="black"
 							onChange={(e) => setProfileType(e.target.value)}
 						>
-							<option value='Staff'>Staff</option>
-							<option value='Owner'>Owner</option>
-							<option value='Manager'>Manager</option>
-							<option value='System Admin'>System Admin</option>
+							<option value="Staff">staff</option>
+							<option value="Owner">owner</option>
+							<option value="Manager">manager</option>
+							<option value="System Admin">admin</option>
 						</Select>
 					</FormControl>
 
 					<FormControl mt={4}>
 						<FormLabel>Job Title</FormLabel>
 						<Input
-							placeholder='Job Ttile'
-							bg='white'
-							color='black'
-							type='text'
+							placeholder="Job Ttile"
+							bg="white"
+							color="black"
+							type="text"
 							value={jobTitle}
 							onChange={(e) => setJobTitle(e.target.value)}
 						/>
@@ -87,8 +87,8 @@ const CreateUserProfile = () => {
 					<Button mt={4} onClick={handleSubmit}>
 						Create User Profile
 					</Button>
-					{responseMessage && <Text color='green'>{responseMessage}</Text>}
-					{error && <Text color='red'>{error}</Text>}
+					{responseMessage && <Text color="green">{responseMessage}</Text>}
+					{error && <Text color="red">{error}</Text>}
 				</Box>
 			</Container>
 		</Center>

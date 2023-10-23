@@ -1,6 +1,6 @@
 'use client';
 
-import { Disclosure, Menu } from '@headlessui/react';
+import { Disclosure } from '@headlessui/react';
 
 const navigation = [
 	{ name: 'Home', href: '/admin', current: true },
@@ -19,15 +19,15 @@ function classNames(...classes) {
 
 const AdminNavbar = () => {
 	return (
-		<Disclosure as='nav' className='bg-gray-800'>
+		<Disclosure as="nav" className="bg-gray-800">
 			{({ open }) => (
 				<>
-					<div className='mx-auto max-w-7xl px-2 sm:px-6 lg:px-8'>
-						<div className='relative flex h-16 items-center justify-between'>
-							<div className='absolute inset-y-0 left-0 flex items-center sm:hidden'></div>
-							<div className='flex flex-1 items-center justify-center sm:items-stretch sm:justify-start'>
-								<div className='hidden sm:ml-6 sm:block'>
-									<div className='flex space-x-4'>
+					<div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
+						<div className="relative flex h-16 items-center justify-between">
+							<div className="absolute inset-y-0 left-0 flex items-center sm:hidden"></div>
+							<div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
+								<div className="hidden sm:ml-6 sm:block">
+									<div className="flex space-x-4">
 										{navigation.map((item) => (
 											<a
 												key={item.name}
@@ -46,9 +46,9 @@ const AdminNavbar = () => {
 									</div>
 								</div>
 							</div>
-							<div className='absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0'>
+							<div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
 								<a
-									href='/'
+									href="/"
 									className={classNames(
 										true
 											? 'bg-gray-900 text-white'
