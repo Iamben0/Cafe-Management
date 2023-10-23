@@ -25,159 +25,119 @@ const Login = () => {
 
 	const router = useRouter();
 
-	const handleSubmit = () => {
-		// Create a JSON object with the selected values and send it to the backend
-		const loginData = {
-			username,
-			password,
-		};
+	const handleLogin = async () => {
+		try {
+			const loginData = {
+				username,
+				password,
+			};
 
-		// Send loginData to your backend controller via an API request
-		fetch('http://localhost:8080/api/', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify(loginData),
-		})
-			.then(async (response) => {
-				if (response.ok) {
-					// store json in variable
-					const credential = await response.json();
-					setMessage('Logged in successfully!');
-					// for middleware
-					// document.cookie = `profileType=${credential}`;
-					setTimeout(() => {
-						router.push(`/${credential}`);
-					}, 300);
-				} else {
-					response.text().then((errorMessage) => {
-						setMessage(errorMessage);
-					});
-				}
-			})
-			.catch((error) => {
-				console.error('Error creating profile type', error);
+			const response = await fetch('http://localhost:8080/api/', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify(loginData),
 			});
+
+			if (response.ok) {
+				const credential = await response.json();
+				setMessage('Logged in successfully!');
+				router.push(`/${credential}`);
+			} else {
+				const errorMessage = await response.text();
+				setMessage(errorMessage);
+			}
+		} catch (error) {
+			console.error('Error creating profile type', error);
+		}
 	};
 
 	return (
 		<Flex
-			flexDirection="column"
-			h="100vh"
-			alignItems="center"
-			justifyContent="center"
+			flexDirection='column'
+			h='100vh'
+			alignItems='center'
+			justifyContent='center'
 		>
 			<h1
-				className="mb-4 text-4xl font-extrabold
+				className='mb-4 text-4xl font-extrabold
 			leading-none tracking-tight text-gray-900 
-			md:text-5xl lg:text-6xl dark:text-white"
+			md:text-5xl lg:text-6xl dark:text-white'
 			>
 				Cafe Management System
 			</h1>
 			<Flex
-				flexDirection="column"
-				bg="gray.700"
-				borderRadius="8"
-				boxShadow="lg"
-				p="12"
-				mt="8"
+				flexDirection='column'
+				bg='gray.700'
+				borderRadius='8'
+				boxShadow='lg'
+				p='12'
+				mt='8'
 			>
-				<Heading textColor="white" alignSelf="center" mb="6">
+				<Heading textColor='white' alignSelf='center' mb='6'>
 					Log In
 				</Heading>
 
-				<form onSubmit={handleSubmit}>
-					<FormControl isRequired>
+				<FormControl isRequired>
+					<Input
+						required
+						mb='3'
+						id='username'
+						name='username'
+						type='username'
+						placeholder='Username'
+						bg='white'
+						textColor='black'
+						onChange={(e) => setUsername(e.target.value)}
+					/>
+				</FormControl>
+
+				<FormControl isRequired>
+					<InputGroup>
 						<Input
 							required
-							mb="3"
-							id="username"
-							name="username"
-							type="username"
-							placeholder="Username"
-							bg="white"
-							textColor="black"
-							onChange={(e) => setUsername(e.target.value)}
+							id='password'
+							name='password'
+							placeholder='Password'
+							type={isPasswordVisible ? 'text' : 'password'}
+							bg='white'
+							textColor='black'
+							onChange={(e) => setPassword(e.target.value)}
 						/>
-					</FormControl>
+						<InputRightElement h='auto'>
+							<Button
+								textColor='black'
+								onClick={() =>
+									setIsPasswordVisible((showPassword) => !showPassword)
+								}
+							>
+								{isPasswordVisible ? <ViewIcon /> : <ViewOffIcon />}
+							</Button>
+						</InputRightElement>
+					</InputGroup>
+					<Text
+						pt='2'
+						pb='2'
+						textAlign='center'
+						color={
+							message === 'Logged in successfully!' ? 'green.500' : 'red.500'
+						}
+					>
+						{message}
+					</Text>
+				</FormControl>
 
-					<FormControl isRequired>
-						<InputGroup>
-							<Input
-								required
-								mb="3"
-								id="password"
-								name="password"
-								placeholder="Password"
-								type={isPasswordVisible ? 'text' : 'password'}
-								bg="white"
-								textColor="black"
-								onChange={(e) => setPassword(e.target.value)}
-							/>
-							<InputRightElement h="auto">
-								<Button
-									textColor="black"
-									onClick={() =>
-										setIsPasswordVisible((showPassword) => !showPassword)
-									}
-								>
-									{isPasswordVisible ? <ViewIcon /> : <ViewOffIcon />}
-								</Button>
-								<Text
-									pt="2"
-									pb="2"
-									textAlign="center"
-									color={
-										message === 'Logged in successfully!'
-											? 'green.500'
-											: 'red.500'
-									}
-								>
-									{message}
-								</Text>
-							</InputRightElement>
-						</InputGroup>
-					</FormControl>
-
-					{/* <FormControl isRequired>
-						<Select
-							required
-							id="role"
-							name="role"
-							placeholder="Select Role"
-							bg="white"
-							color="black"
-							onChange={(e) => setRole(e.target.value)}
-						>
-							<option value="Admin">Admin</option>
-							<option value="Owner">Owner</option>
-							<option value="Manager">Manager</option>
-							<option value="Staff">Staff</option>
-						</Select>
-						<Text
-							pt="2"
-							pb="2"
-							textAlign="center"
-							color={
-								message === 'Logged in successfully!' ? 'green.500' : 'red.500'
-							}
-						>
-							{message}
-						</Text>
-					</FormControl> */}
-
-					<Center>
-						<Button mb="4" colorScheme="blue" onClick={handleSubmit}>
-							Log In
-						</Button>
-					</Center>
-				</form>
+				<Center>
+					<Button mb='4' colorScheme='blue' onClick={handleLogin}>
+						Log In
+					</Button>
+				</Center>
 
 				<FormControl
-					display="flex"
-					alignItems="center"
-					justifyContent="center"
+					display='flex'
+					alignItems='center'
+					justifyContent='center'
 				></FormControl>
 			</Flex>
 		</Flex>

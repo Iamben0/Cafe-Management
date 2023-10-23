@@ -17,78 +17,88 @@ import { useState } from 'react';
 const CreateUserProfile = () => {
 	const [profileType, setProfileType] = useState(''); // To store the selected profile type
 	const [jobTitle, setJobTitle] = useState(''); // To store the job title input
-	const [responseMessage, setResponseMessage] = useState('');
-	const [error, setError] = useState(null);
+	const [message, setMessage] = useState('');
 
-	const handleSubmit = () => {
+	const handleCreateProfile = async () => {
 		// Create a JSON object with the selected values and send it to the backend
-		const userProfileData = {
-			profileType,
-			jobTitle,
-		};
+		try {
+			const userProfileData = {
+				profileType,
+				jobTitle,
+			};
 
-		// Send userProfileData to your backend controller via an API request
-		fetch('http://localhost:8080/api/system-admin/create/', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify(userProfileData),
-		})
-			.then((response) => {
-				if (response.ok) {
-					setResponseMessage('Profile type created!');
-					setError(null);
-				} else {
-					setResponseMessage(null);
-					setError('Profile type already existed');
+			// Send userProfileData to your backend controller via an API request
+			const response = await fetch(
+				'http://localhost:8080/api/system-admin/create/',
+				{
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					body: JSON.stringify(userProfileData),
 				}
-			})
-			.catch((error) => {
-				console.error('Error creating profile type', error);
-			});
+			);
+
+			if (response.ok) {
+				const msg = await response.text();
+				setMessage(msg);
+			} else {
+				const errorMessage = await response.text();
+				setMessage(errorMessage);
+			}
+		} catch (error) {
+			console.error('Error creating profile type', error);
+		}
 	};
 
 	return (
 		<Center>
-			<Container maxW="container.xl">
-				<Heading as="h1" size="xl" mt={8} mb={4}>
+			<Container maxW='container.xl'>
+				<Heading as='h1' size='xl' mt={8} mb={4}>
 					Create User Profile
 				</Heading>
-				<Box w="300px">
+				<Box w='300px'>
 					<FormControl mt={4}>
 						<FormLabel>Profile Type</FormLabel>
 						<Select
 							value={profileType}
-							placeholder="Select Profile Type"
-							bg="white"
-							color="black"
+							placeholder='Select Profile Type'
+							bg='white'
+							color='black'
 							onChange={(e) => setProfileType(e.target.value)}
 						>
-							<option value="Staff">staff</option>
-							<option value="Owner">owner</option>
-							<option value="Manager">manager</option>
-							<option value="System Admin">admin</option>
+							<option value='Staff'>staff</option>
+							<option value='Owner'>owner</option>
+							<option value='Manager'>manager</option>
+							<option value='System Admin'>admin</option>
 						</Select>
 					</FormControl>
 
 					<FormControl mt={4}>
 						<FormLabel>Job Title</FormLabel>
 						<Input
-							placeholder="Job Ttile"
-							bg="white"
-							color="black"
-							type="text"
+							placeholder='Job Ttile'
+							bg='white'
+							color='black'
+							type='text'
 							value={jobTitle}
 							onChange={(e) => setJobTitle(e.target.value)}
 						/>
 					</FormControl>
 
-					<Button mt={4} onClick={handleSubmit}>
+					<Button mt={4} onClick={handleCreateProfile}>
 						Create User Profile
 					</Button>
-					{responseMessage && <Text color="green">{responseMessage}</Text>}
-					{error && <Text color="red">{error}</Text>}
+					<Text
+						pt='2'
+						pb='2'
+						textAlign='center'
+						color={
+							message === 'User Profile created!' ? 'green.500' : 'red.500'
+						}
+					>
+						{message}
+					</Text>
 				</Box>
 			</Container>
 		</Center>
