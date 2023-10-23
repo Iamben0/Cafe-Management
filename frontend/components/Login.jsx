@@ -44,15 +44,12 @@ const Login = () => {
 				if (response.ok) {
 					// store json in variable
 					const credential = await response.json();
-
-					setMessage(response.statusText);
-					console.log('asdt' + setMessage);
+					setMessage('Logged in successfully!');
 					// for middleware
 					// document.cookie = `profileType=${credential}`;
-
-					response.text().then((errorMessage) => {
-						setMessage(errorMessage);
-					});
+					setTimeout(() => {
+						router.push(`/${credential}`);
+					}, 300);
 				} else {
 					response.text().then((errorMessage) => {
 						setMessage(errorMessage);
