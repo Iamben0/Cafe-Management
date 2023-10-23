@@ -1,11 +1,10 @@
-package bip.backend.Controller;
+package bip.backend.Controller.Share;
 
 import bip.backend.Entity.UserAccount;
-import bip.backend.Entity.UserProfile;
 import bip.backend.Repository.UserAccountRepository;
-import bip.backend.Repository.UserProfileRepository;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,10 +27,12 @@ public class LoginController {
             JsonNode jsonNode = objectMapper.readTree(json);
             String username = jsonNode.get("username").asText();
             String password = jsonNode.get("password").asText();
-            // create profile type
-            String response = UserAccount.verifyUserAccount(username, password, profileType, userAccountRepository);
+
+            String response = UserAccount.verifyUserAccount(username, password, userAccountRepository);
+            System.out.println(response);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
+            System.out.println(e.getMessage());
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }

@@ -1,4 +1,4 @@
-package bip.backend.Controller;
+package bip.backend.Controller.Admin;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;

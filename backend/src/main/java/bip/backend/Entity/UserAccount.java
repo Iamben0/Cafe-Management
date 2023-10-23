@@ -1,11 +1,16 @@
 package bip.backend.Entity;
 
 import bip.backend.Repository.UserAccountRepository;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -30,27 +35,40 @@ public class UserAccount {
     @Column(name = "email", nullable = false)
     private String email;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_profile")
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @Fetch(FetchMode.JOIN)
+    @JoinColumn(name = "user_profile", nullable = false)
     private UserProfile userProfile;
 
-    @OneToMany(mappedBy = "user")
-    private Set<WorkSlot> workSlots = new LinkedHashSet<>();
 
     // verify user account when logging in, after wards return the user account details
-    public static String verifyUserAccount(String username, String password, UserProfile profileType, UserAccountRepository userAccountRepository) {
+    public static String verifyUserAccount(String username, String password, UserAccountRepository userAccountRepository) {
         if (!userAccountRepository.existsByUsernameOrPassword(username, password)) {
             throw new RuntimeException("Incorrect username or password");
         }
-        if (!userAccountRepository.existsByProfileType(profileType)) {
-            throw new RuntimeException("Incorrect profile type");
-        }
         UserAccount userAccount = userAccountRepository.findByUsernameAndPassword(username, password);
-        if (userAccount.getUserProfile().getProfileType().equals(profileType.getProfileType())) {
-            return userAccount.toString();
-        } else {
-            throw new RuntimeException("Profile type does not match");
-        }
+        UserProfile credential = userAccount.getUserProfile();
+
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode arrayNode = mapper.valueToTree(credential.getProfileType());
+
+        return switch (credential.getProfileType()) {
+            case "admin", "manager", "staff", "owner" -> arrayNode.toString();
+            default -> throw new RuntimeException("Invalid profile type");
+        };
+    }
+
+    // view user account
+    public static String viewAccount(String username, UserAccountRepository userAccountRepository) {
+//        if (!userAccountRepository.existsByUsername(username)) {
+//            throw new RuntimeException("Username does not exist");
+//        }
+//        UserAccount userAccount = userAccountRepository.findByUsername(username);
+//        ObjectMapper mapper = new ObjectMapper();
+//        JsonNode arrayNode = mapper.valueToTree(userAccount);
+//
+//        return arrayNode.toString();
+        return null;
     }
 
     // create user account

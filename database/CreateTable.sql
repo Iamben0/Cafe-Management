@@ -12,26 +12,26 @@ CREATE TABLE user_profile
 );
 
 INSERT INTO user_profile (profile_type, job_title, active)
-VALUES ('System Admin', 'Senior System Admin', TRUE);
+VALUES ('admin', 'senior system admin', TRUE);
 INSERT INTO user_profile (profile_type, job_title, active)
-VALUES ('System Admin', ' Junior System Admin', TRUE);
+VALUES ('admin', 'junior system admin', TRUE);
 INSERT INTO user_profile (profile_type, job_title, active)
-VALUES ('Owner', 'Owner', TRUE);
+VALUES ('owner', 'owner', TRUE);
 INSERT INTO user_profile (profile_type, job_title, active)
-VALUES ('Manager', 'Senior Manager', TRUE);
+VALUES ('manager', 'senior manager', TRUE);
 INSERT INTO user_profile (profile_type, job_title, active)
-VALUES ('Manager', 'Junior Manager', TRUE);
+VALUES ('manager', 'junior manager', TRUE);
 INSERT INTO user_profile (profile_type, job_title, active)
-VALUES ('Staff', 'Chef', TRUE);
+VALUES ('staff', 'chef', TRUE);
 INSERT INTO user_profile (profile_type, job_title, active)
-VALUES ('Staff', 'Waiter', TRUE);
+VALUES ('staff', 'waiter', TRUE);
 INSERT INTO user_profile (profile_type, job_title, active)
-VALUES ('Staff', 'Cashier', TRUE);
+VALUES ('staff', 'cashier', TRUE);
 
 CREATE TABLE user_account
 (
     id           SERIAL       NOT NULL PRIMARY KEY,
-    username     VARCHAR(255) NOT NULL,
+    username     VARCHAR(255) NOT NULL UNIQUE,
     name         VARCHAR(255) NOT NULL,
     password     VARCHAR(255) NOT NULL,
     email        VARCHAR(255) NOT NULL,

@@ -1,6 +1,7 @@
 package bip.backend.Entity;
 
 import bip.backend.Repository.UserProfileRepository;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.*;
@@ -17,6 +18,7 @@ import java.util.*;
 @Setter
 @Entity
 @Table(name = "user_profile")
+@JsonIgnoreProperties({"userAccounts"})
 public class UserProfile {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,8 +34,9 @@ public class UserProfile {
     @Column(name = "active", nullable = false)
     private Boolean active;
 
-    @OneToMany(mappedBy = "up")
+    @OneToMany(mappedBy = "userProfile")
     private Set<UserAccount> userAccounts = new LinkedHashSet<>();
+
 
     // Create user profile
     public static void createUserProfile(String profileType, String jobTitle, UserProfileRepository userProfileRepository) {

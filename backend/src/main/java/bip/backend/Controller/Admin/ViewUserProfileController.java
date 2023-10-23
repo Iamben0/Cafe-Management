@@ -1,9 +1,7 @@
-package bip.backend.Controller;
+package bip.backend.Controller.Admin;
 
 import bip.backend.Entity.UserProfile;
 import bip.backend.Repository.UserProfileRepository;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

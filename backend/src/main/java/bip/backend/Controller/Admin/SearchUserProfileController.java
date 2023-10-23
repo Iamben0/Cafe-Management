@@ -1,4 +1,4 @@
-package bip.backend.Controller;
+package bip.backend.Controller.Admin;
 
 import bip.backend.Entity.UserProfile;
 import bip.backend.Repository.UserProfileRepository;
