@@ -42,22 +42,21 @@ const Login = () => {
 		})
 			.then(async (response) => {
 				if (response.ok) {
-					// setMessage('Logged in successfully!');
 					// store json in variable
 					const credential = await response.json();
-					// setMessage('Login successful!');
-					// setResponseMessage('Profile type created!');
-					// setError(null);
 
+					setMessage(response.statusText);
+					console.log('asdt' + setMessage);
 					// for middleware
 					// document.cookie = `profileType=${credential}`;
-					setTimeout(() => {
-						router.push(`/${credential}`);
-					}, 300);
+
+					response.text().then((errorMessage) => {
+						setMessage(errorMessage);
+					});
 				} else {
-					// setMessage('Invalid User Account');
-					// setResponseMessage(null);
-					// setError('Profile type already existed');
+					response.text().then((errorMessage) => {
+						setMessage(errorMessage);
+					});
 				}
 			})
 			.catch((error) => {
@@ -128,6 +127,18 @@ const Login = () => {
 								>
 									{isPasswordVisible ? <ViewIcon /> : <ViewOffIcon />}
 								</Button>
+								<Text
+									pt="2"
+									pb="2"
+									textAlign="center"
+									color={
+										message === 'Logged in successfully!'
+											? 'green.500'
+											: 'red.500'
+									}
+								>
+									{message}
+								</Text>
 							</InputRightElement>
 						</InputGroup>
 					</FormControl>
