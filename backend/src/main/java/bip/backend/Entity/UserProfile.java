@@ -41,11 +41,15 @@ public class UserProfile {
     // Create user profile
     public static void createUserProfile(String profileType, String jobTitle, UserProfileRepository userProfileRepository) {
         if (userProfileRepository.existsByJobTitle(jobTitle)) {
-            throw new RuntimeException("Job title already exists");
+            throw new RuntimeException("Profile already exists");
         }
-        if (jobTitle == null) {
+        if (profileType.isEmpty()) {
+            throw new RuntimeException("Profile type cannot be null");
+        }
+        if (jobTitle.isEmpty()) {
             throw new RuntimeException("Job title cannot be null");
         }
+
 
         UserProfile userProfile = new UserProfile();
         userProfile.setProfileType(profileType);
@@ -56,19 +60,17 @@ public class UserProfile {
     }
 
     // Update user profile
-    public static boolean updateUserProfile(String jobTitle, String newJobTitle, UserProfileRepository userProfileRepository) {
-        if (!userProfileRepository.existsByJobTitle(jobTitle)) {
-            throw new RuntimeException("User profile does not exist");
-        }
-
+    public static void updateUserProfile(String jobTitle, String newJobTitle, UserProfileRepository userProfileRepository) {
         if (userProfileRepository.existsByJobTitle(newJobTitle)) {
             throw new RuntimeException("User profile already exist");
+        }
+        if (newJobTitle.isEmpty()) {
+            throw new RuntimeException("Job title cannot be null");
         }
 
         UserProfile userProfile = userProfileRepository.findByJobTitle(jobTitle);
         userProfile.setJobTitle(newJobTitle);
         userProfileRepository.save(userProfile);
-        return true;
     }
 
     // Suspend user profile

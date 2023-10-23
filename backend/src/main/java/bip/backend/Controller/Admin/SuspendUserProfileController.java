@@ -20,7 +20,7 @@ public class SuspendUserProfileController {
     {
         try {
             UserProfile.suspendUserProfile(jobTitle, userProfileRepository);
-            return ResponseEntity.ok("Success");
+            return ResponseEntity.ok("Profile Suspended!");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

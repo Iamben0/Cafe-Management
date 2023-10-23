@@ -44,7 +44,7 @@ public class UserAccount {
     // verify user account when logging in, after wards return the user account details
     public static String verifyUserAccount(String username, String password, UserAccountRepository userAccountRepository) {
         if (!userAccountRepository.existsByUsernameAndPassword(username, password)) {
-            throw new RuntimeException("Incorrect username or password");
+            throw new RuntimeException("Incorrect Username or Password");
         }
         UserAccount userAccount = userAccountRepository.findByUsernameAndPassword(username, password);
         UserProfile credential = userAccount.getUserProfile();

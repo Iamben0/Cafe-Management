@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 public class UpdateUserProfileController {
 
     private final UserProfileRepository userProfileRepository;
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     public UpdateUserProfileController(UserProfileRepository userProfileRepository) {
         this.userProfileRepository = userProfileRepository;
@@ -20,26 +21,12 @@ public class UpdateUserProfileController {
 
     @PutMapping("/{jobTitle}")
     public ResponseEntity<String> updateUserProfile(@PathVariable String jobTitle, @RequestBody String newJobTitle) {
-        ObjectMapper objectMapper = new ObjectMapper();
         try {
             JsonNode jsonNode = objectMapper.readTree(newJobTitle);
-
-            if (!jsonNode.has("jobTitle")) {
-                return ResponseEntity.badRequest().body("Missing 'jobTitle' in the request body.");
-            }
-
-            String updatedJobTitle = jsonNode.get("jobTitle").asText();
-            boolean updated = UserProfile.updateUserProfile(jobTitle, updatedJobTitle, userProfileRepository);
-
-            if (updated) {
-                return ResponseEntity.ok("User Profile updated!");
-            }
-
+            UserProfile.updateUserProfile(jobTitle, jsonNode.get("jobTitle").asText(), userProfileRepository);
+            return ResponseEntity.ok("Profile Updated!");
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Invalid request: " + e.getMessage());
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
-
-        return ResponseEntity.badRequest().body("User Profile not updated.");
     }
-
 }

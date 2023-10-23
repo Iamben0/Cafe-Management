@@ -22,17 +22,15 @@ public class LoginController {
     }
 
     @PostMapping("/")
-    public ResponseEntity<String> enterCredentialsProfileType(@RequestBody String json) {
+    public ResponseEntity<String> enterCredentials(@RequestBody String json) {
         try {
             JsonNode jsonNode = objectMapper.readTree(json);
             String username = jsonNode.get("username").asText();
             String password = jsonNode.get("password").asText();
 
             String response = UserAccount.verifyUserAccount(username, password, userAccountRepository);
-            System.out.println(response);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }

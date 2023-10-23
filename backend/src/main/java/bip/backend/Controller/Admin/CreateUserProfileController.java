@@ -22,7 +22,6 @@ public class CreateUserProfileController {
     @PostMapping("/")
     public ResponseEntity<String> submitUserProfileDetails(@RequestBody String json)
     {
-
         ObjectMapper objectMapper = new ObjectMapper();
         try {
 
