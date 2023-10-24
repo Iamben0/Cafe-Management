@@ -23,22 +23,23 @@ const UserProfiles = () => {
 	const [searchTerm, setSearchTerm] = useState('');
 	const [message, setMessage] = useState('');
 
-	useEffect(() => {
-		const viewProfile = async () => {
-			try {
-				const response = await fetch(
-					'http://localhost:8080/api/system-admin/view/'
-				);
-				if (response.ok) {
-					const data = await response.json();
-					setUserProfile(data);
-				} else {
-					console.error('Failed to fetch user data');
-				}
-			} catch (error) {
-				console.error('Error fetching user data', error);
+	const viewProfile = async () => {
+		try {
+			const response = await fetch(
+				'http://localhost:8080/api/system-admin/view/'
+			);
+			if (response.ok) {
+				const data = await response.json();
+				setUserProfile(data);
+			} else {
+				console.error('Failed to fetch user data');
 			}
-		};
+		} catch (error) {
+			console.error('Error fetching user data', error);
+		}
+	};
+
+	useEffect(() => {
 		viewProfile();
 	}, []);
 
@@ -70,7 +71,17 @@ const UserProfiles = () => {
 
 	// Filter the profiles based on the search term
 	const handleSearchProfile = (e) => {
-	
+		if (searchTerm.trim() === '') {
+			// If the search term is empty, show all profiles
+			viewProfile();
+		} else {
+			const filteredProfiles = userProfile.filter((user) =>
+				user.jobTitle.toLowerCase().includes(searchTerm.toLowerCase())
+			);
+
+			// Set the filtered profiles to the state
+			setUserProfile(filteredProfiles);
+		}
 	};
 
 	return (
@@ -99,6 +110,7 @@ const UserProfiles = () => {
 
 					<Flex justifyContent='space-evenly' align='center' maxW='600'>
 						<Input
+							id='search'
 							w='50'
 							type='text'
 							placeholder='Search by Job Title'
