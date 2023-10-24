@@ -89,7 +89,7 @@ public class UserProfile {
     }
 
     // Search user profile by job title and return as json
-    public static String searchUserProfile(String jobTitle, UserProfileRepository userProfileRepository) {
+    public static String searchProfile(String jobTitle, UserProfileRepository userProfileRepository) {
         return userProfileRepository.findByJobTitle(jobTitle).toString();
     }
 }

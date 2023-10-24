@@ -27,7 +27,7 @@ public class SearchUserProfileController {
         try {
             JsonNode jsonNode = objectMapper.readTree(json);
             String searchCriteria = jsonNode.get("jobTitle").asText();
-            return ResponseEntity.ok(UserProfile.searchUserProfile( searchCriteria, userProfileRepository));
+            return ResponseEntity.ok(UserProfile.searchProfile( searchCriteria, userProfileRepository));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

@@ -9,10 +9,6 @@ import lombok.Setter;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
-
 @Getter
 @Setter
 @Entity
@@ -72,7 +68,7 @@ public class UserAccount {
     }
 
     // create user account
-    public static void createUserAccount(String username, String name, String password, String email, UserProfile userProfile, UserAccountRepository userAccountRepository) {
+    public static void createUserAcct(String username, String name, String password, String email, UserProfile userProfile, UserAccountRepository userAccountRepository) {
         if (userAccountRepository.existsByUsername(username)) {
             throw new RuntimeException("Username already exists");
         }
