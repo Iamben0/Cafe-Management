@@ -92,4 +92,5 @@ public class UserProfile {
     public static String searchProfile(String jobTitle, UserProfileRepository userProfileRepository) {
         return userProfileRepository.findByJobTitle(jobTitle).toString();
     }
+
 }

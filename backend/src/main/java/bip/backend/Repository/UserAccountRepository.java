@@ -13,4 +13,6 @@ public interface UserAccountRepository extends JpaRepository<UserAccount, Intege
     boolean existsByUsernameOrPassword(String username, String password);
     @Query("select (count(u) > 0) from UserAccount u where u.username = ?1 and u.password = ?2")
     boolean existsByUsernameAndPassword(String username, String password);
+
+    boolean existsByEmail(String email);
 }

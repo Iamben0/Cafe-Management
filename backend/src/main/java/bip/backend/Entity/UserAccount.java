@@ -1,18 +1,25 @@
 package bip.backend.Entity;
 
 import bip.backend.Repository.UserAccountRepository;
+import bip.backend.Repository.UserProfileRepository;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
+@AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
 @Entity
 @Table(name = "user_account")
+@JsonIgnoreProperties({"userProfile"})
 public class UserAccount {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -68,17 +75,27 @@ public class UserAccount {
     }
 
     // create user account
-    public static void createUserAcct(String username, String name, String password, String email, UserProfile userProfile, UserAccountRepository userAccountRepository) {
+    public static void createUserAcct(String username, String name, String password, String email, String jobTitle, UserProfileRepository userProfileRepository, UserAccountRepository userAccountRepository) {
+        UserProfile userProfile = userProfileRepository.findUserProfileByJobTitle(jobTitle);
+
+        if (userProfile == null) {
+            throw new RuntimeException("User profile does not exist");
+        }
         if (userAccountRepository.existsByUsername(username)) {
             throw new RuntimeException("Username already exists");
         }
-        if (username == null || password == null) {
-            throw new RuntimeException("Username and password cannot be null");
+        if (username.isEmpty() && password.isEmpty() && name.isEmpty() && email.isEmpty()) {
+            throw new RuntimeException("Please fill in all fields");
         }
-        if (userProfile == null) {
-            throw new RuntimeException("User profile cannot be null");
+        if (jobTitle.isEmpty()) {
+            throw new RuntimeException("Job title cannot be null");
         }
+        if (userProfileRepository.existsByJobTitle(jobTitle)) {
+            throw new RuntimeException("Job title does not exist");
+        }
+
         UserAccount userAccount = new UserAccount();
+        userAccount.userProfile = userProfile;
         userAccount.setUsername(username);
         userAccount.setName(name);
         userAccount.setPassword(password);

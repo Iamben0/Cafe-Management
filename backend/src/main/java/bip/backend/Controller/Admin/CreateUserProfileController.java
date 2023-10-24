@@ -19,7 +19,7 @@ public class CreateUserProfileController {
         this.userProfileRepository = userProfileRepository;
     }
 
-    @PostMapping("/")
+    @PostMapping("/user-profile")
     public ResponseEntity<String> submitUserProfileDetails(@RequestBody String json)
     {
         ObjectMapper objectMapper = new ObjectMapper();

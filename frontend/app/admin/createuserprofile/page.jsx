@@ -29,7 +29,7 @@ const CreateUserProfile = () => {
 
 			// Send userProfileData to your backend controller via an API request
 			const response = await fetch(
-				'http://localhost:8080/api/system-admin/create/',
+				'http://localhost:8080/api/system-admin/create/user-profile',
 				{
 					method: 'POST',
 					headers: {
