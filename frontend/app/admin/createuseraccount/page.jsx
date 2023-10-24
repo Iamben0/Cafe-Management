@@ -15,7 +15,6 @@ import {
 import { useState } from 'react';
 
 const CreateUserAccount = () => {
-	const [profileType, setProfileType] = useState('');
 	const [jobTitle, setJobTitle] = useState('');
 	const [username, setUsername] = useState('');
 	const [name, setName] = useState('');
@@ -27,12 +26,11 @@ const CreateUserAccount = () => {
 		// Create a JSON object with the selected values and send it to the backend
 		try {
 			const userAccountData = {
-				profileType,
-				jobTitle,
 				username,
 				name,
 				password,
 				email,
+				jobTitle,
 			};
 
 			// Send userAccountData to your backend controller via an API request
@@ -115,13 +113,13 @@ const CreateUserAccount = () => {
 					</FormControl>
 
 					<FormControl mt={4}>
-						<FormLabel>Profile Title</FormLabel>
+						<FormLabel>Job Title</FormLabel>
 						<Select
-							value={profileType}
+							value={jobTitle}
 							placeholder='Select Profile Type'
 							bg='white'
 							color='black'
-							onChange={(e) => setProfileType(e.target.value)}
+							onChange={(e) => setJobTitle(e.target.value)}
 						>
 							<option value='chef'>chef</option>
 							<option value='Waiter'>waiter</option>

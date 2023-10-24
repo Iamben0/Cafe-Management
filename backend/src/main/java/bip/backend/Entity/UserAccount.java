@@ -77,10 +77,15 @@ public class UserAccount {
     // create user account
     public static void createUserAcct(String username, String name, String password, String email, String jobTitle, UserProfileRepository userProfileRepository, UserAccountRepository userAccountRepository) {
         UserProfile userProfile = userProfileRepository.findUserProfileByJobTitle(jobTitle);
+        System.out.println("User profile: " + userProfile.getJobTitle());
+        System.out.println("User profile: " + userProfile.getProfileType());
+        System.out.println("Username: " + username);
+        System.out.println("Name: " + name);
+        System.out.println("Password: " + password);
+        System.out.println("Email: " + email);
+        System.out.println("Job Title: " + jobTitle);
 
-        if (userProfile == null) {
-            throw new RuntimeException("User profile does not exist");
-        }
+
         if (userAccountRepository.existsByUsername(username)) {
             throw new RuntimeException("Username already exists");
         }
