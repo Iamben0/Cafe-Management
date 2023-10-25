@@ -18,19 +18,19 @@ import {
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 
-const UserProfiles = () => {
-	const [userProfile, setUserProfile] = useState([]);
+const UserAccounts = () => {
+	const [userAccount, setUserAccount] = useState([]);
 	const [searchTerm, setSearchTerm] = useState('');
 	const [message, setMessage] = useState('');
 
-	const viewProfile = async () => {
+	const viewAccount = async () => {
 		try {
 			const response = await fetch(
-				'http://localhost:8080/api/system-admin/view/'
+				'http://localhost:8080/api/system-admin/view/user-accounts/'
 			);
 			if (response.ok) {
 				const data = await response.json();
-				setUserProfile(data);
+				setUserAccount(data);
 			} else {
 				console.error('Failed to fetch user data');
 			}
@@ -40,7 +40,7 @@ const UserProfiles = () => {
 	};
 
 	useEffect(() => {
-		viewProfile();
+		viewAccount();
 	}, []);
 
 	const handleSuspendProfile = async (userJobTitle) => {
@@ -75,7 +75,7 @@ const UserProfiles = () => {
 			// If the search term is empty, show all profiles
 			viewProfile();
 		} else {
-			const filteredProfiles = userProfile.filter((user) =>
+			const filteredProfiles = userAccount.filter((user) =>
 				user.jobTitle.toLowerCase().includes(searchTerm.toLowerCase())
 			);
 
@@ -102,7 +102,7 @@ const UserProfiles = () => {
 							pt='2'
 							pb='2'
 							textAlign='center'
-							color={message === 'Profile Suspended!' ? 'green.500' : 'red.500'}
+							color={message === 'Account Suspended!' ? 'green.500' : 'red.500'}
 						>
 							{message}
 						</Text>
@@ -123,7 +123,7 @@ const UserProfiles = () => {
 					</Flex>
 				</Flex>
 
-				{userProfile.length > 0 && (
+				{userAccount.length > 0 && (
 					<Table variant='simple'>
 						<Thead>
 							<Tr>
@@ -134,33 +134,37 @@ const UserProfiles = () => {
 							</Tr>
 						</Thead>
 						<Tbody>
-							{userProfile.map((user) => (
-								<Tr key={user.id}>
-									<Td>{user.profileType}</Td>
-									<Td>{user.jobTitle}</Td>
-									<Td>
-										<Link href={`userprofiles/update/${user.jobTitle}`}>
+							{/* // set up if active == false */}
+							{userAccount
+								.filter((user) => user.active === true)
+								.map((user) => (
+									<Tr key={user.id}>
+										<Td>{user.username}</Td>
+										<Td>{user.name}</Td>
+										<Td>{user.email}</Td>
+										<Td>
+											<Link href={`useraccount/update/${user.email}`}>
+												<Button
+													size='sm'
+													onClick={() =>
+														localStorage.setItem('oldJobTitle', user.jobTitle)
+													}
+												>
+													Update
+												</Button>
+											</Link>
+										</Td>
+										<Td>
 											<Button
 												size='sm'
-												onClick={() =>
-													localStorage.setItem('jobTitle', user.jobTitle)
-												}
+												colorScheme='red'
+												onClick={() => handleSuspendProfile(user.jobTitle)}
 											>
-												Update
+												Suspend
 											</Button>
-										</Link>
-									</Td>
-									<Td>
-										<Button
-											size='sm'
-											colorScheme='red'
-											onClick={() => handleSuspendProfile(user.jobTitle)}
-										>
-											Suspend
-										</Button>
-									</Td>
-								</Tr>
-							))}
+										</Td>
+									</Tr>
+								))}
 						</Tbody>
 					</Table>
 				)}
@@ -169,4 +173,4 @@ const UserProfiles = () => {
 	);
 };
 
-export default UserProfiles;
+export default UserAccounts;

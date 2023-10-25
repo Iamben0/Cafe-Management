@@ -26,7 +26,7 @@ const UserProfiles = () => {
 	const viewProfile = async () => {
 		try {
 			const response = await fetch(
-				'http://localhost:8080/api/system-admin/view/'
+				'http://localhost:8080/api/system-admin/view/user-profiles/'
 			);
 			if (response.ok) {
 				const data = await response.json();
@@ -134,33 +134,36 @@ const UserProfiles = () => {
 							</Tr>
 						</Thead>
 						<Tbody>
-							{userProfile.map((user) => (
-								<Tr key={user.id}>
-									<Td>{user.profileType}</Td>
-									<Td>{user.jobTitle}</Td>
-									<Td>
-										<Link href={`userprofiles/update/${user.jobTitle}`}>
+							{/* // set up if active == false */}
+							{userProfile
+								.filter((user) => user.active === true)
+								.map((user) => (
+									<Tr key={user.id}>
+										<Td>{user.profileType}</Td>
+										<Td>{user.jobTitle}</Td>
+										<Td>
+											<Link href={`userprofiles/update/${user.jobTitle}`}>
+												<Button
+													size='sm'
+													onClick={() =>
+														localStorage.setItem('oldJobTitle', user.jobTitle)
+													}
+												>
+													Update
+												</Button>
+											</Link>
+										</Td>
+										<Td>
 											<Button
 												size='sm'
-												onClick={() =>
-													localStorage.setItem('jobTitle', user.jobTitle)
-												}
+												colorScheme='red'
+												onClick={() => handleSuspendProfile(user.jobTitle)}
 											>
-												Update
+												Suspend
 											</Button>
-										</Link>
-									</Td>
-									<Td>
-										<Button
-											size='sm'
-											colorScheme='red'
-											onClick={() => handleSuspendProfile(user.jobTitle)}
-										>
-											Suspend
-										</Button>
-									</Td>
-								</Tr>
-							))}
+										</Td>
+									</Tr>
+								))}
 						</Tbody>
 					</Table>
 				)}

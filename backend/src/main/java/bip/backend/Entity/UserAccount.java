@@ -2,7 +2,7 @@ package bip.backend.Entity;
 
 import bip.backend.Repository.UserAccountRepository;
 import bip.backend.Repository.UserProfileRepository;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import bip.backend.GetRepository;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.*;
@@ -10,16 +10,18 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
+
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 @Entity
-@Table(name = "user_account")
-@JsonIgnoreProperties({"userProfile"})
+@Table(name = "user_account", indexes = {
+        @Index(name = "user_account_username_key", columnList = "username", unique = true)
+})
+
 public class UserAccount {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,14 +40,20 @@ public class UserAccount {
     @Column(name = "email", nullable = false)
     private String email;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @Fetch(FetchMode.JOIN)
-    @JoinColumn(name = "user_profile", nullable = false)
+    @Column(name = "active", nullable = false)
+    private Boolean active = false;
+
+    @Column(name = "cafe_role")
+    private String cafeRole;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_profile")
     private UserProfile userProfile;
 
-
     // verify user account when logging in, after wards return the user account details
-    public static String verifyUserAccount(String username, String password, UserAccountRepository userAccountRepository) {
+    public String verifyUserAccount(String username, String password) {
+        UserAccountRepository userAccountRepository = GetRepository.UserAccount();
+
         if (!userAccountRepository.existsByUsernameAndPassword(username, password)) {
             throw new RuntimeException("Incorrect Username or Password");
         }
@@ -62,56 +70,45 @@ public class UserAccount {
     }
 
     // view user account
-    public static String viewAccount(String username, UserAccountRepository userAccountRepository) {
-//        if (!userAccountRepository.existsByUsername(username)) {
-//            throw new RuntimeException("Username does not exist");
-//        }
-//        UserAccount userAccount = userAccountRepository.findByUsername(username);
-//        ObjectMapper mapper = new ObjectMapper();
-//        JsonNode arrayNode = mapper.valueToTree(userAccount);
-//
-//        return arrayNode.toString();
-        return null;
+    public String viewUserAcc() {
+        List<UserAccount> userAccountList = GetRepository.UserAccount().findAll();
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode arrayNode = mapper.valueToTree(userAccountList);
+        return arrayNode.toString();
     }
 
     // create user account
-    public static void createUserAcct(String username, String name, String password, String email, String jobTitle, UserProfileRepository userProfileRepository, UserAccountRepository userAccountRepository) {
-        UserProfile userProfile = userProfileRepository.findUserProfileByJobTitle(jobTitle);
-        System.out.println("User profile: " + userProfile.getJobTitle());
-        System.out.println("User profile: " + userProfile.getProfileType());
-        System.out.println("Username: " + username);
-        System.out.println("Name: " + name);
-        System.out.println("Password: " + password);
-        System.out.println("Email: " + email);
-        System.out.println("Job Title: " + jobTitle);
+    public void createUserAcct(String username, String name, String password, String email, String jobTitle) {
+        UserProfileRepository userProfileRepository = GetRepository.UserProfile();
+        UserAccountRepository userAccountRepository = GetRepository.UserAccount();
 
 
         if (userAccountRepository.existsByUsername(username)) {
             throw new RuntimeException("Username already exists");
         }
-        if (username.isEmpty() && password.isEmpty() && name.isEmpty() && email.isEmpty()) {
+        if (username.isEmpty() || password.isEmpty() || name.isEmpty() || email.isEmpty()) {
             throw new RuntimeException("Please fill in all fields");
         }
         if (jobTitle.isEmpty()) {
-            throw new RuntimeException("Job title cannot be null");
+            throw new RuntimeException("Please select a job title");
         }
-        if (userProfileRepository.existsByJobTitle(jobTitle)) {
-            throw new RuntimeException("Job title does not exist");
-        }
-
+        UserProfile userProfile = userProfileRepository.findByJobTitle(jobTitle);
         UserAccount userAccount = new UserAccount();
+
         userAccount.userProfile = userProfile;
         userAccount.setUsername(username);
         userAccount.setName(name);
         userAccount.setPassword(password);
         userAccount.setEmail(email);
         userAccount.setUserProfile(userProfile);
+        userAccount.setCafeRole("un-assign");
 
         userAccountRepository.save(userAccount);
     }
 
     // update user account
-    public static boolean updateUserAccount(String username, String newUsername, String name, String password, String email, UserProfile userProfile, UserAccountRepository userAccountRepository) {
+    public static boolean updateUserAccount(String username, String newUsername, String name, String
+            password, String email, UserProfile userProfile, UserAccountRepository userAccountRepository) {
         if (!userAccountRepository.existsByUsername(username)) {
             throw new RuntimeException("Username does not exist");
         }
@@ -140,6 +137,6 @@ public class UserAccount {
         UserAccount userAccount = userAccountRepository.findByUsername(username);
         userAccountRepository.save(userAccount);
         return true;
-
     }
+
 }

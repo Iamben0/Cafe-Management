@@ -12,7 +12,7 @@ import {
 	Input,
 	Text,
 } from '@chakra-ui/react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 const CreateUserAccount = () => {
 	const [jobTitle, setJobTitle] = useState('');
@@ -21,6 +21,27 @@ const CreateUserAccount = () => {
 	const [password, setPassword] = useState('');
 	const [email, setEmail] = useState('');
 	const [message, setMessage] = useState('');
+	const [userProfile, setUserProfile] = useState([]);
+
+	const viewProfile = async () => {
+		try {
+			const response = await fetch(
+				'http://localhost:8080/api/system-admin/view/user-profiles/'
+			);
+			if (response.ok) {
+				const data = await response.json();
+				setUserProfile(data);
+			} else {
+				console.error('Failed to fetch user data');
+			}
+		} catch (error) {
+			console.error('Error fetching user data', error);
+		}
+	};
+
+	useEffect(() => {
+		viewProfile();
+	}, []);
 
 	const handleCreateAccount = async () => {
 		// Create a JSON object with the selected values and send it to the backend
@@ -121,10 +142,11 @@ const CreateUserAccount = () => {
 							color='black'
 							onChange={(e) => setJobTitle(e.target.value)}
 						>
-							<option value='chef'>chef</option>
-							<option value='Waiter'>waiter</option>
-							<option value='Manager'>manager</option>
-							<option value='System Admin'>admin</option>
+							{userProfile.map((user) => (
+								<option key={user.id} value={user.jobTitle}>
+									{user.jobTitle}
+								</option>
+							))}
 						</Select>
 					</FormControl>
 

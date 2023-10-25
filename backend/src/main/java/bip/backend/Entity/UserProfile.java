@@ -1,6 +1,7 @@
 package bip.backend.Entity;
 
 import bip.backend.Repository.UserProfileRepository;
+import bip.backend.GetRepository;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -39,7 +40,8 @@ public class UserProfile {
 
 
     // Create user profile
-    public static void createUserProfile(String profileType, String jobTitle, UserProfileRepository userProfileRepository) {
+    public static void createUserProfile(String profileType, String jobTitle) {
+        UserProfileRepository userProfileRepository = GetRepository.UserProfile();
         if (userProfileRepository.existsByJobTitle(jobTitle)) {
             throw new RuntimeException("Profile already exists");
         }
@@ -50,7 +52,6 @@ public class UserProfile {
             throw new RuntimeException("Job title cannot be null");
         }
 
-
         UserProfile userProfile = new UserProfile();
         userProfile.setProfileType(profileType);
         userProfile.setJobTitle(jobTitle);
@@ -60,7 +61,8 @@ public class UserProfile {
     }
 
     // Update user profile
-    public static void updateUserProfile(String jobTitle, String newJobTitle, UserProfileRepository userProfileRepository) {
+    public void updateUserProfile(String jobTitle, String newJobTitle) {
+        UserProfileRepository userProfileRepository = GetRepository.UserProfile();
         if (userProfileRepository.existsByJobTitle(newJobTitle)) {
             throw new RuntimeException("User profile already exist");
         }
@@ -73,24 +75,25 @@ public class UserProfile {
         userProfileRepository.save(userProfile);
     }
 
-    // Suspend user profile
-    public static void suspendUserProfile(String jobTitle, UserProfileRepository userProfileRepository) {
+    // Suspend user profile by setting active status to false
+    public void suspendUserProfile(String jobTitle) {
+        UserProfileRepository userProfileRepository = GetRepository.UserProfile();
         UserProfile userProfile = userProfileRepository.findByJobTitle(jobTitle);
-
-        userProfileRepository.delete(userProfile);
+        userProfile.setActive(false);
+        userProfileRepository.save(userProfile);
     }
 
     // View userProfile and have ViewUserProfileController return as json
-    public static String viewUserProfile(UserProfileRepository userProfileRepository) {
-        List<UserProfile> userProfileList = userProfileRepository.findAll();
+    public String viewUserProfile() {
+        List<UserProfile> userProfileList = GetRepository.UserProfile().findAll();
         ObjectMapper mapper = new ObjectMapper();
         JsonNode arrayNode = mapper.valueToTree(userProfileList);
         return arrayNode.toString();
     }
 
     // Search user profile by job title and return as json
-    public static String searchProfile(String jobTitle, UserProfileRepository userProfileRepository) {
-        return userProfileRepository.findByJobTitle(jobTitle).toString();
+    public String searchProfile(String jobTitle) {
+        return GetRepository.UserProfile().findByJobTitle(jobTitle).toString();
     }
 
 }

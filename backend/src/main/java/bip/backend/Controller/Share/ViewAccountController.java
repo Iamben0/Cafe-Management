@@ -1,8 +1,6 @@
 package bip.backend.Controller.Share;
 
-import bip.backend.Entity.UserAccount;
 import bip.backend.Repository.UserAccountRepository;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.http.ResponseEntity;

@@ -1,22 +1,24 @@
 package bip.backend.Controller.Admin;
 
+import bip.backend.Entity.UserAccount;
 import bip.backend.Entity.UserProfile;
-import bip.backend.Repository.UserProfileRepository;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.NoArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 @NoArgsConstructor
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping("/system-admin/view")
-public class ViewUserProfileController {
+public class ViewUserAccountController {
 
-
-    @GetMapping("/user-profiles/")
-    public ResponseEntity<String> viewUserProfile() {
+    @GetMapping("/user-accounts/")
+    public ResponseEntity<String> viewUserAccount() {
         try {
-            UserProfile userProfile = new UserProfile();
-            return ResponseEntity.ok(userProfile.viewUserProfile());
+              UserAccount userAccount = new UserAccount();
+                return ResponseEntity.ok(userAccount.viewUserAcc());
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

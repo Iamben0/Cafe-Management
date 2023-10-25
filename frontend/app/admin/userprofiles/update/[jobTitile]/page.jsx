@@ -20,7 +20,7 @@ const UpdateUserProfile = () => {
 	const [message, setMessage] = useState('');
 
 	// Retrieve the jobTitle from localStorage
-	const jobTitle = localStorage.getItem('jobTitle');
+	const jobTitle = localStorage.getItem('oldJobTitle');
 
 	const handleUpdateProfile = async () => {
 		// Create a JSON object with the selected values and send it to the backend
@@ -50,7 +50,7 @@ const UpdateUserProfile = () => {
 			}
 
 			// Clear the item from localStorage once it's no longer needed
-			localStorage.removeItem('jobTitle');
+			localStorage.removeItem('oldJobTitle');
 		} catch (error) {
 			console.error('Error updating job title:', error);
 		}

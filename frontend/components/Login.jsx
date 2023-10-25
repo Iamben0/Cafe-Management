@@ -41,11 +41,11 @@ const Login = () => {
 			});
 
 			if (response.ok) {
-				const jobTitle = await response.json();
+				const profileType = await response.json();
 				setMessage('Logged in successfully!');
 				localStorage.setItem('username', username);
-				localStorage.setItem('jobTitle', jobTitle);
-				router.push(`/${jobTitle}`);
+				localStorage.setItem('profileType', profileType);
+				router.push(`/${profileType}`);
 			} else {
 				const errorMessage = await response.text();
 				setMessage(errorMessage);
