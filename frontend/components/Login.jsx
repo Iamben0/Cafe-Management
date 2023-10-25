@@ -41,9 +41,11 @@ const Login = () => {
 			});
 
 			if (response.ok) {
-				const credential = await response.json();
+				const jobTitle = await response.json();
 				setMessage('Logged in successfully!');
-				router.push(`/${credential}`);
+				localStorage.setItem('username', username);
+				localStorage.setItem('jobTitle', jobTitle);
+				router.push(`/${jobTitle}`);
 			} else {
 				const errorMessage = await response.text();
 				setMessage(errorMessage);
@@ -55,40 +57,40 @@ const Login = () => {
 
 	return (
 		<Flex
-			flexDirection='column'
-			h='100vh'
-			alignItems='center'
-			justifyContent='center'
+			flexDirection="column"
+			h="100vh"
+			alignItems="center"
+			justifyContent="center"
 		>
 			<h1
-				className='mb-4 text-4xl font-extrabold
+				className="mb-4 text-4xl font-extrabold
 			leading-none tracking-tight text-gray-900 
-			md:text-5xl lg:text-6xl dark:text-white'
+			md:text-5xl lg:text-6xl dark:text-white"
 			>
 				Cafe Management System
 			</h1>
 			<Flex
-				flexDirection='column'
-				bg='gray.700'
-				borderRadius='8'
-				boxShadow='lg'
-				p='12'
-				mt='8'
+				flexDirection="column"
+				bg="gray.700"
+				borderRadius="8"
+				boxShadow="lg"
+				p="12"
+				mt="8"
 			>
-				<Heading textColor='white' alignSelf='center' mb='6'>
+				<Heading textColor="white" alignSelf="center" mb="6">
 					Log In
 				</Heading>
 
 				<FormControl isRequired>
 					<Input
 						required
-						mb='3'
-						id='username'
-						name='username'
-						type='username'
-						placeholder='Username'
-						bg='white'
-						textColor='black'
+						mb="3"
+						id="username"
+						name="username"
+						type="username"
+						placeholder="Username"
+						bg="white"
+						textColor="black"
 						onChange={(e) => setUsername(e.target.value)}
 					/>
 				</FormControl>
@@ -97,17 +99,17 @@ const Login = () => {
 					<InputGroup>
 						<Input
 							required
-							id='password'
-							name='password'
-							placeholder='Password'
+							id="password"
+							name="password"
+							placeholder="Password"
 							type={isPasswordVisible ? 'text' : 'password'}
-							bg='white'
-							textColor='black'
+							bg="white"
+							textColor="black"
 							onChange={(e) => setPassword(e.target.value)}
 						/>
-						<InputRightElement h='auto'>
+						<InputRightElement h="auto">
 							<Button
-								textColor='black'
+								textColor="black"
 								onClick={() =>
 									setIsPasswordVisible((showPassword) => !showPassword)
 								}
@@ -117,9 +119,9 @@ const Login = () => {
 						</InputRightElement>
 					</InputGroup>
 					<Text
-						pt='2'
-						pb='2'
-						textAlign='center'
+						pt="2"
+						pb="2"
+						textAlign="center"
 						color={
 							message === 'Logged in successfully!' ? 'green.500' : 'red.500'
 						}
@@ -129,15 +131,15 @@ const Login = () => {
 				</FormControl>
 
 				<Center>
-					<Button mb='4' colorScheme='blue' onClick={handleLogin}>
+					<Button mb="4" colorScheme="blue" onClick={handleLogin}>
 						Log In
 					</Button>
 				</Center>
 
 				<FormControl
-					display='flex'
-					alignItems='center'
-					justifyContent='center'
+					display="flex"
+					alignItems="center"
+					justifyContent="center"
 				></FormControl>
 			</Flex>
 		</Flex>
