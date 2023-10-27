@@ -9,13 +9,14 @@ import org.springframework.web.bind.annotation.*;
 @NoArgsConstructor
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
-@RequestMapping("/system-admin/view")
-public class ViewUserAccountController {
-    @GetMapping("/user-accounts/")
-    public ResponseEntity<String> viewUserAccount() {
+@RequestMapping("/system-admin/search/user-account")
+public class SearchUserAccountController {
+    // Search by job title
+    @GetMapping("/{name}/")
+    public ResponseEntity<String> submitSearchCriteria(@PathVariable String name)
+    {
         try {
-            UserAccount userAccount = new UserAccount();
-            return ResponseEntity.ok(userAccount.viewUserAcc());
+            return ResponseEntity.ok(new UserAccount().searchAccount(name));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

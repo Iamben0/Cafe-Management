@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.*;
 @NoArgsConstructor
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
-@RequestMapping("/system-admin/search")
+@RequestMapping("/system-admin/search/user-profile")
 public class SearchUserProfileController {
     // Search by job title
-    @GetMapping("/{jobTitle}")
+    @GetMapping("/{jobTitle}/")
     public ResponseEntity<String> submitSearchCriteria(@PathVariable String jobTitle)
     {
         try {

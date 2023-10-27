@@ -5,14 +5,13 @@ import bip.backend.Entity.UserProfile;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.List;
+
 public interface UserAccountRepository extends JpaRepository<UserAccount, Integer> {
     boolean existsByUsername(String username);
     UserAccount findByUsername(String username);
     UserAccount findByUsernameAndPassword(String username, String password);
-    @Query("select (count(u) > 0) from UserAccount u where u.username = ?1 or u.password = ?2")
-    boolean existsByUsernameOrPassword(String username, String password);
-    @Query("select (count(u) > 0) from UserAccount u where u.username = ?1 and u.password = ?2")
     boolean existsByUsernameAndPassword(String username, String password);
-
-    boolean existsByEmail(String email);
+    @Query("select u from UserAccount u where upper(u.name) like upper(concat('%', ?1, '%'))")
+    List<UserAccount> findByNameContainsIgnoreCase(String name);
 }

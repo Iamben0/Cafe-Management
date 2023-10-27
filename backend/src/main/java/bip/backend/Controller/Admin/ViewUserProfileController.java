@@ -10,8 +10,6 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping("/system-admin/view")
 public class ViewUserProfileController {
-
-
     @GetMapping("/user-profiles/")
     public ResponseEntity<String> viewUserProfile() {
         try {

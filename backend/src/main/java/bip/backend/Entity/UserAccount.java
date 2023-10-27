@@ -41,12 +41,12 @@ public class UserAccount {
     private String email;
 
     @Column(name = "active", nullable = false)
-    private Boolean active = false;
+    private Boolean active = true;
 
     @Column(name = "cafe_role")
     private String cafeRole;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_profile")
     private UserProfile userProfile;
 
@@ -69,19 +69,10 @@ public class UserAccount {
         };
     }
 
-    // view user account
-    public String viewUserAcc() {
-        List<UserAccount> userAccountList = GetRepository.UserAccount().findAll();
-        ObjectMapper mapper = new ObjectMapper();
-        JsonNode arrayNode = mapper.valueToTree(userAccountList);
-        return arrayNode.toString();
-    }
-
     // create user account
     public void createUserAcct(String username, String name, String password, String email, String jobTitle) {
         UserProfileRepository userProfileRepository = GetRepository.UserProfile();
         UserAccountRepository userAccountRepository = GetRepository.UserAccount();
-
 
         if (userAccountRepository.existsByUsername(username)) {
             throw new RuntimeException("Username already exists");
@@ -92,7 +83,7 @@ public class UserAccount {
         if (jobTitle.isEmpty()) {
             throw new RuntimeException("Please select a job title");
         }
-        UserProfile userProfile = userProfileRepository.findByJobTitle(jobTitle);
+        UserProfile userProfile = userProfileRepository.findByJobTitle(jobTitle).get(0);
         UserAccount userAccount = new UserAccount();
 
         userAccount.userProfile = userProfile;
@@ -106,37 +97,59 @@ public class UserAccount {
         userAccountRepository.save(userAccount);
     }
 
+    // view user account
+    public String viewUserAcc() {
+        List<UserAccount> userAccountList = GetRepository.UserAccount().findAll();
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode arrayNode = mapper.valueToTree(userAccountList);
+        return arrayNode.toString();
+    }
+
     // update user account
-    public static boolean updateUserAccount(String username, String newUsername, String name, String
-            password, String email, UserProfile userProfile, UserAccountRepository userAccountRepository) {
-        if (!userAccountRepository.existsByUsername(username)) {
-            throw new RuntimeException("Username does not exist");
-        }
-        if (username == null || password == null) {
-            throw new RuntimeException("Username and password cannot be null");
-        }
-        if (userProfile == null) {
-            throw new RuntimeException("User profile cannot be null");
-        }
+    public void updateUserAccount(String username,
+                                  String newUsername,
+                                  String newName,
+                                  String newPassword,
+                                  String newEmail) {
+
+        UserAccountRepository userAccountRepository = GetRepository.UserAccount();
         UserAccount userAccount = userAccountRepository.findByUsername(username);
+
+        if (newUsername.equals(username) &&
+                newName.equals(userAccount.getName()) &&
+                newPassword.equals(userAccount.getPassword()) &&
+                newEmail.equals(userAccount.getEmail())) {
+            throw new RuntimeException("No changes detected");
+        }
+
         userAccount.setUsername(newUsername);
-        userAccount.setName(name);
-        userAccount.setPassword(password);
-        userAccount.setEmail(email);
-        userAccount.setUserProfile(userProfile);
+        userAccount.setName(newName);
+        userAccount.setPassword(newPassword);
+        userAccount.setEmail(newEmail);
 
         userAccountRepository.save(userAccount);
-        return true;
     }
 
     // suspend user account
-    public static boolean suspendUserAccount(String username, UserAccountRepository userAccountRepository) {
-        if (!userAccountRepository.existsByUsername(username)) {
-            throw new RuntimeException("Username does not exist");
-        }
+    public void suspendUserAccount(String username) {
+        UserAccountRepository userAccountRepository = GetRepository.UserAccount();
         UserAccount userAccount = userAccountRepository.findByUsername(username);
+        userAccount.setActive(false);
         userAccountRepository.save(userAccount);
-        return true;
+    }
+
+
+    public String searchAccount(String name) {
+        List<UserAccount> userAccountList;
+        if (name.isBlank()) {
+            userAccountList = GetRepository.UserAccount().findAll();
+        } else {
+            userAccountList = GetRepository.UserAccount().findByNameContainsIgnoreCase(name);
+        }
+
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode arrayNode = mapper.valueToTree(userAccountList);
+        return arrayNode.toString();
     }
 
 }

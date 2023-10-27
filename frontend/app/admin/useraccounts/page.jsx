@@ -14,6 +14,7 @@ import {
 	Th,
 	Thead,
 	Tr,
+	Box,
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
@@ -43,10 +44,10 @@ const UserAccounts = () => {
 		viewAccount();
 	}, []);
 
-	const handleSuspendProfile = async (userJobTitle) => {
+	const handleSuspendAccount = async (username) => {
 		try {
 			const response = await fetch(
-				`http://localhost:8080/api/system-admin/suspend/${userJobTitle}`,
+				`http://localhost:8080/api/system-admin/suspend/user-account/${username}/`,
 				{
 					method: 'DELETE', // Assuming you're using HTTP DELETE for suspension
 				}
@@ -64,32 +65,40 @@ const UserAccounts = () => {
 		}
 
 		// After a successful response
-		setUserProfile((prevUsers) =>
-			prevUsers.filter((user) => user.jobTitle !== userJobTitle)
+		setUserAccount((prevUsers) =>
+			prevUsers.filter((user) => user.username !== username)
 		);
 	};
 
 	// Filter the profiles based on the search term
-	const handleSearchProfile = (e) => {
-		if (searchTerm.trim() === '') {
-			// If the search term is empty, show all profiles
-			viewProfile();
-		} else {
-			const filteredProfiles = userAccount.filter((user) =>
-				user.jobTitle.toLowerCase().includes(searchTerm.toLowerCase())
+	const handleSearchAccount = async () => {
+		try {
+			const response = await fetch(
+				searchTerm === ''
+					? `http://localhost:8080/api/system-admin/search/user-account/ /`
+					: `http://localhost:8080/api/system-admin/search/user-account/${searchTerm}/`
 			);
-
-			// Set the filtered profiles to the state
-			setUserProfile(filteredProfiles);
+			if (response.ok) {
+				const data = await response.json();
+				console.log(data);
+				setUserAccount(data);
+			} else {
+				console.error(
+					`Failed to fetch user data. Status: ${
+						response.status
+					}, Response: ${await response.text()}`
+				);
+			}
+		} catch (error) {
+			console.error('Error fetching user data', error);
 		}
 	};
-
 	return (
 		<Center>
 			<Container maxW='container.xl'>
 				<Flex justifyContent='space-between'>
 					<Heading as='h1' size='xl' mt={8} mb={4}>
-						User Profiles
+						User Accounts
 					</Heading>
 
 					<Flex
@@ -113,60 +122,78 @@ const UserAccounts = () => {
 							id='search'
 							w='50'
 							type='text'
-							placeholder='Search by Job Title'
+							placeholder='Search by Name'
 							value={searchTerm}
 							onChange={(e) => setSearchTerm(e.target.value)}
 						/>
-						<Button ml='2' onClick={handleSearchProfile} value={searchTerm}>
+						<Button ml='2' onClick={handleSearchAccount} value={searchTerm}>
 							Search
 						</Button>
 					</Flex>
 				</Flex>
 
 				{userAccount.length > 0 && (
-					<Table variant='simple'>
-						<Thead>
-							<Tr>
-								<Th color='white'>Profile Type</Th>
-								<Th color='white'>Job Title</Th>
-								<Th color='white'>Update</Th>
-								<Th color='white'>Suspend</Th>
-							</Tr>
-						</Thead>
-						<Tbody>
-							{/* // set up if active == false */}
-							{userAccount
-								.filter((user) => user.active === true)
-								.map((user) => (
-									<Tr key={user.id}>
-										<Td>{user.username}</Td>
-										<Td>{user.name}</Td>
-										<Td>{user.email}</Td>
-										<Td>
-											<Link href={`useraccount/update/${user.email}`}>
+					<Box overflowY='auto'>
+						<Table variant='simple'>
+							<Thead>
+								<Tr>
+									<Th color='white'>Username</Th>
+									<Th color='white'>Name</Th>
+									<Th color='white'>Email</Th>
+									<Th color='white'>Job Title</Th>
+									<Th color='white'>Update</Th>
+									<Th color='white'>Suspend</Th>
+								</Tr>
+							</Thead>
+							<Tbody>
+								{/* // set up if active == false */}
+								{userAccount
+									.filter((user) => user.active === true)
+									.map((user) => (
+										<Tr key={user.id}>
+											<Td>{user.username}</Td>
+											<Td>{user.name}</Td>
+											<Td>{user.email}</Td>
+											<Td>{user.userProfile.jobTitle}</Td>
+											<Td>
+												<Link href={`useraccounts/update/${user.username}`}>
+													<Button
+														size='sm'
+														onClick={() => (
+															localStorage.setItem(
+																'oldUsername',
+																user.username
+															),
+															localStorage.setItem('oldName', user.name),
+															localStorage.setItem('oldEmail', user.email),
+															localStorage.setItem(
+																'oldPassword',
+																user.password
+															),
+															localStorage.setItem(
+																'oldJobTitle',
+																user.userProfile.jobTitle
+															)
+														)}
+													>
+														Update
+													</Button>
+												</Link>
+											</Td>
+											<Td>
 												<Button
 													size='sm'
-													onClick={() =>
-														localStorage.setItem('oldJobTitle', user.jobTitle)
-													}
+													colorScheme='red'
+													onClick={() => handleSuspendAccount(user.username)}
 												>
-													Update
+													Suspend
 												</Button>
-											</Link>
-										</Td>
-										<Td>
-											<Button
-												size='sm'
-												colorScheme='red'
-												onClick={() => handleSuspendProfile(user.jobTitle)}
-											>
-												Suspend
-											</Button>
-										</Td>
-									</Tr>
-								))}
-						</Tbody>
-					</Table>
+											</Td>
+										</Tr>
+									))}
+							</Tbody>
+						</Table>
+					</Box>
 				)}
 			</Container>
 		</Center>

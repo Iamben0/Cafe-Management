@@ -14,6 +14,7 @@ import {
 	Th,
 	Thead,
 	Tr,
+	Box,
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
@@ -43,10 +44,10 @@ const UserProfiles = () => {
 		viewProfile();
 	}, []);
 
-	const handleSuspendProfile = async (userJobTitle) => {
+	const handleSuspendProfile = async (jobTitle) => {
 		try {
 			const response = await fetch(
-				`http://localhost:8080/api/system-admin/suspend/${userJobTitle}`,
+				`http://localhost:8080/api/system-admin/suspend/user-profile/${jobTitle}/`,
 				{
 					method: 'DELETE', // Assuming you're using HTTP DELETE for suspension
 				}
@@ -65,22 +66,30 @@ const UserProfiles = () => {
 
 		// After a successful response
 		setUserProfile((prevUsers) =>
-			prevUsers.filter((user) => user.jobTitle !== userJobTitle)
+			prevUsers.filter((user) => user.jobTitle !== jobTitle)
 		);
 	};
 
-	// Filter the profiles based on the search term
-	const handleSearchProfile = (e) => {
-		if (searchTerm.trim() === '') {
-			// If the search term is empty, show all profiles
-			viewProfile();
-		} else {
-			const filteredProfiles = userProfile.filter((user) =>
-				user.jobTitle.toLowerCase().includes(searchTerm.toLowerCase())
+	const handleSearchProfile = async () => {
+		try {
+			const response = await fetch(
+				searchTerm === ''
+					? `http://localhost:8080/api/system-admin/search/user-profile/ /`
+					: `http://localhost:8080/api/system-admin/search/user-profile/${searchTerm}/`
 			);
-
-			// Set the filtered profiles to the state
-			setUserProfile(filteredProfiles);
+			if (response.ok) {
+				const data = await response.json();
+				console.log(data);
+				setUserProfile(data);
+			} else {
+				console.error(
+					`Failed to fetch user data. Status: ${
+						response.status
+					}, Response: ${await response.text()}`
+				);
+			}
+		} catch (error) {
+			console.error('Error fetching user data', error);
 		}
 	};
 
@@ -124,48 +133,50 @@ const UserProfiles = () => {
 				</Flex>
 
 				{userProfile.length > 0 && (
-					<Table variant='simple'>
-						<Thead>
-							<Tr>
-								<Th color='white'>Profile Type</Th>
-								<Th color='white'>Job Title</Th>
-								<Th color='white'>Update</Th>
-								<Th color='white'>Suspend</Th>
-							</Tr>
-						</Thead>
-						<Tbody>
-							{/* // set up if active == false */}
-							{userProfile
-								.filter((user) => user.active === true)
-								.map((user) => (
-									<Tr key={user.id}>
-										<Td>{user.profileType}</Td>
-										<Td>{user.jobTitle}</Td>
-										<Td>
-											<Link href={`userprofiles/update/${user.jobTitle}`}>
+					<Box overflowY='auto'>
+						<Table variant='simple'>
+							<Thead>
+								<Tr>
+									<Th color='white'>Profile Type</Th>
+									<Th color='white'>Job Title</Th>
+									<Th color='white'>Update</Th>
+									<Th color='white'>Suspend</Th>
+								</Tr>
+							</Thead>
+							<Tbody>
+								{/* // set up if active == false */}
+								{userProfile
+									.filter((user) => user.active === true)
+									.map((user) => (
+										<Tr key={user.id}>
+											<Td>{user.profileType}</Td>
+											<Td>{user.jobTitle}</Td>
+											<Td>
+												<Link href={`userprofiles/update/${user.jobTitle}`}>
+													<Button
+														size='sm'
+														onClick={() =>
+															localStorage.setItem('oldJobTitle', user.jobTitle)
+														}
+													>
+														Update
+													</Button>
+												</Link>
+											</Td>
+											<Td>
 												<Button
 													size='sm'
-													onClick={() =>
-														localStorage.setItem('oldJobTitle', user.jobTitle)
-													}
+													colorScheme='red'
+													onClick={() => handleSuspendProfile(user.jobTitle)}
 												>
-													Update
+													Suspend
 												</Button>
-											</Link>
-										</Td>
-										<Td>
-											<Button
-												size='sm'
-												colorScheme='red'
-												onClick={() => handleSuspendProfile(user.jobTitle)}
-											>
-												Suspend
-											</Button>
-										</Td>
-									</Tr>
-								))}
-						</Tbody>
-					</Table>
+											</Td>
+										</Tr>
+									))}
+							</Tbody>
+						</Table>
+					</Box>
 				)}
 			</Container>
 		</Center>

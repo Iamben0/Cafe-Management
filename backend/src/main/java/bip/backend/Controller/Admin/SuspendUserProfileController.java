@@ -8,10 +8,10 @@ import org.springframework.web.bind.annotation.*;
 @NoArgsConstructor
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
-@RequestMapping("/system-admin/suspend")
+@RequestMapping("/system-admin/suspend/user-profile")
 public class SuspendUserProfileController {
 
-    @DeleteMapping("/{jobTitle}")
+    @DeleteMapping("/{jobTitle}/")
     public ResponseEntity<String> suspendUserProfile(@PathVariable String jobTitle) {
         try {
             new UserProfile().suspendUserProfile(jobTitle);

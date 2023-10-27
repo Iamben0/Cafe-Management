@@ -67,10 +67,10 @@ const CreateUserProfile = () => {
 							color='black'
 							onChange={(e) => setProfileType(e.target.value)}
 						>
-							<option value='Staff'>staff</option>
-							<option value='Owner'>owner</option>
-							<option value='Manager'>manager</option>
-							<option value='System Admin'>admin</option>
+							<option value='staff'>staff</option>
+							<option value='owner'>owner</option>
+							<option value='manager'>manager</option>
+							<option value='admin'>admin</option>
 						</Select>
 					</FormControl>
 

@@ -31,7 +31,7 @@ const UpdateUserProfile = () => {
 
 			// Make an API request to update the job title
 			const response = await fetch(
-				`http://localhost:8080/api/system-admin/update/${jobTitle}`,
+				`http://localhost:8080/api/system-admin/update/user-profile/${jobTitle}/`,
 				{
 					method: 'PUT',
 					headers: {
@@ -41,16 +41,13 @@ const UpdateUserProfile = () => {
 				}
 			);
 			if (response.ok) {
-				// console.log('Job title updated successfully');
+				console.log('Job title updated successfully');
 				const msg = await response.text();
 				setMessage(msg);
 			} else {
 				const msg = await response.text();
 				setMessage(msg);
 			}
-
-			// Clear the item from localStorage once it's no longer needed
-			localStorage.removeItem('oldJobTitle');
 		} catch (error) {
 			console.error('Error updating job title:', error);
 		}
@@ -58,6 +55,8 @@ const UpdateUserProfile = () => {
 
 	const handleGoBack = () => {
 		window.history.back(); // This will navigate back to the previous page in the browser's history.
+			localStorage.removeItem('oldJobTitle');
+
 	};
 
 	return (

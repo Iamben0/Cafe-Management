@@ -2,7 +2,7 @@ DROP TABLE IF EXISTS bid;
 DROP TABLE IF EXISTS work_slot;
 DROP TABLE IF EXISTS user_account;
 DROP TABLE IF EXISTS user_profile;
-
+Create extension if not EXISTS citext;
 
 CREATE TABLE user_profile
 (

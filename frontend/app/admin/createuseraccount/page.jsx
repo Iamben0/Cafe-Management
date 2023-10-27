@@ -112,7 +112,7 @@ const CreateUserAccount = () => {
 					<FormControl mt={4}>
 						<FormLabel>Password</FormLabel>
 						<Input
-							placeholder='Job Ttile'
+							placeholder='Password'
 							bg='white'
 							color='black'
 							type='text'
@@ -137,16 +137,18 @@ const CreateUserAccount = () => {
 						<FormLabel>Job Title</FormLabel>
 						<Select
 							value={jobTitle}
-							placeholder='Select Profile Type'
+							placeholder='Select Job Title'
 							bg='white'
 							color='black'
 							onChange={(e) => setJobTitle(e.target.value)}
 						>
-							{userProfile.map((user) => (
-								<option key={user.id} value={user.jobTitle}>
-									{user.jobTitle}
-								</option>
-							))}
+							{userProfile
+								.filter((user) => user.active === true)
+								.map((user) => (
+									<option key={user.id} value={user.jobTitle}>
+										{user.jobTitle}
+									</option>
+								))}
 						</Select>
 					</FormControl>
 

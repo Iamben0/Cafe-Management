@@ -60,6 +60,14 @@ public class UserProfile {
         userProfileRepository.save(userProfile);
     }
 
+    // View userProfile and have ViewUserProfileController return as json
+    public String viewUserProfile() {
+        List<UserProfile> userProfileList = GetRepository.UserProfile().findAll();
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode arrayNode = mapper.valueToTree(userProfileList);
+        return arrayNode.toString();
+    }
+
     // Update user profile
     public void updateUserProfile(String jobTitle, String newJobTitle) {
         UserProfileRepository userProfileRepository = GetRepository.UserProfile();
@@ -70,7 +78,7 @@ public class UserProfile {
             throw new RuntimeException("Job title cannot be null");
         }
 
-        UserProfile userProfile = userProfileRepository.findByJobTitle(jobTitle);
+        UserProfile userProfile = userProfileRepository.findByJobTitle(jobTitle).get(0);
         userProfile.setJobTitle(newJobTitle);
         userProfileRepository.save(userProfile);
     }
@@ -78,22 +86,24 @@ public class UserProfile {
     // Suspend user profile by setting active status to false
     public void suspendUserProfile(String jobTitle) {
         UserProfileRepository userProfileRepository = GetRepository.UserProfile();
-        UserProfile userProfile = userProfileRepository.findByJobTitle(jobTitle);
+        UserProfile userProfile = userProfileRepository.findByJobTitle(jobTitle).get(0);
         userProfile.setActive(false);
         userProfileRepository.save(userProfile);
     }
 
-    // View userProfile and have ViewUserProfileController return as json
-    public String viewUserProfile() {
-        List<UserProfile> userProfileList = GetRepository.UserProfile().findAll();
-        ObjectMapper mapper = new ObjectMapper();
-        JsonNode arrayNode = mapper.valueToTree(userProfileList);
-        return arrayNode.toString();
-    }
 
     // Search user profile by job title and return as json
     public String searchProfile(String jobTitle) {
-        return GetRepository.UserProfile().findByJobTitle(jobTitle).toString();
+        List<UserProfile> userProfileList;
+        if (jobTitle.isBlank()) {
+            userProfileList = GetRepository.UserProfile().findAll();
+        } else {
+            userProfileList = GetRepository.UserProfile().findByJobTitleContainsIgnoreCase(jobTitle);
+        }
+
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode arrayNode = mapper.valueToTree(userProfileList);
+        return arrayNode.toString();
     }
 
 }
