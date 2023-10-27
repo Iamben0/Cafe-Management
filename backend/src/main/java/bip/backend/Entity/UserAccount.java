@@ -43,8 +43,8 @@ public class UserAccount {
     @Column(name = "active", nullable = false)
     private Boolean active = true;
 
-    @Column(name = "cafe_role")
-    private String cafeRole;
+    @Column(name = "role")
+    private String role;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_profile")
@@ -92,7 +92,7 @@ public class UserAccount {
         userAccount.setPassword(password);
         userAccount.setEmail(email);
         userAccount.setUserProfile(userProfile);
-        userAccount.setCafeRole("un-assign");
+        userAccount.setRole("un-assign");
 
         userAccountRepository.save(userAccount);
     }
@@ -139,7 +139,7 @@ public class UserAccount {
     }
 
 
-    public String searchAccount(String name) {
+    public String retrieveUserAccount(String name) {
         List<UserAccount> userAccountList;
         if (name.isBlank()) {
             userAccountList = GetRepository.UserAccount().findAll();

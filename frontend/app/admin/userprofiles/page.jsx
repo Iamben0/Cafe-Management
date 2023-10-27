@@ -24,7 +24,7 @@ const UserProfiles = () => {
 	const [searchTerm, setSearchTerm] = useState('');
 	const [message, setMessage] = useState('');
 
-	const viewProfile = async () => {
+	const viewProfiles = async () => {
 		try {
 			const response = await fetch(
 				'http://localhost:8080/api/system-admin/view/user-profiles/'
@@ -41,7 +41,7 @@ const UserProfiles = () => {
 	};
 
 	useEffect(() => {
-		viewProfile();
+		viewProfiles();
 	}, []);
 
 	const handleSuspendProfile = async (jobTitle) => {
@@ -117,7 +117,7 @@ const UserProfiles = () => {
 						</Text>
 					</Flex>
 
-					<Flex justifyContent='space-evenly' align='center' maxW='600'>
+					<Flex justifyContent='space-evenly' align='center' maxW='600' pt='5'>
 						<Input
 							id='search'
 							w='50'

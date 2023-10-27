@@ -14,7 +14,7 @@ import {
 } from '@chakra-ui/react';
 import { useState, useEffect } from 'react';
 
-const CreateUserAccount = () => {
+const CreateWorkSlot = () => {
 	const [jobTitle, setJobTitle] = useState('');
 	const [username, setUsername] = useState('');
 	const [name, setName] = useState('');
@@ -23,7 +23,7 @@ const CreateUserAccount = () => {
 	const [message, setMessage] = useState('');
 	const [userProfile, setUserProfile] = useState([]);
 
-	const viewProfiles = async () => {
+	const viewWorkSlots = async () => {
 		try {
 			const response = await fetch(
 				'http://localhost:8080/api/system-admin/view/user-profiles/'
@@ -40,7 +40,7 @@ const CreateUserAccount = () => {
 	};
 
 	useEffect(() => {
-		viewProfiles();
+		viewWorkSlots();
 	}, []);
 
 	const handleCreateAccount = async () => {
@@ -171,4 +171,4 @@ const CreateUserAccount = () => {
 	);
 };
 
-export default CreateUserAccount;
+export default CreateWorkSlot;

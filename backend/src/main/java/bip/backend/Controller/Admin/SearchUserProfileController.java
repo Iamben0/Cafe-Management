@@ -1,9 +1,6 @@
 package bip.backend.Controller.Admin;
 
 import bip.backend.Entity.UserProfile;
-import bip.backend.Repository.UserProfileRepository;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.NoArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +15,7 @@ public class SearchUserProfileController {
     public ResponseEntity<String> submitSearchCriteria(@PathVariable String jobTitle)
     {
         try {
-            return ResponseEntity.ok(new UserProfile().searchProfile(jobTitle));
+            return ResponseEntity.ok(new UserProfile().retrieveUserProfile(jobTitle));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

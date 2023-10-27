@@ -12,6 +12,5 @@ public interface UserAccountRepository extends JpaRepository<UserAccount, Intege
     UserAccount findByUsername(String username);
     UserAccount findByUsernameAndPassword(String username, String password);
     boolean existsByUsernameAndPassword(String username, String password);
-    @Query("select u from UserAccount u where upper(u.name) like upper(concat('%', ?1, '%'))")
     List<UserAccount> findByNameContainsIgnoreCase(String name);
 }

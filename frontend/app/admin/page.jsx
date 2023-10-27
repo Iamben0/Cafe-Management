@@ -8,7 +8,7 @@ const Admin = () => {
 	const [userAccount, setUserAccount] = useState([]);
 	const username = localStorage.getItem('username');
 
-	const viewAccount = async () => {
+	const viewAccounts = async () => {
 		try {
 			const response = await fetch(
 				'http://localhost:8080/api/system-admin/view/user-accounts/'
@@ -25,7 +25,7 @@ const Admin = () => {
 	};
 
 	useEffect(() => {
-		viewAccount();
+		viewAccounts();
 	}, []);
 
 	return (

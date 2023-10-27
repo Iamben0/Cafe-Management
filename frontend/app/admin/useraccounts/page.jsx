@@ -24,7 +24,7 @@ const UserAccounts = () => {
 	const [searchTerm, setSearchTerm] = useState('');
 	const [message, setMessage] = useState('');
 
-	const viewAccount = async () => {
+	const viewAccounts = async () => {
 		try {
 			const response = await fetch(
 				'http://localhost:8080/api/system-admin/view/user-accounts/'
@@ -41,7 +41,7 @@ const UserAccounts = () => {
 	};
 
 	useEffect(() => {
-		viewAccount();
+		viewAccounts();
 	}, []);
 
 	const handleSuspendAccount = async (username) => {
@@ -117,7 +117,7 @@ const UserAccounts = () => {
 						</Text>
 					</Flex>
 
-					<Flex justifyContent='space-evenly' align='center' maxW='600'>
+					<Flex justifyContent='space-evenly' align='center' maxW='600' pt='5'>
 						<Input
 							id='search'
 							w='50'

@@ -93,7 +93,7 @@ public class UserProfile {
 
 
     // Search user profile by job title and return as json
-    public String searchProfile(String jobTitle) {
+    public String retrieveUserProfile(String jobTitle) {
         List<UserProfile> userProfileList;
         if (jobTitle.isBlank()) {
             userProfileList = GetRepository.UserProfile().findAll();

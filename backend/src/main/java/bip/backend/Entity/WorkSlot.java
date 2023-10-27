@@ -1,29 +1,103 @@
 package bip.backend.Entity;
 
+import bip.backend.GetRepository;
+import bip.backend.Repository.WorkSlotRepository;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.OffsetDateTime;
+import java.time.LocalDate;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
 
+@AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
 @Entity
 @Table(name = "work_slot")
+@JsonIgnoreProperties({"bid"})
 public class WorkSlot {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Integer id;
 
-    @Column(name = "start_time", nullable = false)
-    private OffsetDateTime startTime;
+    @Column(name = "shift", nullable = false)
+    private String shift;
 
-    @Column(name = "end_time", nullable = false)
-    private OffsetDateTime endTime;
+    @Column(name = "role", nullable = false)
+    private String role;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private UserAccount user;
+    @Column(name = "date", nullable = false)
+    private LocalDate date;
 
+    @OneToMany(mappedBy = "workSlot")
+    private Set<Bid> bids = new LinkedHashSet<>();
+
+    @Column(name = "active", nullable = false)
+    private Boolean active = false;
+
+    public String viewWorkSlot() {
+        List<WorkSlot> workSlotList = GetRepository.WorkSlot().findAll();
+        ObjectMapper mapper = new ObjectMapper().registerModule(new JavaTimeModule());
+
+        ArrayNode arrayNode = mapper.createArrayNode();
+        for (WorkSlot workSlot : workSlotList) {
+            if (workSlot.date.isBefore(LocalDate.now())) {
+                continue;
+            }
+            String staff = "Not assigned";
+            for (Bid bid : workSlot.getBids()) {
+                if (bid.getApproved()) {
+                    staff = bid.getStaff().getName();
+                }
+            }
+            ObjectNode on = mapper.createObjectNode();
+            on.put("staff", staff);
+            on.put("shift", workSlot.getShift());
+            on.put("role", workSlot.getRole());
+            on.put("date", workSlot.getDate().toString());
+            on.put("active", workSlot.getActive());
+            on.put("id", workSlot.getId());
+            arrayNode.add(on);
+        }
+
+        return arrayNode.toString();
+    }
+
+    public void suspendWorkSlot(int id) {
+        WorkSlotRepository workSlotRepository = GetRepository.WorkSlot();
+        WorkSlot workSlot = workSlotRepository.findById(id).orElseThrow(() -> new RuntimeException("Work Slot not found"));
+        workSlot.setActive(false);
+        workSlotRepository.save(workSlot);
+    }
+
+    public String retrieveWorkSlot(String shift) throws JsonProcessingException {
+        String list = viewWorkSlot();
+        ArrayNode arrayNode = new ObjectMapper().createArrayNode();
+        arrayNode.addAll((ArrayNode) new ObjectMapper().readTree(list));
+
+        if (shift.isBlank()) {
+            return arrayNode.toString();
+        } else {
+            ArrayNode filteredArrayNode = new ObjectMapper().createArrayNode();
+            for (JsonNode jsonNode : arrayNode) {
+                if (jsonNode.get("shift").asText().toLowerCase().contains(shift.toLowerCase())) {
+                    filteredArrayNode.add(jsonNode);
+                }
+            }
+            return filteredArrayNode.toString();
+        }
+    }
 }

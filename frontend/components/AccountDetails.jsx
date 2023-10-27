@@ -3,10 +3,8 @@
 import { useState, useEffect } from 'react';
 import { Flex, Center, Container, Heading, FormLabel } from '@chakra-ui/react';
 
-// After login, will appear as localhost:3000/owner
-const Owner = () => {
-	const [userAccount, setUserAccount] = useState([]);
-	const username = localStorage.getItem('username');
+const AccountDetails = (username) => {
+	const [userAccount, setUserAccount] = useState(null);
 
 	const viewAccount = async () => {
 		try {
@@ -26,7 +24,7 @@ const Owner = () => {
 
 	useEffect(() => {
 		viewAccount();
-	}, []);
+	}, [username]);
 
 	return (
 		<Center h='100vh' flexDirection='column' justifyContent='flex-start'>
@@ -62,4 +60,4 @@ const Owner = () => {
 	);
 };
 
-export default Owner;
+export default AccountDetails;

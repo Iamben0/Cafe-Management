@@ -12,14 +12,13 @@ const Home = () => {
 	if (username !== null) {
 		if (profileType === 'admin') {
 			router.push('/admin');
+		} else if (profileType === 'manager') {
+			router.push('/manager');
+		} else if (profileType === 'owner') {
+			router.push('/owner');
+		} else if (profileType === 'staff') {
+			router.push('/staff');
 		}
-		// else if (profileType === 'manager') {
-		// 	return null;
-		// } else if (profileType === 'owner') {
-		// 	return null;
-		// } else if (profileType === 'staff') {
-		// 	return null;
-		// }
 	}
 
 	const Login = dynamic(() => import('@/components/Login'));

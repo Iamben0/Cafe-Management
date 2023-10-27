@@ -1,7 +1,6 @@
 package bip.backend.Controller.Admin;
 
 import bip.backend.Entity.UserProfile;
-import bip.backend.Repository.UserProfileRepository;
 import lombok.NoArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
