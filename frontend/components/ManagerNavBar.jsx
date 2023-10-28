@@ -3,15 +3,20 @@
 import { Disclosure } from '@headlessui/react';
 
 const navigation = [
-	{ name: 'Home', href: '/owner', current: true },
+	{ name: 'Home', href: '/manager', current: true },
 	{
-		name: 'Create Work Slot',
-		href: '/owner/createworkslot',
+		name: 'View Cafe Staff Bids',
+		href: '/manager/view/staffbids',
+		current: false,
+	},
+	{
+		name: 'View available Cafe Staff',
+		href: '/manager/view/staffs',
 		current: false,
 	},
 	{
 		name: 'View Work Slots',
-		href: '/owner/workslots',
+		href: '/manager/view/workslots',
 		current: false,
 	},
 ];
@@ -20,7 +25,7 @@ function classNames(...classes) {
 	return classes.filter(Boolean).join(' ');
 }
 
-const OwnerNavbar = () => {
+const ManagerNavbar = () => {
 	return (
 		<Disclosure as='nav' className='bg-gray-800'>
 			{({ open }) => (
@@ -74,4 +79,4 @@ const OwnerNavbar = () => {
 	);
 };
 
-export default OwnerNavbar;
+export default ManagerNavbar;

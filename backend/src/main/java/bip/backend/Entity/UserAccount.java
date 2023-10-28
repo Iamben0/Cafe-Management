@@ -149,4 +149,12 @@ public class UserAccount {
         return arrayNode.toString();
     }
 
+    public void selectRole(String username, String role) {
+        UserAccountRepository userAccountRepository = GetRepository.UserAccount();
+        UserAccount userAccount = userAccountRepository.findByUsername(username);
+
+        userAccount.setRole(role);
+
+        userAccountRepository.save(userAccount);
+    }
 }

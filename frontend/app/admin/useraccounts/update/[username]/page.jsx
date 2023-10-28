@@ -48,7 +48,6 @@ const UpdateUserAccount = () => {
 				password: newPassword,
 				email: newEmail,
 			};
-			console.log(updatedUserAccount);
 			const response = await fetch(
 				`http://localhost:8080/api/system-admin/update/user-account/${oldUsername}/`,
 				{

@@ -14,17 +14,13 @@ import {
 	Input,
 	Text,
 } from '@chakra-ui/react';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 const CreateWorkSlot = () => {
 	const [shift, setShift] = useState('');
 	const [role, setRole] = useState('');
 	const [date, setDate] = useState('');
-	const [email, setEmail] = useState('');
-
-	const [jobTitle, setJobTitle] = useState('');
 	const [message, setMessage] = useState('');
-	const [userProfile, setUserProfile] = useState([]);
 
 	const handleCreateWorkSlot = async () => {
 		// create a JSON object with the selected values and send it to the backend
@@ -35,7 +31,7 @@ const CreateWorkSlot = () => {
 				date: date,
 			};
 
-			// Send wokrSlotData to your backend controller via an API request
+			// send wokrSlotData to your backend controller via an API request
 			const response = await fetch(
 				'http://localhost:8080/api/owner/create/work-slot/',
 				{

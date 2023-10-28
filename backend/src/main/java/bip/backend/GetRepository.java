@@ -1,6 +1,5 @@
 package bip.backend;
 
-import bip.backend.Entity.Bid;
 import bip.backend.Repository.BidRepository;
 import bip.backend.Repository.UserAccountRepository;
 import bip.backend.Repository.UserProfileRepository;
