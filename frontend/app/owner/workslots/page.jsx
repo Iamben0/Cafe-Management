@@ -1,3 +1,5 @@
+// VIEW WORK SLOTS PAGE
+
 'use client';
 import {
 	Button,
@@ -19,10 +21,13 @@ import {
 	TabPanels,
 	Tab,
 	TabPanel,
+	InputGroup,
+	InputRightElement,
 } from '@chakra-ui/react';
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { DeleteIcon, CloseIcon } from '@chakra-ui/icons';
 
 const WorkSlotTable = ({ workSlots, role, handleSuspendWorkSlot }) => {
 	return (
@@ -41,20 +46,49 @@ const WorkSlotTable = ({ workSlots, role, handleSuspendWorkSlot }) => {
 					<Tbody>
 						{workSlots
 							.filter((workslot) => workslot.role === role && workslot.active)
+							.sort((a, b) => {
+								const dateComparison = new Date(a.date) - new Date(b.date);
+								if (dateComparison !== 0) {
+									return dateComparison; // sort by date in ascending order
+								}
+
+								// if dates are the same, compare by shift
+								const shiftComparison = b.shift.localeCompare(a.shift); // compare shifts as strings
+
+								if (shiftComparison !== 0) {
+									return shiftComparison; // sort by shift
+								}
+
+								// if dates and shifts are the same, sort "Not assigned" staff last
+								if (a.staff === 'Not assigned' && b.staff !== 'Not assigned') {
+									return 1; // "Not assigned" comes after other staff
+								} else if (
+									a.staff !== 'Not assigned' &&
+									b.staff === 'Not assigned'
+								) {
+									return -1; // "Not assigned" comes before other staff
+								} else {
+									return 0; // they have the same date, shift, and staff
+								}
+							})
 							.map((workslot) => (
 								<Tr key={workslot.id}>
 									<Td>{workslot.date}</Td>
 									<Td>{workslot.shift}</Td>
-									<Td>{workslot.staff}</Td>
+									<Td
+										color={
+											workslot.staff === 'Not assigned' ? 'red.500' : 'white'
+										}
+									>
+										{workslot.staff}
+									</Td>
+
 									<Td>
 										<Link href={`workslots/update/${workslot.id}`}>
 											<Button
 												size='sm'
 												onClick={() => (
-													localStorage.setItem(
-														'oldUsername',
-														workslot.username
-													),
+													localStorage.setItem('workSlotId', workslot.id),
 													localStorage.setItem('oldShift', workslot.shift),
 													localStorage.setItem('oldRole', workslot.role),
 													localStorage.setItem('oldDate', workslot.date)
@@ -112,7 +146,7 @@ const WorkSlots = () => {
 			const response = await fetch(
 				`http://localhost:8080/api/owner/suspend/${id}/`,
 				{
-					method: 'DELETE', // Assuming you're using HTTP DELETE for deletion
+					method: 'DELETE', // assuming you're using HTTP DELETE for deletion
 				}
 			);
 
@@ -127,13 +161,13 @@ const WorkSlots = () => {
 			console.error('Error deleting workslot', error);
 		}
 
-		// After a successful response
+		// after a successful response
 		setWorkSlot((prevWorkSlots) =>
 			prevWorkSlots.filter((workSlots) => workSlots.id !== id)
 		);
 	};
 
-	// Filter the work slots based on the search term
+	// filter the work slots based on the search term
 	const handleSearchWorkSlot = async () => {
 		try {
 			const response = await fetch(
@@ -181,14 +215,22 @@ const WorkSlots = () => {
 					</Flex>
 
 					<Flex justifyContent='space-evenly' align='center' maxW='600' pt='5'>
-						<Input
-							id='search'
-							w='50'
-							type='text'
-							placeholder='Search by Shift'
-							value={searchTerm}
-							onChange={(e) => setSearchTerm(e.target.value)}
-						/>
+						<InputGroup>
+							<Input
+								id='search'
+								w='50'
+								type='text'
+								placeholder='Search by Shift'
+								value={searchTerm}
+								onChange={(e) => setSearchTerm(e.target.value)}
+							/>
+							<InputRightElement h='auto'>
+								<Button size='md' onClick={() => setSearchTerm('')}>
+									{<CloseIcon />}
+								</Button>
+							</InputRightElement>
+						</InputGroup>
+
 						<Button ml='2' onClick={handleSearchWorkSlot} value={searchTerm}>
 							Search
 						</Button>

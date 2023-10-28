@@ -1,3 +1,5 @@
+// CREATE WORK SLOT PAGE
+
 'use client';
 import React from 'react';
 import {
@@ -15,54 +17,33 @@ import {
 import { useState, useEffect } from 'react';
 
 const CreateWorkSlot = () => {
-	const [jobTitle, setJobTitle] = useState('');
-	const [username, setUsername] = useState('');
-	const [name, setName] = useState('');
-	const [password, setPassword] = useState('');
+	const [shift, setShift] = useState('');
+	const [role, setRole] = useState('');
+	const [date, setDate] = useState('');
 	const [email, setEmail] = useState('');
+
+	const [jobTitle, setJobTitle] = useState('');
 	const [message, setMessage] = useState('');
 	const [userProfile, setUserProfile] = useState([]);
 
-	const viewWorkSlots = async () => {
+	const handleCreateWorkSlot = async () => {
+		// create a JSON object with the selected values and send it to the backend
 		try {
-			const response = await fetch(
-				'http://localhost:8080/api/system-admin/view/user-profiles/'
-			);
-			if (response.ok) {
-				const data = await response.json();
-				setUserProfile(data);
-			} else {
-				console.error('Failed to fetch user data');
-			}
-		} catch (error) {
-			console.error('Error fetching user data', error);
-		}
-	};
-
-	useEffect(() => {
-		viewWorkSlots();
-	}, []);
-
-	const handleCreateAccount = async () => {
-		// Create a JSON object with the selected values and send it to the backend
-		try {
-			const userAccountData = {
-				username,
-				name,
-				password,
-				email,
-				jobTitle,
+			const workSlotData = {
+				shift: shift,
+				role: role,
+				date: date,
 			};
 
-			// Send userAccountData to your backend controller via an API request
+			// Send wokrSlotData to your backend controller via an API request
 			const response = await fetch(
-				'http://localhost:8080/api/system-admin/create/user-account',
+				'http://localhost:8080/api/owner/create/work-slot/',
 				{
 					method: 'POST',
 					headers: {
 						'Content-Type': 'application/json',
 					},
-					body: JSON.stringify(userAccountData),
+					body: JSON.stringify(workSlotData),
 				}
 			);
 
@@ -74,7 +55,7 @@ const CreateWorkSlot = () => {
 				setMessage(errorMessage);
 			}
 		} catch (error) {
-			console.error('Error creating account', error);
+			console.error('Error creating work slot', error);
 		}
 	};
 
@@ -82,86 +63,57 @@ const CreateWorkSlot = () => {
 		<Center>
 			<Container maxW='container.xl'>
 				<Heading as='h1' size='xl' mt={8} mb={4}>
-					Create User Account
+					Create Work Slot
 				</Heading>
 				<Box w='300px'>
 					<FormControl mt={4}>
-						<FormLabel>Username</FormLabel>
-						<Input
-							placeholder='Username'
-							bg='white'
-							color='black'
-							type='text'
-							value={username}
-							onChange={(e) => setUsername(e.target.value)}
-						/>
-					</FormControl>
-
-					<FormControl mt={4}>
-						<FormLabel>Name</FormLabel>
-						<Input
-							placeholder='Name'
-							bg='white'
-							color='black'
-							type='text'
-							value={name}
-							onChange={(e) => setName(e.target.value)}
-						/>
-					</FormControl>
-
-					<FormControl mt={4}>
-						<FormLabel>Password</FormLabel>
-						<Input
-							placeholder='Password'
-							bg='white'
-							color='black'
-							type='text'
-							value={password}
-							onChange={(e) => setPassword(e.target.value)}
-						/>
-					</FormControl>
-
-					<FormControl mt={4}>
-						<FormLabel>Email</FormLabel>
-						<Input
-							placeholder='Email'
-							bg='white'
-							color='black'
-							type='text'
-							value={email}
-							onChange={(e) => setEmail(e.target.value)}
-						/>
-					</FormControl>
-
-					<FormControl mt={4}>
-						<FormLabel>Job Title</FormLabel>
+						<FormLabel>Shift</FormLabel>
 						<Select
-							value={jobTitle}
-							placeholder='Select Job Title'
+							placeholder='Select Shift'
 							bg='white'
 							color='black'
-							onChange={(e) => setJobTitle(e.target.value)}
+							value={shift}
+							onChange={(e) => setShift(e.target.value)}
 						>
-							{userProfile
-								.filter((user) => user.active === true)
-								.map((user) => (
-									<option key={user.id} value={user.jobTitle}>
-										{user.jobTitle}
-									</option>
-								))}
+							<option value='morning'>morning</option>
+							<option value='afternoon'>afternoon</option>
 						</Select>
 					</FormControl>
 
-					<Button mt={4} onClick={handleCreateAccount}>
-						Create User Account
+					<FormControl mt={4}>
+						<FormLabel>Role</FormLabel>
+						<Select
+							placeholder='Select Role'
+							bg='white'
+							color='black'
+							value={role}
+							onChange={(e) => setRole(e.target.value)}
+						>
+							<option value='waiter'>waiter</option>
+							<option value='cashier'>cashier</option>
+							<option value='chef'>chef</option>
+						</Select>
+					</FormControl>
+
+					<FormControl mt={4}>
+						<FormLabel>Date</FormLabel>
+						<Input
+							bg='white'
+							color='black'
+							type='date'
+							value={date}
+							onChange={(e) => setDate(e.target.value)}
+						/>
+					</FormControl>
+
+					<Button mt={4} onClick={handleCreateWorkSlot}>
+						Create Work Slot
 					</Button>
 					<Text
 						pt='2'
 						pb='2'
 						textAlign='center'
-						color={
-							message === 'User Account created!' ? 'green.500' : 'red.500'
-						}
+						color={message === 'Work Slot created!' ? 'green.500' : 'red.500'}
 					>
 						{message}
 					</Text>

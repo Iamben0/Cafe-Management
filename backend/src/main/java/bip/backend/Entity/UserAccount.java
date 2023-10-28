@@ -77,11 +77,8 @@ public class UserAccount {
         if (userAccountRepository.existsByUsername(username)) {
             throw new RuntimeException("Username already exists");
         }
-        if (username.isEmpty() || password.isEmpty() || name.isEmpty() || email.isEmpty()) {
+        if (username.isEmpty() || password.isEmpty() || name.isEmpty() || email.isEmpty() || jobTitle.isEmpty()) {
             throw new RuntimeException("Please fill in all fields");
-        }
-        if (jobTitle.isEmpty()) {
-            throw new RuntimeException("Please select a job title");
         }
         UserProfile userProfile = userProfileRepository.findByJobTitle(jobTitle).get(0);
         UserAccount userAccount = new UserAccount();

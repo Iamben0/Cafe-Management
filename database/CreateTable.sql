@@ -68,11 +68,12 @@ INSERT INTO user_account (username, name, password, email, active, role, user_pr
        ('manager1' , 'Scarlett Johansson' , 'password4' , 'blackwidow@gmail.com'  , TRUE , 'non-staff' , 4)  ,
        ('manager2' , 'Jeremy Renner'      , 'password5' , 'hawkeye@gmail.com'     , TRUE , 'non-staff' , 5)  ,
        ('staff1'   , 'Mark Ruffalo'       , 'password6' , 'hulk@gmail.com'        , TRUE , 'chef'      , 6)  ,
-       ('staff2'   , 'Samuel L. Jackson'  , 'password7' , 'nightfury@gmail.com'   , TRUE , 'cashier'   , 7)  ,
-       ('staff3'   , 'Peter Parker'       , 'password8' , 'spiderman@gmail.com'   , TRUE , 'waiter'    , 7)  ,
-       ('staff4'   , 'Peter'              , 'password6' , 'hulk@gmail.com'        , TRUE , 'un-assign' , 6)  ,
-       ('staff5'   , 'Mary'               , 'password7' , 'nightfury@gmail.com'   , TRUE , 'un-assign' , 7)  ,
-       ('staff6'   , 'Tom'                , 'password8' , 'spiderman@gmail.com'   , TRUE , 'un-assign' , 7);
+       ('staff2'   , 'Samuel L. Jackson'  , 'password7' , 'nightfury@gmail.com'   , TRUE , 'waiter'    , 7)  ,
+       ('staff3'   , 'Peter Parker'       , 'password8' , 'spiderman@gmail.com'   , TRUE , 'cashier'   , 7)  ,
+       ('staff4'   , 'person1'            , 'password6' , 'person1@gmail.com'     , TRUE , 'un-assign' , 6)  ,
+       ('staff5'   , 'person2'            , 'password7' , 'person2@gmail.com'     , TRUE , 'un-assign' , 7)  ,
+       ('staff6'   , 'person3'            , 'password8' , 'person3@gmail.com'     , TRUE , 'un-assign' , 7);
+
 
 
 
@@ -86,6 +87,7 @@ CREATE TABLE work_slot
 );
 
 INSERT INTO work_slot (shift, role, date, active) VALUES
+    ('morning'   , 'chef'  ,   '2023-11-01' , TRUE) ,
     ('morning'   , 'waiter'  , '2023-11-01' , TRUE) ,
     ('morning'   , 'cashier' , '2023-11-01' , TRUE) ,
     ('afternoon' , 'chef'    , '2023-11-01' , TRUE) ,
@@ -102,95 +104,47 @@ INSERT INTO work_slot (shift, role, date, active) VALUES
     ('morning'   , 'cashier' , '2023-11-03' , TRUE) ,
     ('afternoon' , 'chef'    , '2023-11-03' , TRUE) ,
     ('afternoon' , 'waiter'  , '2023-11-03' , TRUE) ,
-    ('afternoon' , 'cashier' , '2023-11-03' , TRUE) ,
-    ('afternoon' , 'cashier' , '2023-11-03' , TRUE);
-
-
+    ('morning'   , 'cashier' , '2023-11-03' , TRUE) ,
+    ('afternoon' , 'chef'    , '2023-11-03' , TRUE) ,
+    ('afternoon' , 'waiter'  , '2023-11-03' , TRUE) ;
 
 
 -- SELECT * FROM work_slot WHERE date = '' AND shift = 'morning';
 -- ^if exactly three rows of data and each row is uniquely one 'chef', 'waiter', and 'cashier', then work_slot is fully filled
 
+-- make sure staff_id and work_slot_id role matches
 CREATE TABLE bid
 (
     id           SERIAL PRIMARY KEY,
-    work_slot_id INTEGER REFERENCES work_slot (id),
+    work_slot_id INTEGER REFERENCES work_slot (id) NOT NULL UNIQUE,
     staff_id     INTEGER REFERENCES user_account (id),
     approved     BOOLEAN NOT NULL
 );
 
+--chef 6, cashier 7, waiter 8
+-- IF staff_id is NULL, then it is a 'un-assign' role, therefore approved is FALSE
 INSERT INTO bid (work_slot_id, staff_id, approved) VALUES
-(1  ,  6 , TRUE)  ,
-(2  ,  7 , TRUE)  ,
-(3  ,  8 , TRUE)  ,
-(4  ,  9 , TRUE)  ,
-(5  , 10 , TRUE)  ,
-(6  , 11 , TRUE)  ;
--- (7  , 12 , TRUE)  ,
--- (8  , 13 , TRUE)  ,
--- (9  , 14 , TRUE)  ,
--- (10 , 15 , TRUE)  ,
--- (11 , 16 , TRUE)  ,
--- (12 , 17 , TRUE)  ,
--- (13 , 18 , TRUE)  ,
--- (14 , 19 , TRUE)  ,
--- (15 , 20 , TRUE)  ,
--- (16 , 21 , TRUE)  ,
--- (17 , 22 , TRUE)  ,
--- (18 , 23 , TRUE)  ,
--- (19 , 24 , TRUE)  ,
--- (20 , 25 , TRUE)  ,
--- (21 , 26 , TRUE)  ,
--- (22 , 27 , TRUE)  ,
--- (23 , 28 , TRUE)  ,
--- (24 , 29 , TRUE)  ,
--- (25 , 30 , TRUE)  ,
--- (26 , 31 , TRUE)  ,
--- (27 , 32 , TRUE)  ,
--- (28 , 33 , TRUE)  ,
--- (29 , 34 , TRUE)  ,
--- (30 , 35 , TRUE)  ,
--- (31 , 36 , TRUE)  ,
--- (32 , 37 , TRUE)  ,
--- (33 , 38 , TRUE)  ,
--- (34 , 39 , TRUE)  ,
--- (35 , 40 , TRUE)  ,
--- (36 , 41 , TRUE)  ,
--- (37 , 42 , TRUE)  ,
--- (38 , 43 , TRUE)  ,
--- (39 , 44 , TRUE)  ,
--- (40 , 45 , TRUE)  ,
--- (41 , 46 , TRUE)  ,
--- (42 , 47 , TRUE)  ,
--- (43 , 48 , TRUE)  ,
--- (44 , 49 , TRUE)  ,
--- (45 , 50 , TRUE)  ,
--- (46 , 51 , TRUE)  ,
--- (47 , 52 , TRUE)  ,
--- (48 , 53 , TRUE)  ,
--- (49 , 54 , TRUE)  ,
--- (50 , 55 , TRUE)  ,
--- (51 , 56 , TRUE)  ,
--- (52 , 57 , TRUE)  ,
--- (53 , 58 , TRUE)  ,
--- (54 , 59 , TRUE)  ,
--- (55 , 60 , TRUE)  ,
--- (56 , 61 , TRUE)  ,
--- (57 , 62 , TRUE)  ,
--- (58 , 63 , TRUE)  ,
--- (59 , 64 , TRUE)  ,
--- (60 , 65 , TRUE)  ,
--- (61 , 66 , TRUE)  ,
--- (62 , 67 , TRUE)  ,
--- (63 , 68 , TRUE)  ,
--- (64 , 69 , TRUE)  ,
--- (65 , 70 , TRUE)  ,
--- (66 , 71 , TRUE)  ,
--- (67 , 72 , TRUE)  ,
--- (68 , 73 , TRUE)  ,
--- (69 , 74 , TRUE)  ,
--- (70 , 75 , TRUE)  ,
--- (71 , 76 , TRUE)  ,
--- (72 , 77 , TRUE)  ,
--- (73 , 78 , TRUE)  ,
--- (74 , 79 , TRUE);
+(1  ,    6 , TRUE)     ,
+(2  ,    7 , TRUE)     ,
+(3  ,    8 , TRUE)     ,
+(4  ,    6 , TRUE)     ,
+(5  ,    7 , TRUE)     ,
+(6  ,    8 , TRUE)     ,
+(7  ,    6 , TRUE)     ,
+(8  ,    7 , TRUE)     ,
+(9  ,    8 , TRUE)     ,
+(10 ,    6 , TRUE)     ,
+(11 ,    7 , TRUE)     ,
+(12 ,    8 , TRUE)     ,
+(13 ,    6 , TRUE)     ,
+(14 ,    7 , TRUE)     ,
+(15 ,    8 , TRUE)     ,
+(16 ,    6 , TRUE)     ,
+(17 ,    7 , TRUE)     ,
+(18 , NULL , FALSE)    ,
+(19 , NULL , FALSE)    ,
+(20 , NULL , FALSE)  ;
+
+
+
+

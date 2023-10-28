@@ -15,9 +15,12 @@ import {
 	Thead,
 	Tr,
 	Box,
+	InputGroup,
+	InputRightElement,
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { CloseIcon } from '@chakra-ui/icons';
 
 const UserProfiles = () => {
 	const [userProfile, setUserProfile] = useState([]);
@@ -118,14 +121,21 @@ const UserProfiles = () => {
 					</Flex>
 
 					<Flex justifyContent='space-evenly' align='center' maxW='600' pt='5'>
-						<Input
-							id='search'
-							w='50'
-							type='text'
-							placeholder='Search by Job Title'
-							value={searchTerm}
-							onChange={(e) => setSearchTerm(e.target.value)}
-						/>
+						<InputGroup>
+							<Input
+								id='search'
+								w='50'
+								type='text'
+								placeholder='Search by Job Title'
+								value={searchTerm}
+								onChange={(e) => setSearchTerm(e.target.value)}
+							/>
+							<InputRightElement h='auto'>
+								<Button size='md' onClick={() => setSearchTerm('')}>
+									{<CloseIcon />}
+								</Button>
+							</InputRightElement>
+						</InputGroup>
 						<Button ml='2' onClick={handleSearchProfile} value={searchTerm}>
 							Search
 						</Button>
@@ -144,7 +154,6 @@ const UserProfiles = () => {
 								</Tr>
 							</Thead>
 							<Tbody>
-								{/* // set up if active == false */}
 								{userProfile
 									.filter((user) => user.active === true)
 									.map((user) => (

@@ -33,29 +33,25 @@ public class UserProfile {
     private String jobTitle;
 
     @Column(name = "active", nullable = false)
-    private Boolean active;
+    private Boolean active = true;
 
     @OneToMany(mappedBy = "userProfile")
     private Set<UserAccount> userAccounts = new LinkedHashSet<>();
 
 
     // Create user profile
-    public static void createUserProfile(String profileType, String jobTitle) {
+    public void createUserProfile(String profileType, String jobTitle) {
         UserProfileRepository userProfileRepository = GetRepository.UserProfile();
         if (userProfileRepository.existsByJobTitle(jobTitle)) {
             throw new RuntimeException("Profile already exists");
         }
-        if (profileType.isEmpty()) {
-            throw new RuntimeException("Profile type cannot be null");
-        }
-        if (jobTitle.isEmpty()) {
-            throw new RuntimeException("Job title cannot be null");
+        if (profileType.isEmpty() || jobTitle.isEmpty()) {
+            throw new RuntimeException("Please fill in all fields");
         }
 
         UserProfile userProfile = new UserProfile();
         userProfile.setProfileType(profileType);
         userProfile.setJobTitle(jobTitle);
-        userProfile.setActive(true);
 
         userProfileRepository.save(userProfile);
     }

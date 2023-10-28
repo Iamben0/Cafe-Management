@@ -1,9 +1,11 @@
+// HOME PAGE
+
 'use client';
 
 import { useState, useEffect } from 'react';
 import { Flex, Center, Container, Heading, FormLabel } from '@chakra-ui/react';
 
-// After login, will appear as localhost:3000/owner
+// after login, will appear as localhost:3000/owner
 const Owner = () => {
 	const [userAccount, setUserAccount] = useState([]);
 	const username = localStorage.getItem('username');

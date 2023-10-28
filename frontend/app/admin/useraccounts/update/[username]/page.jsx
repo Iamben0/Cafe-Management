@@ -69,7 +69,7 @@ const UpdateUserAccount = () => {
 				setMessage(msg);
 			}
 		} catch (error) {
-			console.error('Error updating job title:', error);
+			console.error('Error updating account:', error);
 		}
 	};
 
@@ -90,7 +90,6 @@ const UpdateUserAccount = () => {
 				<Box w='300px'>
 					<FormControl mt={4}>
 						<FormLabel>Username</FormLabel>
-						{console.log}
 						<Input
 							placeholder='Username'
 							bg='white'

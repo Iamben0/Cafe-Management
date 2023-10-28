@@ -1,6 +1,7 @@
 package bip.backend.Entity;
 
 import bip.backend.GetRepository;
+import bip.backend.Repository.BidRepository;
 import bip.backend.Repository.WorkSlotRepository;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -46,7 +47,8 @@ public class WorkSlot {
     private Set<Bid> bids = new LinkedHashSet<>();
 
     @Column(name = "active", nullable = false)
-    private Boolean active = false;
+    private Boolean active = true;
+
 
     public String viewWorkSlot() {
         List<WorkSlot> workSlotList = GetRepository.WorkSlot().findAll();
@@ -100,4 +102,40 @@ public class WorkSlot {
             return filteredArrayNode.toString();
         }
     }
+
+    public void updateWorkSlot(String id, String newShift, String newRole, String newDate) {
+        WorkSlotRepository workSlotRepository = GetRepository.WorkSlot();
+        WorkSlot workSlot = workSlotRepository.findById(Integer.parseInt(id)).orElseThrow(() -> new RuntimeException("Work Slot not found"));
+        if (newShift.equals(workSlot.getShift()) &&
+                newRole.equals(workSlot.getRole()) &&
+                newDate.equals(workSlot.getDate().toString())) {
+            throw new RuntimeException("No changes detected");
+        }
+        workSlot.setShift(newShift);
+        workSlot.setRole(newRole);
+        workSlot.setDate(LocalDate.parse(newDate));
+        workSlotRepository.save(workSlot);
+    }
+
+    public void createWorkSlot(String shift, String role, String date) {
+        WorkSlotRepository workSlotRepository = GetRepository.WorkSlot();
+//        BidRepository bidRepository = GetRepository.Bid();
+
+
+        if (shift.isEmpty() || role.isEmpty() || date.isEmpty()) {
+            throw new RuntimeException("Please fill in all fields");
+        }
+
+        WorkSlot workSlot = new WorkSlot();
+        workSlot.setShift(shift);
+        workSlot.setRole(role);
+        workSlot.setDate(LocalDate.parse(date));
+
+        workSlotRepository.save(workSlot);
+//        // CREATE NEW BID TO LINK TO WORKSLOT
+//        Bid bid = new Bid();
+//
+//        bid.setWorkSlot(workSlot);
+    }
+
 }
