@@ -6,17 +6,17 @@ const navigation = [
 	{ name: 'Home', href: '/staff', current: true },
 	{
 		name: 'Book Work Slot',
-		href: '/staff/view/workslots',
+		href: '/staff/bookworkslots',
 		current: false,
 	},
 	{
 		name: 'View my Bids',
-		href: '/staff/view/bids',
+		href: '/staff/viewbids',
 		current: false,
 	},
 	{
 		name: 'View my Work Slot',
-		href: '/staff/view/myworkslots',
+		href: '/staff/viewmyworkslots',
 		current: false,
 	},
 ];
@@ -59,6 +59,7 @@ const StaffNavbar = () => {
 									onClick={() => {
 										localStorage.removeItem('username');
 										localStorage.removeItem('profileType');
+										localStorage.removeItem('role');
 									}}
 									href='/'
 									className={classNames(

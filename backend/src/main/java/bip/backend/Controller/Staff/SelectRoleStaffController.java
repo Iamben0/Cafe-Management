@@ -1,4 +1,4 @@
-package bip.backend.Controller.Admin;
+package bip.backend.Controller.Staff;
 
 import bip.backend.Entity.UserAccount;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping("/system-admin/update/user-account-role")
-public class SelectRoleUserAccountController {
+public class SelectRoleStaffController {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @PutMapping("/{username}/")

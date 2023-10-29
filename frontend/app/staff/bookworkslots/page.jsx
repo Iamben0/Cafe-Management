@@ -27,7 +27,7 @@ import {
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { DeleteIcon, CloseIcon } from '@chakra-ui/icons';
+import { CloseIcon } from '@chakra-ui/icons';
 
 const WorkSlotTable = ({ workSlots, role, handleSuspendWorkSlot }) => {
 	return (

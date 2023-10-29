@@ -83,7 +83,8 @@ CREATE TABLE work_slot
     shift        VARCHAR(255) NOT NULL CHECK ( shift IN ('morning', 'afternoon') ),
     role         VARCHAR(255) NOT NULL CHECK (role IN ('chef', 'waiter', 'cashier')),
     date         DATE         NOT NULL,
-    active       BOOLEAN      NOT NULL DEFAULT TRUE
+    active       BOOLEAN      NOT NULL DEFAULT TRUE,
+    user_account INTEGER REFERENCES user_account (id)
 );
 
 INSERT INTO work_slot (shift, role, date, active) VALUES

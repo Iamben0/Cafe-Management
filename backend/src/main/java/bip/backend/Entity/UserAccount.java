@@ -89,7 +89,11 @@ public class UserAccount {
         userAccount.setPassword(password);
         userAccount.setEmail(email);
         userAccount.setUserProfile(userProfile);
-        userAccount.setRole("un-assign");
+        if (userProfile.getProfileType().equals("admin") || userProfile.getProfileType().equals("manager") || userProfile.getProfileType().equals("owner")) {
+            userAccount.setRole("non-staff");
+        } else {
+            userAccount.setRole("un-assign");
+        }
 
         userAccountRepository.save(userAccount);
     }

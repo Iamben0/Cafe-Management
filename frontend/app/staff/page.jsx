@@ -9,6 +9,7 @@ import { Flex, Center, Container, Heading, FormLabel } from '@chakra-ui/react';
 const Staff = () => {
 	const [userAccount, setUserAccount] = useState([]);
 	const username = localStorage.getItem('username');
+	const [role, setRole] = useState('');
 
 	const viewAccount = async () => {
 		try {
@@ -29,6 +30,18 @@ const Staff = () => {
 	useEffect(() => {
 		viewAccount();
 	}, []);
+
+	useEffect(() => {
+		// filter the userAccount to find the user with matching username
+		const user = userAccount.find((user) => user.username === username);
+
+		if (user) {
+			// if a matching user is found, extract the user's role
+			setRole(user.role);
+		}
+	}, [userAccount, username]);
+
+	localStorage.setItem('role', role);
 
 	return (
 		<Center h='100vh' flexDirection='column' justifyContent='flex-start'>

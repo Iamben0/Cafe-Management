@@ -9,7 +9,6 @@ import {
 	FormControl,
 	FormLabel,
 	Select,
-	Input,
 	Text,
 } from '@chakra-ui/react';
 import { useState, useEffect } from 'react';
