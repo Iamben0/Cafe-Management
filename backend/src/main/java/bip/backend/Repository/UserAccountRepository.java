@@ -13,4 +13,6 @@ public interface UserAccountRepository extends JpaRepository<UserAccount, Intege
     UserAccount findByUsernameAndPassword(String username, String password);
     boolean existsByUsernameAndPassword(String username, String password);
     List<UserAccount> findByNameContainsIgnoreCase(String name);
+
+    UserAccount findByRole(String s);
 }

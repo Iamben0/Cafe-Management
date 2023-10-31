@@ -2,10 +2,15 @@
 
 import { Disclosure } from '@headlessui/react';
 
-const navigation = [
+const navigationForStaff = [
 	{ name: 'Home', href: '/staff', current: true },
 	{
-		name: 'Book Work Slot',
+		name: 'Select Role',
+		href: '/staff/bookworkslots/selectrole',
+		current: false,
+	},
+	{
+		name: 'Bid Work Slot',
 		href: '/staff/bookworkslots',
 		current: false,
 	},
@@ -36,7 +41,7 @@ const StaffNavbar = () => {
 							<div className='flex flex-1 items-center justify-center sm:items-stretch sm:justify-start'>
 								<div className='hidden sm:ml-6 sm:block'>
 									<div className='flex space-x-4'>
-										{navigation.map((item) => (
+										{navigationForStaff.map((item) => (
 											<a
 												key={item.name}
 												href={item.href}

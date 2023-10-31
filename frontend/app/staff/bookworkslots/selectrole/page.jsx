@@ -38,7 +38,7 @@ const SelectStaffRole = () => {
 	useEffect(() => {
 		viewAccount();
 	}, []);
-	
+
 	const handleUpdateAccount = async () => {
 		// Create a JSON object with the selected values and send it to the backend
 		try {
@@ -46,7 +46,7 @@ const SelectStaffRole = () => {
 				role: role,
 			};
 			const response = await fetch(
-				`http://localhost:8080/api/system-admin/update/user-account-role/${username}/`,
+				`http://localhost:8080/api/staff/select-role/${username}/`,
 				{
 					method: 'PUT',
 					headers: {
@@ -58,6 +58,7 @@ const SelectStaffRole = () => {
 			if (response.ok) {
 				console.log('Account Updated!');
 				const msg = await response.text();
+				localStorage.setItem('role', role);
 				setMessage(msg);
 			} else {
 				console.error('Error updating account');

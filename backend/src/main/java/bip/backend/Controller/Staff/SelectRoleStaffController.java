@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 @NoArgsConstructor
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
-@RequestMapping("/system-admin/update/user-account-role")
+@RequestMapping("/staff/select-role")
 public class SelectRoleStaffController {
     private final ObjectMapper objectMapper = new ObjectMapper();
 

@@ -10,6 +10,7 @@ const Staff = () => {
 	const [userAccount, setUserAccount] = useState([]);
 	const username = localStorage.getItem('username');
 	const [role, setRole] = useState('');
+	const [staffId, setStaffId] = useState('');
 
 	const viewAccount = async () => {
 		try {
@@ -38,10 +39,12 @@ const Staff = () => {
 		if (user) {
 			// if a matching user is found, extract the user's role
 			setRole(user.role);
+			setStaffId(user.id);
 		}
 	}, [userAccount, username]);
 
 	localStorage.setItem('role', role);
+	localStorage.setItem('staffId', staffId);
 
 	return (
 		<Center h='100vh' flexDirection='column' justifyContent='flex-start'>

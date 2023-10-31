@@ -157,6 +157,10 @@ public class UserAccount {
         UserAccountRepository userAccountRepository = GetRepository.UserAccount();
         UserAccount userAccount = userAccountRepository.findByUsername(username);
 
+        if (userAccount.getRole().equals("chef") || userAccount.getRole().equals("waiter") || userAccount.getRole().equals("cashier")) {
+            throw new RuntimeException("Role has been set, cannot be changed!");
+        }
+
         userAccount.setRole(role);
 
         userAccountRepository.save(userAccount);

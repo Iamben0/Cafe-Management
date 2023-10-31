@@ -74,7 +74,6 @@ public class WorkSlot {
             on.put("id", workSlot.getId());
             arrayNode.add(on);
         }
-
         return arrayNode.toString();
     }
 
@@ -119,23 +118,51 @@ public class WorkSlot {
 
     public void createWorkSlot(String shift, String role, String date) {
         WorkSlotRepository workSlotRepository = GetRepository.WorkSlot();
-//        BidRepository bidRepository = GetRepository.Bid();
-
+        BidRepository bidRepository = GetRepository.Bid();
 
         if (shift.isEmpty() || role.isEmpty() || date.isEmpty()) {
             throw new RuntimeException("Please fill in all fields");
         }
-
         WorkSlot workSlot = new WorkSlot();
         workSlot.setShift(shift);
         workSlot.setRole(role);
         workSlot.setDate(LocalDate.parse(date));
 
         workSlotRepository.save(workSlot);
-//        // CREATE NEW BID TO LINK TO WORKSLOT
-//        Bid bid = new Bid();
-//
-//        bid.setWorkSlot(workSlot);
+
+        Bid bid = new Bid();
+        bid.setApproved(false);
+        bid.setStaff(null);
+        bid.setWorkSlot(workSlot);
+        bidRepository.save(bid);
+    }
+
+    public String viewWorkSlotToBid() {
+        List<WorkSlot> workSlotList = GetRepository.WorkSlot().findAll();
+        ObjectMapper mapper = new ObjectMapper().registerModule(new JavaTimeModule());
+
+        ArrayNode arrayNode = mapper.createArrayNode();
+        for (WorkSlot workSlot : workSlotList) {
+            if (workSlot.date.isBefore(LocalDate.now())) {
+                continue;
+            }
+            String staff = "Not assigned";
+            for (Bid bid : workSlot.getBids()) {
+                if (bid.getApproved()) {
+                    staff = bid.getStaff().getName();
+                }
+            }
+
+            ObjectNode obj1 = mapper.createObjectNode();
+            obj1.put("staff", staff);
+            obj1.put("shift", workSlot.getShift());
+            obj1.put("role", workSlot.getRole());
+            obj1.put("date", workSlot.getDate().toString());
+            obj1.put("active", workSlot.getActive());
+            obj1.put("id", workSlot.getId());
+            arrayNode.add(obj1);
+        }
+        return arrayNode.toString();
     }
 
 }

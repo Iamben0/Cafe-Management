@@ -1,4 +1,4 @@
-// VIEW WORK SLOTS PAGE
+// VIEW BID WORK SLOTS PAGE
 
 'use client';
 import {
@@ -26,10 +26,9 @@ import {
 } from '@chakra-ui/react';
 
 import { useEffect, useState } from 'react';
-import Link from 'next/link';
 import { CloseIcon } from '@chakra-ui/icons';
 
-const WorkSlotTable = ({ workSlots, role, handleSuspendWorkSlot }) => {
+const WorkSlotTable = ({ workSlots, role, handleBidWorkSlot }) => {
 	return (
 		workSlots.length > 0 && (
 			<Box overflowY='auto'>
@@ -38,14 +37,17 @@ const WorkSlotTable = ({ workSlots, role, handleSuspendWorkSlot }) => {
 						<Tr>
 							<Th color='white'>Date (YYYY-MM-DD)</Th>
 							<Th color='white'>Shift (Morning/Afternoon)</Th>
-							<Th color='white'>Staff</Th>
-							<Th color='white'>Update</Th>
-							<Th color='white'>Delete</Th>
+							<Th color='white'>Bid</Th>
 						</Tr>
 					</Thead>
 					<Tbody>
 						{workSlots
-							.filter((workslot) => workslot.role === role && workslot.active)
+							.filter(
+								(workslot) =>
+									workslot.role === role &&
+									workslot.active &&
+									workslot.staff === 'Not assigned'
+							)
 							.sort((a, b) => {
 								const dateComparison = new Date(a.date) - new Date(b.date);
 								if (dateComparison !== 0) {
@@ -58,53 +60,26 @@ const WorkSlotTable = ({ workSlots, role, handleSuspendWorkSlot }) => {
 								if (shiftComparison !== 0) {
 									return shiftComparison; // sort by shift
 								}
-
-								// if dates and shifts are the same, sort "Not assigned" staff last
-								if (a.staff === 'Not assigned' && b.staff !== 'Not assigned') {
-									return 1; // "Not assigned" comes after other staff
-								} else if (
-									a.staff !== 'Not assigned' &&
-									b.staff === 'Not assigned'
-								) {
-									return -1; // "Not assigned" comes before other staff
-								} else {
-									return 0; // they have the same date, shift, and staff
-								}
 							})
 							.map((workslot) => (
 								<Tr key={workslot.id}>
 									<Td>{workslot.date}</Td>
 									<Td>{workslot.shift}</Td>
-									<Td
+									{/* <Td
 										color={
 											workslot.staff === 'Not assigned' ? 'red.500' : 'white'
 										}
 									>
 										{workslot.staff}
-									</Td>
+									</Td> */}
 
-									<Td>
-										<Link href={`workslots/update/${workslot.id}`}>
-											<Button
-												size='sm'
-												onClick={() => (
-													localStorage.setItem('workSlotId', workslot.id),
-													localStorage.setItem('oldShift', workslot.shift),
-													localStorage.setItem('oldRole', workslot.role),
-													localStorage.setItem('oldDate', workslot.date)
-												)}
-											>
-												Update
-											</Button>
-										</Link>
-									</Td>
 									<Td>
 										<Button
 											size='sm'
-											colorScheme='red'
-											onClick={() => handleSuspendWorkSlot(workslot.id)}
+											colorScheme='blue'
+											onClick={() => handleBidWorkSlot(workslot.id)}
 										>
-											Delete
+											Bid
 										</Button>
 									</Td>
 								</Tr>
@@ -121,10 +96,13 @@ const WorkSlots = () => {
 	const [searchTerm, setSearchTerm] = useState('');
 	const [message, setMessage] = useState('');
 
-	const viewWorkSlots = async () => {
+	const staffId = localStorage.getItem('staffId');
+	const role = localStorage.getItem('role');
+
+	const viewWorkSlotsToBid = async () => {
 		try {
 			const response = await fetch(
-				'http://localhost:8080/api/owner/view/work-slots/'
+				'http://localhost:8080/api/staff/view/available-work-slots/'
 			);
 			if (response.ok) {
 				const data = await response.json();
@@ -138,15 +116,22 @@ const WorkSlots = () => {
 	};
 
 	useEffect(() => {
-		viewWorkSlots();
+		viewWorkSlotsToBid();
 	}, []);
 
-	const handleSuspendWorkSlot = async (id) => {
+	const handleBidWorkSlot = async (workslotId) => {
 		try {
+			const bidWorkSlot = {
+				staff_id: staffId,
+			};
 			const response = await fetch(
-				`http://localhost:8080/api/owner/suspend/${id}/`,
+				`http://localhost:8080/api/staff/view/available-work-slots/bid/${workslotId}/`,
 				{
-					method: 'DELETE', // assuming you're using HTTP DELETE for deletion
+					method: 'PUT',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					body: JSON.stringify(bidWorkSlot),
 				}
 			);
 
@@ -158,22 +143,22 @@ const WorkSlots = () => {
 				setMessage(errorMessage);
 			}
 		} catch (error) {
-			console.error('Error deleting workslot', error);
+			console.error('Error bidding workslot', error);
 		}
 
-		// after a successful response
-		setWorkSlot((prevWorkSlots) =>
-			prevWorkSlots.filter((workSlots) => workSlots.id !== id)
-		);
+		// // after a successful response
+		// setWorkSlot((prevWorkSlots) =>
+		// 	prevWorkSlots.filter((workSlots) => workSlots.id !== id)
+		// );
 	};
 
-	// filter the work slots based on the search term
-	const handleSearchWorkSlot = async () => {
+	// filter the bid work slots based on the search term
+	const handleSearchBidWorkSlot = async () => {
 		try {
 			const response = await fetch(
 				searchTerm === ''
-					? `http://localhost:8080/api/owner/search/ /`
-					: `http://localhost:8080/api/owner/search/${searchTerm}/`
+					? `http://localhost:8080/api/staff/view/available-work-slots/search/ /`
+					: `http://localhost:8080/api/staff/view/available-work-slots/search/${searchTerm}/`
 			);
 			if (response.ok) {
 				const data = await response.json();
@@ -195,7 +180,7 @@ const WorkSlots = () => {
 			<Container maxW='container.xl'>
 				<Flex justifyContent='space-between'>
 					<Heading as='h1' size='xl' mt={8} mb={4}>
-						Work Slots
+						Available Work Slots
 					</Heading>
 
 					<Flex
@@ -208,7 +193,7 @@ const WorkSlots = () => {
 							pt='2'
 							pb='2'
 							textAlign='center'
-							color={message === 'Work Slot Deleted!' ? 'green.500' : 'red.500'}
+							color={message === 'Bid Work Slot!' ? 'green.500' : 'red.500'}
 						>
 							{message}
 						</Text>
@@ -231,7 +216,7 @@ const WorkSlots = () => {
 							</InputRightElement>
 						</InputGroup>
 
-						<Button ml='2' onClick={handleSearchWorkSlot} value={searchTerm}>
+						<Button ml='2' onClick={handleSearchBidWorkSlot} value={searchTerm}>
 							Search
 						</Button>
 					</Flex>
@@ -240,17 +225,9 @@ const WorkSlots = () => {
 					<TabList>
 						<Tab>
 							<Heading size='md' color='black'>
-								Chef
-							</Heading>
-						</Tab>
-						<Tab>
-							<Heading size='md' color='black'>
-								Waiter
-							</Heading>
-						</Tab>
-						<Tab>
-							<Heading size='md' color='black'>
-								Cashier
+								{role === 'un-assign'
+									? 'Role unassign, please select a role first!'
+									: role}
 							</Heading>
 						</Tab>
 					</TabList>
@@ -259,22 +236,8 @@ const WorkSlots = () => {
 						<TabPanel>
 							<WorkSlotTable
 								workSlots={workSlots}
-								role='chef'
-								handleSuspendWorkSlot={handleSuspendWorkSlot}
-							/>
-						</TabPanel>
-						<TabPanel>
-							<WorkSlotTable
-								workSlots={workSlots}
-								role='waiter'
-								handleSuspendWorkSlot={handleSuspendWorkSlot}
-							/>
-						</TabPanel>
-						<TabPanel>
-							<WorkSlotTable
-								workSlots={workSlots}
-								role='cashier'
-								handleSuspendWorkSlot={handleSuspendWorkSlot}
+								role={role}
+								handleBidWorkSlot={handleBidWorkSlot}
 							/>
 						</TabPanel>
 					</TabPanels>
