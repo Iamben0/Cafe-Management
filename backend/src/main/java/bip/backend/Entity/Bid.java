@@ -65,4 +65,23 @@ public class Bid {
         }
     }
 
+    // let staff view if their bid is approved or not approved
+    public String viewBidResult(String staffId) {
+        BidRepository bidRepository = GetRepository.Bid();
+        List<Bid> bidList = bidRepository.findAllByStaffId(Integer.parseInt(staffId));
+
+        ObjectMapper mapper = new ObjectMapper().registerModule(new JavaTimeModule());
+
+        ArrayNode arrayNode = mapper.createArrayNode();
+        for (Bid bid : bidList) {
+            ObjectNode on = mapper.createObjectNode();
+            on.put("workSlotId", bid.getWorkSlot().getId());
+            on.put("shift", bid.getWorkSlot().getShift());
+            on.put("role", bid.getWorkSlot().getRole());
+            on.put("date", bid.getWorkSlot().getDate().toString());
+            on.put("approved", bid.getApproved());
+            arrayNode.add(on);
+        }
+        return arrayNode.toString();
+    }
 }
