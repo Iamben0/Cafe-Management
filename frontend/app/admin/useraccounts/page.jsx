@@ -73,7 +73,7 @@ const UserAccounts = () => {
 		);
 	};
 
-	// Filter the profiles based on the search term
+	// Filter the account based on the search term
 	const handleSearchAccount = async () => {
 		try {
 			const response = await fetch(

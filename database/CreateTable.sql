@@ -82,32 +82,30 @@ CREATE TABLE work_slot
     id           SERIAL PRIMARY KEY,
     shift        VARCHAR(255) NOT NULL CHECK ( shift IN ('morning', 'afternoon') ),
     role         VARCHAR(255) NOT NULL CHECK (role IN ('chef', 'waiter', 'cashier')),
-    date         DATE         NOT NULL,
-    active       BOOLEAN      NOT NULL DEFAULT TRUE,
-    user_account INTEGER REFERENCES user_account (id)
+    date         DATE         NOT NULL
 );
 
-INSERT INTO work_slot (shift, role, date, active) VALUES
-    ('morning'   , 'chef'  ,   '2023-11-01' , TRUE) ,
-    ('morning'   , 'waiter'  , '2023-11-01' , TRUE) ,
-    ('morning'   , 'cashier' , '2023-11-01' , TRUE) ,
-    ('afternoon' , 'chef'    , '2023-11-01' , TRUE) ,
-    ('afternoon' , 'waiter'  , '2023-11-01' , TRUE) ,
-    ('afternoon' , 'cashier' , '2023-11-01' , TRUE) ,
-    ('morning'   , 'chef'    , '2023-11-02' , TRUE) ,
-    ('morning'   , 'waiter'  , '2023-11-02' , TRUE) ,
-    ('morning'   , 'cashier' , '2023-11-02' , TRUE) ,
-    ('afternoon' , 'chef'    , '2023-11-02' , TRUE) ,
-    ('afternoon' , 'waiter'  , '2023-11-02' , TRUE) ,
-    ('afternoon' , 'cashier' , '2023-11-02' , TRUE) ,
-    ('morning'   , 'chef'    , '2023-11-03' , TRUE) ,
-    ('morning'   , 'waiter'  , '2023-11-03' , TRUE) ,
-    ('morning'   , 'cashier' , '2023-11-03' , TRUE) ,
-    ('afternoon' , 'chef'    , '2023-11-03' , TRUE) ,
-    ('afternoon' , 'waiter'  , '2023-11-03' , TRUE) ,
-    ('morning'   , 'cashier' , '2023-11-03' , TRUE) ,
-    ('afternoon' , 'chef'    , '2023-11-03' , TRUE) ,
-    ('afternoon' , 'waiter'  , '2023-11-03' , TRUE) ;
+INSERT INTO work_slot (shift, role, date) VALUES
+    ('morning'   , 'chef'  ,   '2023-11-01') ,
+    ('morning'   , 'waiter'  , '2023-11-01') ,
+    ('morning'   , 'cashier' , '2023-11-01') ,
+    ('afternoon' , 'chef'    , '2023-11-01') ,
+    ('afternoon' , 'waiter'  , '2023-11-01') ,
+    ('afternoon' , 'cashier' , '2023-11-01') ,
+    ('morning'   , 'chef'    , '2023-11-02') ,
+    ('morning'   , 'waiter'  , '2023-11-02') ,
+    ('morning'   , 'cashier' , '2023-11-02') ,
+    ('afternoon' , 'chef'    , '2023-11-02') ,
+    ('afternoon' , 'waiter'  , '2023-11-02') ,
+    ('afternoon' , 'cashier' , '2023-11-02') ,
+    ('morning'   , 'chef'    , '2023-11-03') ,
+    ('morning'   , 'waiter'  , '2023-11-03') ,
+    ('morning'   , 'cashier' , '2023-11-03') ,
+    ('afternoon' , 'chef'    , '2023-11-03') ,
+    ('afternoon' , 'waiter'  , '2023-11-03') ,
+    ('morning'   , 'cashier' , '2023-11-03') ,
+    ('afternoon' , 'chef'    , '2023-11-03') ,
+    ('afternoon' , 'waiter'  , '2023-11-03') ;
 
 
 -- SELECT * FROM work_slot WHERE date = '' AND shift = 'morning';

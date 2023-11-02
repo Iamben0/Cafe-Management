@@ -8,13 +8,13 @@ import org.springframework.web.bind.annotation.*;
 @NoArgsConstructor
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
-@RequestMapping("/owner/suspend")
-public class SuspendWorkSlotController {
+@RequestMapping("/owner/delete")
+public class DeleteWorkSlotController {
     @DeleteMapping("/{id}/")
-    public ResponseEntity<String> suspendWorkSlot(@PathVariable int id) {
+    public ResponseEntity<String> deleteWorkSlot(@PathVariable int id) {
         try {
-            new WorkSlot().suspendWorkSlot(id);
-            return ResponseEntity.ok("Work Slot Suspended!");
+            new WorkSlot().deleteWorkSlot(id);
+            return ResponseEntity.ok("Work Slot Deleted!");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

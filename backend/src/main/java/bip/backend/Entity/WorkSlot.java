@@ -46,8 +46,8 @@ public class WorkSlot {
     @OneToMany(mappedBy = "workSlot")
     private Set<Bid> bids = new LinkedHashSet<>();
 
-    @Column(name = "active", nullable = false)
-    private Boolean active = true;
+//    @Column(name = "active", nullable = false)
+//    private Boolean active = true;
 
 
     public String viewWorkSlot() {
@@ -70,18 +70,21 @@ public class WorkSlot {
             on.put("shift", workSlot.getShift());
             on.put("role", workSlot.getRole());
             on.put("date", workSlot.getDate().toString());
-            on.put("active", workSlot.getActive());
             on.put("id", workSlot.getId());
             arrayNode.add(on);
         }
         return arrayNode.toString();
     }
 
-    public void suspendWorkSlot(int id) {
+    public void deleteWorkSlot(int id) {
         WorkSlotRepository workSlotRepository = GetRepository.WorkSlot();
-        WorkSlot workSlot = workSlotRepository.findById(id).orElseThrow(() -> new RuntimeException("Work Slot not found"));
-        workSlot.setActive(false);
-        workSlotRepository.save(workSlot);
+        BidRepository bidRepository = GetRepository.Bid();
+        WorkSlot workSlot = workSlotRepository.findById(id).orElse(null);
+
+        assert workSlot != null;
+        Bid bid = bidRepository.findByWorkSlotId(workSlot.getId());
+        bidRepository.delete(bid);
+        workSlotRepository.delete(workSlot);
     }
 
     public String retrieveWorkSlot(String shift) throws JsonProcessingException {
@@ -158,7 +161,6 @@ public class WorkSlot {
             obj1.put("shift", workSlot.getShift());
             obj1.put("role", workSlot.getRole());
             obj1.put("date", workSlot.getDate().toString());
-            obj1.put("active", workSlot.getActive());
             obj1.put("id", workSlot.getId());
             arrayNode.add(obj1);
         }

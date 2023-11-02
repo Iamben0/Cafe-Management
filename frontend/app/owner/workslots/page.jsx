@@ -29,7 +29,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { CloseIcon } from '@chakra-ui/icons';
 
-const WorkSlotTable = ({ workSlots, role, handleSuspendWorkSlot }) => {
+const WorkSlotTable = ({ workSlots, role, handleDeleteWorkSlot }) => {
 	return (
 		workSlots.length > 0 && (
 			<Box overflowY='auto'>
@@ -45,7 +45,7 @@ const WorkSlotTable = ({ workSlots, role, handleSuspendWorkSlot }) => {
 					</Thead>
 					<Tbody>
 						{workSlots
-							.filter((workslot) => workslot.role === role && workslot.active)
+							.filter((workslot) => workslot.role === role)
 							.sort((a, b) => {
 								const dateComparison = new Date(a.date) - new Date(b.date);
 								if (dateComparison !== 0) {
@@ -102,7 +102,7 @@ const WorkSlotTable = ({ workSlots, role, handleSuspendWorkSlot }) => {
 										<Button
 											size='sm'
 											colorScheme='red'
-											onClick={() => handleSuspendWorkSlot(workslot.id)}
+											onClick={() => handleDeleteWorkSlot(workslot.id)}
 										>
 											Delete
 										</Button>
@@ -141,10 +141,10 @@ const WorkSlots = () => {
 		viewWorkSlots();
 	}, []);
 
-	const handleSuspendWorkSlot = async (id) => {
+	const handleDeleteWorkSlot = async (id) => {
 		try {
 			const response = await fetch(
-				`http://localhost:8080/api/owner/suspend/${id}/`,
+				`http://localhost:8080/api/owner/delete/${id}/`,
 				{
 					method: 'DELETE', // assuming you're using HTTP DELETE for deletion
 				}
@@ -260,21 +260,21 @@ const WorkSlots = () => {
 							<WorkSlotTable
 								workSlots={workSlots}
 								role='chef'
-								handleSuspendWorkSlot={handleSuspendWorkSlot}
+								handleDeleteWorkSlot={handleDeleteWorkSlot}
 							/>
 						</TabPanel>
 						<TabPanel>
 							<WorkSlotTable
 								workSlots={workSlots}
 								role='waiter'
-								handleSuspendWorkSlot={handleSuspendWorkSlot}
+								handleDeleteWorkSlot={handleDeleteWorkSlot}
 							/>
 						</TabPanel>
 						<TabPanel>
 							<WorkSlotTable
 								workSlots={workSlots}
 								role='cashier'
-								handleSuspendWorkSlot={handleSuspendWorkSlot}
+								handleDeleteWorkSlot={handleDeleteWorkSlot}
 							/>
 						</TabPanel>
 					</TabPanels>
