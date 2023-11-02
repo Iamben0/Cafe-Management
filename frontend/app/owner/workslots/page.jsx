@@ -167,7 +167,6 @@ const WorkSlots = () => {
 		);
 	};
 
-	// filter the work slots based on the search term
 	const handleSearchWorkSlot = async () => {
 		try {
 			const response = await fetch(

@@ -28,7 +28,7 @@ import {
 import { useEffect, useState } from 'react';
 import { CloseIcon } from '@chakra-ui/icons';
 
-const WorkSlotTable = ({ workSlots, role, handleBidWorkSlot }) => {
+const BidWorkSlotTable = ({ workSlots, handleBidWorkSlot }) => {
 	return (
 		workSlots.length > 0 && (
 			<Box overflowY='auto'>
@@ -42,12 +42,6 @@ const WorkSlotTable = ({ workSlots, role, handleBidWorkSlot }) => {
 					</Thead>
 					<Tbody>
 						{workSlots
-							.filter(
-								(workslot) =>
-									workslot.role === role &&
-									workslot.active &&
-									workslot.staff === 'Not assigned'
-							)
 							.sort((a, b) => {
 								const dateComparison = new Date(a.date) - new Date(b.date);
 								if (dateComparison !== 0) {
@@ -65,14 +59,6 @@ const WorkSlotTable = ({ workSlots, role, handleBidWorkSlot }) => {
 								<Tr key={workslot.id}>
 									<Td>{workslot.date}</Td>
 									<Td>{workslot.shift}</Td>
-									{/* <Td
-										color={
-											workslot.staff === 'Not assigned' ? 'red.500' : 'white'
-										}
-									>
-										{workslot.staff}
-									</Td> */}
-
 									<Td>
 										<Button
 											size='sm'
@@ -91,7 +77,7 @@ const WorkSlotTable = ({ workSlots, role, handleBidWorkSlot }) => {
 	);
 };
 
-const WorkSlots = () => {
+const BidWorkSlots = () => {
 	const [workSlots, setWorkSlot] = useState([]);
 	const [searchTerm, setSearchTerm] = useState('');
 	const [message, setMessage] = useState('');
@@ -102,7 +88,7 @@ const WorkSlots = () => {
 	const viewWorkSlotsToBid = async () => {
 		try {
 			const response = await fetch(
-				'http://localhost:8080/api/staff/view/available-work-slots/'
+				`http://localhost:8080/api/staff/view/available-work-slots/${role}/`
 			);
 			if (response.ok) {
 				const data = await response.json();
@@ -152,13 +138,12 @@ const WorkSlots = () => {
 		// );
 	};
 
-	// filter the bid work slots based on the search term
 	const handleSearchBidWorkSlot = async () => {
 		try {
 			const response = await fetch(
 				searchTerm === ''
-					? `http://localhost:8080/api/staff/view/available-work-slots/search/ /`
-					: `http://localhost:8080/api/staff/view/available-work-slots/search/${searchTerm}/`
+					? `http://localhost:8080/api/staff/view/available-work-slots/search/${role}/ /`
+					: `http://localhost:8080/api/staff/view/available-work-slots/search/${role}/${searchTerm}/`
 			);
 			if (response.ok) {
 				const data = await response.json();
@@ -203,7 +188,6 @@ const WorkSlots = () => {
 						<InputGroup>
 							<Input
 								id='search'
-								w='50'
 								type='text'
 								placeholder='Search by Shift'
 								value={searchTerm}
@@ -234,7 +218,7 @@ const WorkSlots = () => {
 
 					<TabPanels>
 						<TabPanel>
-							<WorkSlotTable
+							<BidWorkSlotTable
 								workSlots={workSlots}
 								role={role}
 								handleBidWorkSlot={handleBidWorkSlot}
@@ -247,4 +231,4 @@ const WorkSlots = () => {
 	);
 };
 
-export default WorkSlots;
+export default BidWorkSlots;

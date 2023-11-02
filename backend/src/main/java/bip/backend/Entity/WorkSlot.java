@@ -46,6 +46,9 @@ public class WorkSlot {
     @OneToMany(mappedBy = "workSlot")
     private Set<Bid> bids = new LinkedHashSet<>();
 
+    @Column(name = "assigned", nullable = false)
+    private Boolean assigned = false;
+
 //    @Column(name = "active", nullable = false)
 //    private Boolean active = true;
 
@@ -59,13 +62,15 @@ public class WorkSlot {
             if (workSlot.date.isBefore(LocalDate.now())) {
                 continue;
             }
+
             String staff = "Not assigned";
             for (Bid bid : workSlot.getBids()) {
-                if (bid.getApproved()) {
+                if (bid.getStatus().equals("approved")) {
                     staff = bid.getStaff().getName();
                 }
             }
             ObjectNode on = mapper.createObjectNode();
+
             on.put("staff", staff);
             on.put("shift", workSlot.getShift());
             on.put("role", workSlot.getRole());
@@ -105,9 +110,9 @@ public class WorkSlot {
         }
     }
 
-    public void updateWorkSlot(String id, String newShift, String newRole, String newDate) {
+    public void updateWorkSlot(int id, String newShift, String newRole, String newDate) {
         WorkSlotRepository workSlotRepository = GetRepository.WorkSlot();
-        WorkSlot workSlot = workSlotRepository.findById(Integer.parseInt(id)).orElseThrow(() -> new RuntimeException("Work Slot not found"));
+        WorkSlot workSlot = workSlotRepository.findById(id).orElseThrow(() -> new RuntimeException("Work Slot not found"));
         if (newShift.equals(workSlot.getShift()) &&
                 newRole.equals(workSlot.getRole()) &&
                 newDate.equals(workSlot.getDate().toString())) {
@@ -121,7 +126,7 @@ public class WorkSlot {
 
     public void createWorkSlot(String shift, String role, String date) {
         WorkSlotRepository workSlotRepository = GetRepository.WorkSlot();
-        BidRepository bidRepository = GetRepository.Bid();
+//        BidRepository bidRepository = GetRepository.Bid();
 
         if (shift.isEmpty() || role.isEmpty() || date.isEmpty()) {
             throw new RuntimeException("Please fill in all fields");
@@ -133,14 +138,14 @@ public class WorkSlot {
 
         workSlotRepository.save(workSlot);
 
-        Bid bid = new Bid();
-        bid.setApproved(false);
-        bid.setStaff(null);
-        bid.setWorkSlot(workSlot);
-        bidRepository.save(bid);
+//        Bid bid = new Bid();
+//        bid.setApproved(false);
+//        bid.setStaff(null);
+//        bid.setWorkSlot(workSlot);
+//        bidRepository.save(bid);
     }
 
-    public String viewWorkSlotToBid() {
+    public String viewWorkSlotToBid(String role) {
         List<WorkSlot> workSlotList = GetRepository.WorkSlot().findAll();
         ObjectMapper mapper = new ObjectMapper().registerModule(new JavaTimeModule());
 
@@ -149,22 +154,34 @@ public class WorkSlot {
             if (workSlot.date.isBefore(LocalDate.now())) {
                 continue;
             }
-            String staff = "Not assigned";
-            for (Bid bid : workSlot.getBids()) {
-                if (bid.getApproved()) {
-                    staff = bid.getStaff().getName();
-                }
-            }
 
-            ObjectNode obj1 = mapper.createObjectNode();
-            obj1.put("staff", staff);
-            obj1.put("shift", workSlot.getShift());
-            obj1.put("role", workSlot.getRole());
-            obj1.put("date", workSlot.getDate().toString());
-            obj1.put("id", workSlot.getId());
-            arrayNode.add(obj1);
+            if (workSlot.getRole().equals(role) && !workSlot.getAssigned()) {
+                ObjectNode on = mapper.createObjectNode();
+                on.put("shift", workSlot.getShift());
+                on.put("role", workSlot.getRole());
+                on.put("date", workSlot.getDate().toString());
+                on.put("id", workSlot.getId());
+                arrayNode.add(on);
+            }
         }
         return arrayNode.toString();
     }
 
+    public String retrieveWorkSlotToBid(String role, String shift) throws JsonProcessingException {
+        String list = viewWorkSlotToBid(role);
+        ArrayNode arrayNode = new ObjectMapper().createArrayNode();
+        arrayNode.addAll((ArrayNode) new ObjectMapper().readTree(list));
+
+        if (shift.isBlank()) {
+            return arrayNode.toString();
+        } else {
+            ArrayNode filteredArrayNode = new ObjectMapper().createArrayNode();
+            for (JsonNode jsonNode : arrayNode) {
+                if (jsonNode.get("shift").asText().toLowerCase().contains(shift.toLowerCase())) {
+                    filteredArrayNode.add(jsonNode);
+                }
+            }
+            return filteredArrayNode.toString();
+        }
+    }
 }

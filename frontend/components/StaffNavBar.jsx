@@ -15,7 +15,7 @@ const navigationForStaff = [
 		current: false,
 	},
 	{
-		name: 'View my Bids',
+		name: 'View my Bids Results',
 		href: '/staff/viewbids',
 		current: false,
 	},
@@ -65,6 +65,7 @@ const StaffNavbar = () => {
 										localStorage.removeItem('username');
 										localStorage.removeItem('profileType');
 										localStorage.removeItem('role');
+										localStorage.removeItem('staffId');
 									}}
 									href='/'
 									className={classNames(

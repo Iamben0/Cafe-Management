@@ -82,30 +82,33 @@ CREATE TABLE work_slot
     id           SERIAL PRIMARY KEY,
     shift        VARCHAR(255) NOT NULL CHECK ( shift IN ('morning', 'afternoon') ),
     role         VARCHAR(255) NOT NULL CHECK (role IN ('chef', 'waiter', 'cashier')),
-    date         DATE         NOT NULL
+    date         DATE         NOT NULL,
+    assigned     BOOLEAN      NOT NULL DEFAULT FALSE
 );
 
-INSERT INTO work_slot (shift, role, date) VALUES
-    ('morning'   , 'chef'  ,   '2023-11-01') ,
-    ('morning'   , 'waiter'  , '2023-11-01') ,
-    ('morning'   , 'cashier' , '2023-11-01') ,
-    ('afternoon' , 'chef'    , '2023-11-01') ,
-    ('afternoon' , 'waiter'  , '2023-11-01') ,
-    ('afternoon' , 'cashier' , '2023-11-01') ,
-    ('morning'   , 'chef'    , '2023-11-02') ,
-    ('morning'   , 'waiter'  , '2023-11-02') ,
-    ('morning'   , 'cashier' , '2023-11-02') ,
-    ('afternoon' , 'chef'    , '2023-11-02') ,
-    ('afternoon' , 'waiter'  , '2023-11-02') ,
-    ('afternoon' , 'cashier' , '2023-11-02') ,
-    ('morning'   , 'chef'    , '2023-11-03') ,
-    ('morning'   , 'waiter'  , '2023-11-03') ,
-    ('morning'   , 'cashier' , '2023-11-03') ,
-    ('afternoon' , 'chef'    , '2023-11-03') ,
-    ('afternoon' , 'waiter'  , '2023-11-03') ,
-    ('morning'   , 'cashier' , '2023-11-03') ,
-    ('afternoon' , 'chef'    , '2023-11-03') ,
-    ('afternoon' , 'waiter'  , '2023-11-03') ;
+INSERT INTO work_slot (shift, role, date, assigned) VALUES
+    ('morning'   , 'chef'    , '2023-12-01' , TRUE ) ,
+    ('morning'   , 'waiter'  , '2023-12-01' , TRUE ) ,
+    ('morning'   , 'cashier' , '2023-12-01' , TRUE ) ,
+    ('afternoon' , 'chef'    , '2023-12-01' , TRUE ) ,
+    ('afternoon' , 'waiter'  , '2023-12-01' , TRUE ) ,
+    ('afternoon' , 'cashier' , '2023-12-02' , TRUE ) ,
+    ('morning'   , 'chef'    , '2023-12-02' , TRUE ) ,
+    ('morning'   , 'waiter'  , '2023-12-02' , TRUE ) ,
+    ('morning'   , 'cashier' , '2023-12-02' , TRUE ) ,
+    ('afternoon' , 'chef'    , '2023-12-02' , TRUE ) ,
+    ('afternoon' , 'waiter'  , '2023-12-02' , TRUE ) ,
+    ('afternoon' , 'cashier' , '2023-12-02' , TRUE ) ,
+    ('morning'   , 'chef'    , '2023-12-03' , TRUE ) ,
+    ('morning'   , 'waiter'  , '2023-12-03' , TRUE ) ,
+    ('morning'   , 'cashier' , '2023-12-03' , TRUE ) ,
+    ('afternoon' , 'chef'    , '2023-12-03' , TRUE ) ,
+    ('afternoon' , 'waiter'  , '2023-12-03' , TRUE ) ,
+    ('morning'   , 'cashier' , '2023-12-03' , FALSE ) ,
+    ('afternoon' , 'chef'    , '2023-12-03' , FALSE ) ,
+    ('afternoon' , 'waiter'  , '2023-12-03' , FALSE ) ,
+    ('afternoon' , 'waiter'  , '2023-12-03' , FALSE ) ;
+
 
 
 -- SELECT * FROM work_slot WHERE date = '' AND shift = 'morning';
@@ -115,34 +118,30 @@ INSERT INTO work_slot (shift, role, date) VALUES
 CREATE TABLE bid
 (
     id           SERIAL PRIMARY KEY,
-    work_slot_id INTEGER REFERENCES work_slot (id) NOT NULL UNIQUE,
+    work_slot_id INTEGER REFERENCES work_slot (id) NOT NULL,
     staff_id     INTEGER REFERENCES user_account (id),
-    approved     BOOLEAN NOT NULL
+    status       VARCHAR(255) NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'approved', 'rejected'))
 );
 
 --chef 6, cashier 7, waiter 8
--- IF staff_id is NULL, then it is a 'un-assign' role, therefore approved is FALSE
-INSERT INTO bid (work_slot_id, staff_id, approved) VALUES
-(1  ,    6 , TRUE)     ,
-(2  ,    7 , TRUE)     ,
-(3  ,    8 , TRUE)     ,
-(4  ,    6 , TRUE)     ,
-(5  ,    7 , TRUE)     ,
-(6  ,    8 , TRUE)     ,
-(7  ,    6 , TRUE)     ,
-(8  ,    7 , TRUE)     ,
-(9  ,    8 , TRUE)     ,
-(10 ,    6 , TRUE)     ,
-(11 ,    7 , TRUE)     ,
-(12 ,    8 , TRUE)     ,
-(13 ,    6 , TRUE)     ,
-(14 ,    7 , TRUE)     ,
-(15 ,    8 , TRUE)     ,
-(16 ,    6 , TRUE)     ,
-(17 ,    7 , TRUE)     ,
-(18 , NULL , FALSE)    ,
-(19 , NULL , FALSE)    ,
-(20 , NULL , FALSE)  ;
+INSERT INTO bid (work_slot_id, staff_id, status) VALUES
+(1  , 6 , 'approved' )   ,
+(2  , 7 , 'approved' )   ,
+(3  , 8 , 'approved' )   ,
+(4  , 6 , 'approved' )   ,
+(5  , 7 , 'approved' )   ,
+(6  , 8 , 'approved' )   ,
+(7  , 6 , 'approved' )   ,
+(8  , 7 , 'approved' )   ,
+(9  , 8 , 'approved' )   ,
+(10 , 6 , 'approved' )   ,
+(11 , 7 , 'approved' )   ,
+(12 , 8 , 'approved' )   ,
+(13 , 6 , 'approved' )   ,
+(14 , 7 , 'approved' )   ,
+(15 , 8 , 'approved' )   ,
+(16 , 6 , 'approved' )   ,
+(17 , 7 , 'approved' ) ;
 
 
 

@@ -4,6 +4,8 @@ import bip.backend.GetRepository;
 import bip.backend.Repository.BidRepository;
 import bip.backend.Repository.WorkSlotRepository;
 import bip.backend.Repository.UserAccountRepository;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -13,7 +15,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -35,53 +36,103 @@ public class Bid {
     @JoinColumn(name = "staff_id")
     private UserAccount staff;
 
-    @Column(name = "approved", nullable = false)
-    private Boolean approved = false;
+    @Column(name = "status", nullable = false)
+    private String status = "pending";
 
-    // find bid by using workSlotId and set staffId
-    public void bidWorkSlot(String workSlotId, String staffId) {
-        WorkSlotRepository workSlotRepository = GetRepository.WorkSlot();
-        WorkSlot workslot = workSlotRepository.findById(Integer.parseInt(workSlotId)).orElse(null);
-
+    public void bidWorkSlot(int workSlotId, int staffId) {
         BidRepository bidRepository = GetRepository.Bid();
-        assert workslot != null;
-        Bid bid = bidRepository.findByWorkSlotId(workslot.getId());
+        List<Bid> bidList = bidRepository.findAllByStaffId(staffId);
+
+        WorkSlotRepository workSlotRepository = GetRepository.WorkSlot();
+        WorkSlot workSlot = workSlotRepository.findById(workSlotId).orElse(null);
+
+        for (Bid bid : bidList) {
+            assert workSlot != null;
+            if (bid.getWorkSlot().getDate().isEqual(workSlot.getDate()) && bid.getWorkSlot().getShift().equals(workSlot.getShift())) {
+                throw new RuntimeException("You have already bid for this work slot");
+            }
+        }
+
+        Bid bid = new Bid();
 
         UserAccountRepository userAccountRepository = GetRepository.UserAccount();
-        UserAccount userAccount = userAccountRepository.findById(Integer.parseInt(staffId)).orElse(null);
+        UserAccount userAccount = userAccountRepository.findById(staffId).orElse(null);
 
-        if (bid.getStaff() == null) {
-            bid.setStaff(userAccount);
-            bidRepository.save(bid);
-            return;
-        }
+        bid.setWorkSlot(workSlot);
+        bid.setStatus("pending");
+        bid.setStaff(userAccount);
 
-        if (bid.getStaff().getId() != Integer.parseInt(staffId)) {
+        if (bidRepository.existsByWorkSlotId(workSlotId)) {
             throw new RuntimeException("This work slot has already been taken");
         }
-
-        if (bid.getStaff().getId() == Integer.parseInt(staffId)) {
-            throw new RuntimeException("You have already bid for this work slot");
-        }
+        bidRepository.save(bid);
     }
 
-    // let staff view if their bid is approved or not approved
-    public String viewBidResult(String staffId) {
+    // let staff view if their bid is approved/rejected/pending
+    public String viewBidResult(int staffId) {
         BidRepository bidRepository = GetRepository.Bid();
-        List<Bid> bidList = bidRepository.findAllByStaffId(Integer.parseInt(staffId));
+        List<Bid> bidList = bidRepository.findAllByStaffId(staffId);
 
         ObjectMapper mapper = new ObjectMapper().registerModule(new JavaTimeModule());
 
         ArrayNode arrayNode = mapper.createArrayNode();
         for (Bid bid : bidList) {
             ObjectNode on = mapper.createObjectNode();
-            on.put("workSlotId", bid.getWorkSlot().getId());
-            on.put("shift", bid.getWorkSlot().getShift());
             on.put("role", bid.getWorkSlot().getRole());
             on.put("date", bid.getWorkSlot().getDate().toString());
-            on.put("approved", bid.getApproved());
+            on.put("shift", bid.getWorkSlot().getShift());
+            on.put("status", bid.getStatus());
             arrayNode.add(on);
         }
         return arrayNode.toString();
+    }
+
+    public String viewApprovedBidWorkSlot(int staffId) {
+        BidRepository bidRepository = GetRepository.Bid();
+        List<Bid> bidList = bidRepository.findAllByStaffId(staffId);
+
+        ObjectMapper mapper = new ObjectMapper().registerModule(new JavaTimeModule());
+        ArrayNode arrayNode = mapper.createArrayNode();
+
+        for (Bid bid : bidList) {
+            if (Objects.equals(bid.getStatus(), "approved") &&
+                    bid.getWorkSlot().getDate().isAfter(LocalDate.now())) {
+                ObjectNode on = mapper.createObjectNode();
+                on.put("bidId", bid.getId());
+                on.put("role", bid.getWorkSlot().getRole());
+                on.put("date", bid.getWorkSlot().getDate().toString());
+                on.put("shift", bid.getWorkSlot().getShift());
+                on.put("status", bid.getStatus());
+                arrayNode.add(on);
+            }
+        }
+        return arrayNode.toString();
+    }
+
+    public void cancelApprovedBidWorkSlot(int bidId) {
+        BidRepository bidRepository = GetRepository.Bid();
+        Bid bid = bidRepository.findById(bidId).orElse(null);
+
+        assert bid != null;
+        bid.getWorkSlot().setAssigned(false);
+        bidRepository.delete(bid);
+    }
+
+    public String retrieveApprovedBidWorkSlot(int staffId, String shift) throws JsonProcessingException {
+        String list = viewApprovedBidWorkSlot(staffId);
+        ArrayNode arrayNode = new ObjectMapper().createArrayNode();
+        arrayNode.addAll((ArrayNode) new ObjectMapper().readTree(list));
+
+        if (shift.isBlank()) {
+            return arrayNode.toString();
+        } else {
+            ArrayNode filteredArrayNode = new ObjectMapper().createArrayNode();
+            for (JsonNode jsonNode : arrayNode) {
+                if (jsonNode.get("shift").asText().toLowerCase().contains(shift.toLowerCase())) {
+                    filteredArrayNode.add(jsonNode);
+                }
+            }
+            return filteredArrayNode.toString();
+        }
     }
 }

@@ -15,7 +15,7 @@ public class UpdateWorkSlotController {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @PutMapping("/{id}/")
-    public ResponseEntity<String> updateWorkSlot(@PathVariable String id,
+    public ResponseEntity<String> updateWorkSlot(@PathVariable int id,
                                                  @RequestBody String json) {
         try {
             JsonNode jsonNode = objectMapper.readTree(json);
