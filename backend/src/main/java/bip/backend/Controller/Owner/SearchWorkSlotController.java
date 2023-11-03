@@ -12,7 +12,6 @@ import java.time.LocalDate;
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping("/owner/search/")
 public class SearchWorkSlotController {
-    // Search by name
     @GetMapping("/{shift}/")
     public ResponseEntity<String> submitSearchCriteria(@PathVariable String shift)
     {

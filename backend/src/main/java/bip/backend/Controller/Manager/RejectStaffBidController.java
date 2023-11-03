@@ -1,4 +1,4 @@
-package bip.backend.Controller.Staff;
+package bip.backend.Controller.Manager;
 
 import bip.backend.Entity.Bid;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -11,16 +11,16 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 
-@RequestMapping("/staff/view/available-work-slots/bid/")
-public class BidWorkSlotController {
-    @PutMapping("/{workSlotId}/")
-    public ResponseEntity<String> bidWorkSlot(@PathVariable int workSlotId,
+@RequestMapping("/manager/view/staff-bid/reject/")
+public class RejectStaffBidController {
+    @PutMapping("/{bidId}/")
+    public ResponseEntity<String> rejectBid(@PathVariable int bidId,
                                               @RequestBody String json) {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
             JsonNode jsonNode = objectMapper.readTree(json);
-            new Bid().bidWorkSlot(workSlotId, Integer.parseInt(jsonNode.get("staff_id").asText()));
-            return ResponseEntity.ok("Bid Work Slot!");
+            new Bid().rejectBid(bidId, jsonNode.get("status").asText());
+            return ResponseEntity.ok("Bid Rejected!");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

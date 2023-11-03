@@ -12,11 +12,7 @@ public interface BidRepository extends JpaRepository<Bid, Integer> {
 
     boolean existsByWorkSlotId(int i);
 
-    boolean existsByWorkSlotIdAndStaffId(int i, int i1);
-
-    boolean existsByStaffId(int i);
-
-    Bid findByStaffId(Integer staff_id);
-
     List<Bid> findAllByStaffId(int i);
+
+    List<Bid> findByStaffNameContainsIgnoreCase(String name);
 }

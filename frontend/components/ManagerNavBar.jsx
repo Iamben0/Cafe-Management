@@ -6,17 +6,17 @@ const navigation = [
 	{ name: 'Home', href: '/manager', current: true },
 	{
 		name: 'View Cafe Staff Bids',
-		href: '/manager/view/staffbids',
+		href: '/manager/viewstaffbids',
 		current: false,
 	},
 	{
 		name: 'View available Cafe Staff',
-		href: '/manager/view/staffs',
+		href: '/manager/viewstaffs',
 		current: false,
 	},
 	{
 		name: 'View Work Slots',
-		href: '/manager/view/workslots',
+		href: '/manager/viewworkslots',
 		current: false,
 	},
 ];
@@ -57,8 +57,9 @@ const ManagerNavbar = () => {
 							<div className='absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0'>
 								<a
 									onClick={() => {
-										localStorage.removeItem('username');
-										localStorage.removeItem('profileType');
+										// localStorage.removeItem('username');
+										// localStorage.removeItem('profileType');
+										localStorage.clear();
 									}}
 									href='/'
 									className={classNames(

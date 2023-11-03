@@ -120,7 +120,7 @@ CREATE TABLE bid
     id           SERIAL PRIMARY KEY,
     work_slot_id INTEGER REFERENCES work_slot (id) NOT NULL,
     staff_id     INTEGER REFERENCES user_account (id),
-    status       VARCHAR(255) NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'approved', 'rejected'))
+    status       VARCHAR(255) NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'approved', 'rejected', 'cancelled'))
 );
 
 --chef 6, cashier 7, waiter 8
@@ -141,7 +141,7 @@ INSERT INTO bid (work_slot_id, staff_id, status) VALUES
 (14 , 7 , 'approved' )   ,
 (15 , 8 , 'approved' )   ,
 (16 , 6 , 'approved' )   ,
-(17 , 7 , 'approved' ) ;
+(17 , 7 , 'approved' )   ;
 
 
 

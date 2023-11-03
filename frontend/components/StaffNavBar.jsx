@@ -6,12 +6,12 @@ const navigationForStaff = [
 	{ name: 'Home', href: '/staff', current: true },
 	{
 		name: 'Select Role',
-		href: '/staff/bookworkslots/selectrole',
+		href: '/staff/bidworkslots/selectrole',
 		current: false,
 	},
 	{
 		name: 'Bid Work Slot',
-		href: '/staff/bookworkslots',
+		href: '/staff/bidworkslots',
 		current: false,
 	},
 	{
@@ -62,10 +62,11 @@ const StaffNavbar = () => {
 							<div className='absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0'>
 								<a
 									onClick={() => {
-										localStorage.removeItem('username');
-										localStorage.removeItem('profileType');
-										localStorage.removeItem('role');
-										localStorage.removeItem('staffId');
+										// localStorage.removeItem('username');
+										// localStorage.removeItem('profileType');
+										// localStorage.removeItem('role');
+										// localStorage.removeItem('staffId');
+										localStorage.clear();
 									}}
 									href='/'
 									className={classNames(

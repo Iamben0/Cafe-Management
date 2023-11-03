@@ -141,7 +141,6 @@ public class UserAccount {
         userAccountRepository.save(userAccount);
     }
 
-
     public String retrieveUserAccount(String name) {
         List<UserAccount> userAccountList;
         if (name.isBlank()) {

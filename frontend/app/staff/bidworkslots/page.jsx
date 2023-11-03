@@ -132,10 +132,6 @@ const BidWorkSlots = () => {
 			console.error('Error bidding workslot', error);
 		}
 
-		// // after a successful response
-		// setWorkSlot((prevWorkSlots) =>
-		// 	prevWorkSlots.filter((workSlots) => workSlots.id !== id)
-		// );
 	};
 
 	const handleSearchBidWorkSlot = async () => {

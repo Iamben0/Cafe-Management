@@ -48,12 +48,22 @@ public class Bid {
 
         for (Bid bid : bidList) {
             assert workSlot != null;
-            if (bid.getWorkSlot().getDate().isEqual(workSlot.getDate()) && bid.getWorkSlot().getShift().equals(workSlot.getShift())) {
+            if (bid.getWorkSlot().getDate().isEqual(workSlot.getDate()) &&
+                    bid.getWorkSlot().getShift().equals(workSlot.getShift())) {
                 throw new RuntimeException("You have already bid for this work slot");
             }
+//            else if (bid.getWorkSlot().getDate().isEqual(workSlot.getDate()) &&
+//                    bid.getWorkSlot().getShift().equals(workSlot.getShift()) &&
+//                    Objects.equals(bid.getStatus(), "cancelled"))
+//                throw new RuntimeException("You have cancelled this work slot before. " +
+//                        "You are unable to bid for this work slot again");
         }
 
         Bid bid = new Bid();
+
+        if (bidRepository.existsByWorkSlotId(workSlotId) && !bid.getStatus().equals("pending")) {
+            throw new RuntimeException("This work slot has already been taken");
+        }
 
         UserAccountRepository userAccountRepository = GetRepository.UserAccount();
         UserAccount userAccount = userAccountRepository.findById(staffId).orElse(null);
@@ -62,9 +72,7 @@ public class Bid {
         bid.setStatus("pending");
         bid.setStaff(userAccount);
 
-        if (bidRepository.existsByWorkSlotId(workSlotId)) {
-            throw new RuntimeException("This work slot has already been taken");
-        }
+
         bidRepository.save(bid);
     }
 
@@ -115,6 +123,8 @@ public class Bid {
 
         assert bid != null;
         bid.getWorkSlot().setAssigned(false);
+//        bid.setStatus("cancelled");
+//        bidRepository.save(bid);
         bidRepository.delete(bid);
     }
 
@@ -129,6 +139,66 @@ public class Bid {
             ArrayNode filteredArrayNode = new ObjectMapper().createArrayNode();
             for (JsonNode jsonNode : arrayNode) {
                 if (jsonNode.get("shift").asText().toLowerCase().contains(shift.toLowerCase())) {
+                    filteredArrayNode.add(jsonNode);
+                }
+            }
+            return filteredArrayNode.toString();
+        }
+    }
+
+
+    // --------------------------------------------- Manager ----------------------------------------------------------
+    public String viewStaffBid() {
+        BidRepository bidRepository = GetRepository.Bid();
+        List<Bid> bidList = bidRepository.findAll();
+
+        ObjectMapper mapper = new ObjectMapper().registerModule(new JavaTimeModule());
+
+        ArrayNode arrayNode = mapper.createArrayNode();
+        for (Bid bid : bidList) {
+            if (Objects.equals(bid.getStatus(), "pending")) {
+                ObjectNode on = mapper.createObjectNode();
+                on.put("name", bid.getStaff().getName());
+                on.put("role", bid.getWorkSlot().getRole());
+                on.put("date", bid.getWorkSlot().getDate().toString());
+                on.put("shift", bid.getWorkSlot().getShift());
+                on.put("bidId", bid.getId());
+                arrayNode.add(on);
+            }
+        }
+        return arrayNode.toString();
+    }
+
+    public void approveBid(int bidId, String status) {
+        BidRepository bidRepository = GetRepository.Bid();
+        Bid bid = bidRepository.findById(bidId).orElse(null);
+
+        assert bid != null;
+        bid.setStatus(status);
+        bid.getWorkSlot().setAssigned(true);
+        bidRepository.save(bid);
+    }
+
+    public void rejectBid(int bidId, String status) {
+        BidRepository bidRepository = GetRepository.Bid();
+        Bid bid = bidRepository.findById(bidId).orElse(null);
+
+        assert bid != null;
+        bid.setStatus(status);
+        bidRepository.save(bid);
+    }
+
+    public String retrievesStaffBid(String name) throws JsonProcessingException {
+        String list = viewStaffBid();
+        ArrayNode arrayNode = new ObjectMapper().createArrayNode();
+        arrayNode.addAll((ArrayNode) new ObjectMapper().readTree(list));
+
+        if (name.isBlank()) {
+            return arrayNode.toString();
+        } else {
+            ArrayNode filteredArrayNode = new ObjectMapper().createArrayNode();
+            for (JsonNode jsonNode : arrayNode) {
+                if (jsonNode.get("name").asText().toLowerCase().contains(name.toLowerCase())) {
                     filteredArrayNode.add(jsonNode);
                 }
             }
