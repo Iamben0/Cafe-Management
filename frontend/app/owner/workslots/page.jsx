@@ -200,7 +200,7 @@ const WorkSlots = () => {
 					<Flex
 						direction='column'
 						align='center'
-						justifyContent='space-betwen'
+						justifyContent='space-between'
 						pt='8'
 					>
 						<Text

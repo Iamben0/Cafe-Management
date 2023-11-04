@@ -7,8 +7,6 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface WorkSlotRepository extends JpaRepository<WorkSlot, Integer> {
-
     List<WorkSlot> findByShiftContainsIgnoreCase(String shift);
-
     WorkSlot findByDateAndShift(LocalDate date, String shift);
 }

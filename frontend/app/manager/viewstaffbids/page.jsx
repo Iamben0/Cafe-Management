@@ -1,3 +1,5 @@
+// VIEW CAFE STAFF BID PAGE
+
 'use client';
 
 import {

@@ -12,7 +12,6 @@ CREATE TABLE user_profile
     active       BOOLEAN      NOT NULL DEFAULT TRUE
 );
 
--- user_profile TABLE
 INSERT INTO user_profile (profile_type, job_title, active)
 VALUES ('admin', 'senior system admin', TRUE),
        ('admin', 'junior system admin', TRUE),
@@ -21,7 +20,6 @@ VALUES ('admin', 'senior system admin', TRUE),
        ('manager', 'junior manager', TRUE),
        ('staff', 'junior staff', TRUE),
        ('staff', 'senior staff', TRUE);
-
 
 CREATE TABLE user_account
 (
@@ -34,33 +32,7 @@ CREATE TABLE user_account
     role         VARCHAR(255) NOT NULL DEFAULT 'un-assign' CHECK (role IN ('un-assign', 'non-staff', 'chef', 'waiter', 'cashier')),
     user_profile INTEGER REFERENCES user_profile (id)
 );
--- idea but very expensive for SQL:
--- the first time 'staff' book, let them book anything.
--- second/subsequent time, query their first/any booking, that is their cafe_role.
 
-/* FIRST BOOKING */
--- List<Bid> bids = bidRepository.findByStaffId('userProfile.getId()');
--- if (bids.empty()) {
---     System.out.println("Wow first day work issit");
---     Assign role to staff, then list out the workslots based on the role
---     List<WorkSlot> staffRole = workSlotRepository.findByRole('chef');
---     shiftsAvailable
--- } else {/*Subsequent Booking */}
---
-
-/* SUBSEQUENT BOOKINGS */
--- choose one:
--- List<Bid> bids = bidRepository.findByStaffId('userProfile.getId()');  // all the previous time they bid
--- OR
--- Bid bid = bidRepository.findByStaffId('userProfile.getId()') // .getFirst() smth like this. (to chose one bid)
--- OR
--- Bid bid = bidRepository.findByStaffId('userProfile.getId()') // .get(0) smth like this. (to chose one bid?)
-
--- WorkSlot workSlot = bid.getWorkSlot()
--- String role = workSlot.getRole()
--- List<WorkSlot> shiftsAvailable = workSlotRepository.findByRole(role);
-
--- user_account TABLE
 INSERT INTO user_account (username, name, password, email, active, role, user_profile) VALUES
        ('admin1'   , 'Robert Downey'      , 'password1' , 'ironman@gmail.com'     , TRUE , 'non-staff' , 1)  ,
        ('admin2'   , 'Chris Evans'        , 'password2' , 'captamerica@gmail.com' , TRUE , 'non-staff' , 2)  ,
@@ -73,8 +45,6 @@ INSERT INTO user_account (username, name, password, email, active, role, user_pr
        ('staff4'   , 'person1'            , 'password6' , 'person1@gmail.com'     , TRUE , 'un-assign' , 6)  ,
        ('staff5'   , 'person2'            , 'password7' , 'person2@gmail.com'     , TRUE , 'un-assign' , 7)  ,
        ('staff6'   , 'person3'            , 'password8' , 'person3@gmail.com'     , TRUE , 'un-assign' , 7);
-
-
 
 
 CREATE TABLE work_slot
@@ -107,23 +77,25 @@ INSERT INTO work_slot (shift, role, date, assigned) VALUES
     ('morning'   , 'cashier' , '2023-12-03' , FALSE ) ,
     ('afternoon' , 'chef'    , '2023-12-03' , FALSE ) ,
     ('afternoon' , 'waiter'  , '2023-12-03' , FALSE ) ,
-    ('afternoon' , 'waiter'  , '2023-12-03' , FALSE ) ;
+    ('afternoon' , 'waiter'  , '2023-12-03' , FALSE ) ,
+    ('morning'   , 'cashier' , '2023-12-04' , FALSE ) ,
+    ('afternoon' , 'chef'    , '2023-12-04' , FALSE ) ,
+    ('afternoon' , 'waiter'  , '2023-12-04' , FALSE ) ,
+    ('afternoon' , 'waiter'  , '2023-12-04' , FALSE ) ,
+    ('morning'   , 'cashier' , '2023-12-05' , FALSE ) ,
+    ('afternoon' , 'chef'    , '2023-12-05' , FALSE ) ,
+    ('afternoon' , 'waiter'  , '2023-12-05' , FALSE ) ,
+    ('afternoon' , 'waiter'  , '2023-12-05' , FALSE ) ;
 
 
-
--- SELECT * FROM work_slot WHERE date = '' AND shift = 'morning';
--- ^if exactly three rows of data and each row is uniquely one 'chef', 'waiter', and 'cashier', then work_slot is fully filled
-
--- make sure staff_id and work_slot_id role matches
 CREATE TABLE bid
 (
     id           SERIAL PRIMARY KEY,
     work_slot_id INTEGER REFERENCES work_slot (id) NOT NULL,
     staff_id     INTEGER REFERENCES user_account (id),
-    status       VARCHAR(255) NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'approved', 'rejected', 'cancelled'))
+    status       VARCHAR(255) NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'approved', 'rejected'))
 );
 
---chef 6, cashier 7, waiter 8
 INSERT INTO bid (work_slot_id, staff_id, status) VALUES
 (1  , 6 , 'approved' )   ,
 (2  , 7 , 'approved' )   ,
@@ -142,6 +114,10 @@ INSERT INTO bid (work_slot_id, staff_id, status) VALUES
 (15 , 8 , 'approved' )   ,
 (16 , 6 , 'approved' )   ,
 (17 , 7 , 'approved' )   ;
+
+
+
+
 
 
 

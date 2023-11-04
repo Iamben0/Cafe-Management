@@ -39,6 +39,7 @@ public class Bid {
     @Column(name = "status", nullable = false)
     private String status = "pending";
 
+    // ------------------------ Staff --------------------------
     public void bidWorkSlot(int workSlotId, int staffId) {
         BidRepository bidRepository = GetRepository.Bid();
         List<Bid> bidList = bidRepository.findAllByStaffId(staffId);
@@ -52,11 +53,6 @@ public class Bid {
                     bid.getWorkSlot().getShift().equals(workSlot.getShift())) {
                 throw new RuntimeException("You have already bid for this work slot");
             }
-//            else if (bid.getWorkSlot().getDate().isEqual(workSlot.getDate()) &&
-//                    bid.getWorkSlot().getShift().equals(workSlot.getShift()) &&
-//                    Objects.equals(bid.getStatus(), "cancelled"))
-//                throw new RuntimeException("You have cancelled this work slot before. " +
-//                        "You are unable to bid for this work slot again");
         }
 
         Bid bid = new Bid();
@@ -72,11 +68,9 @@ public class Bid {
         bid.setStatus("pending");
         bid.setStaff(userAccount);
 
-
         bidRepository.save(bid);
     }
 
-    // let staff view if their bid is approved/rejected/pending
     public String viewBidResult(int staffId) {
         BidRepository bidRepository = GetRepository.Bid();
         List<Bid> bidList = bidRepository.findAllByStaffId(staffId);
@@ -146,8 +140,7 @@ public class Bid {
         }
     }
 
-
-    // --------------------------------------------- Manager ----------------------------------------------------------
+    //------------------------ Manager --------------------------
     public String viewStaffBid() {
         BidRepository bidRepository = GetRepository.Bid();
         List<Bid> bidList = bidRepository.findAll();
@@ -205,4 +198,38 @@ public class Bid {
             return filteredArrayNode.toString();
         }
     }
+
+    // check for the staff availability,
+    // if they are not working on the same day and same shift when comparing to the unassigned work slot,
+    // they are available
+    public String vewDayAvailableStaffController(String date) {
+        BidRepository bidRepository = GetRepository.Bid();
+        List<Bid> bidList = bidRepository.findAll();
+
+        WorkSlotRepository workSlotRepository = GetRepository.WorkSlot();
+        List<WorkSlot> workSlotList = workSlotRepository.findAll();
+
+        ObjectMapper mapper = new ObjectMapper().registerModule(new JavaTimeModule());
+
+        ArrayNode arrayNode = mapper.createArrayNode();
+        for (Bid bid : bidList) {
+            if (Objects.equals(bid.getStatus(), "pending")) {
+                for (WorkSlot workSlot : workSlotList) {
+                    if (workSlot.getDate().toString().equals(date) &&
+                            workSlot.getShift().equals(bid.getWorkSlot().getShift()) &&
+                            workSlot.getRole().equals(bid.getWorkSlot().getRole())) {
+                        ObjectNode on = mapper.createObjectNode();
+                        on.put("name", bid.getStaff().getName());
+                        on.put("role", bid.getWorkSlot().getRole());
+                        on.put("date", bid.getWorkSlot().getDate().toString());
+                        on.put("shift", bid.getWorkSlot().getShift());
+//                        on.put("bidId", bid.getId());
+                        arrayNode.add(on);
+                    }
+                }
+            }
+        }
+        return arrayNode.toString();
+    }
+
 }
