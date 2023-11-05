@@ -2,6 +2,7 @@ package bip.backend.Entity;
 
 import bip.backend.GetRepository;
 import bip.backend.Repository.BidRepository;
+import bip.backend.Repository.UserAccountRepository;
 import bip.backend.Repository.WorkSlotRepository;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -19,6 +20,7 @@ import lombok.Setter;
 import java.time.LocalDate;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 @AllArgsConstructor
@@ -197,10 +199,10 @@ public class WorkSlot {
 
             if (workSlot.getDate().toString().equals(date) && !workSlot.getAssigned()) {
                 ObjectNode on = mapper.createObjectNode();
+                on.put("workSlotId", workSlot.getId());
                 on.put("date", workSlot.getDate().toString());
                 on.put("shift", workSlot.getShift());
                 on.put("role", workSlot.getRole());
-                on.put("workSlotId", workSlot.getId());
                 arrayNode.add(on);
             }
         }
@@ -222,14 +224,46 @@ public class WorkSlot {
                     workSlot.getDate().isBefore(LocalDate.parse(date).plusDays(7)) &&
                     !workSlot.getAssigned()) {
                 ObjectNode on = mapper.createObjectNode();
+                on.put("workSlotId", workSlot.getId());
                 on.put("date", workSlot.getDate().toString());
                 on.put("shift", workSlot.getShift());
                 on.put("role", workSlot.getRole());
-                on.put("workSlotId", workSlot.getId());
                 arrayNode.add(on);
             }
         }
         return arrayNode.toString();
     }
 
+    // assign staff to work slot based on staff availability
+    public void assignStaffToWorkSlot(String workSlotId, String staffId) {
+        WorkSlotRepository workSlotRepository = GetRepository.WorkSlot();
+        UserAccountRepository userAccountRepository = GetRepository.UserAccount();
+        BidRepository bidRepository = GetRepository.Bid();
+
+        if (workSlotId.isEmpty() || staffId.isEmpty()) {
+            throw new RuntimeException("Please fill in all fields");
+        }
+        if (!workSlotRepository.existsById(Integer.valueOf(workSlotId))) {
+            throw new RuntimeException("Work Slot does not exist");
+        }
+        if (bidRepository.existsByWorkSlotIdAndStaffId(Integer.valueOf(workSlotId), Integer.valueOf(staffId))) {
+            throw new RuntimeException("Staff has already taken this work slot");
+        }
+        if (bidRepository.existsByWorkSlotIdAndStatus(Integer.valueOf(workSlotId), "approved")) {
+            throw new RuntimeException("This work slot has already been taken");
+        }
+        WorkSlot workSlot = workSlotRepository.findById(Integer.valueOf(workSlotId)).orElse(null);
+        assert workSlot != null;
+        if (!workSlot.getRole().equals(Objects.requireNonNull(userAccountRepository.findById(Integer.valueOf(staffId)).orElse(null)).getRole())) {
+            throw new RuntimeException("Staff role is not the same as work slot role");
+        }
+
+        Bid bid = new Bid();
+        bid.setStatus("approved");
+        bid.setStaff(GetRepository.UserAccount().findById(Integer.valueOf(staffId)).orElse(null));
+        bid.setWorkSlot(workSlot);
+        workSlot.setAssigned(true);
+        bidRepository.save(bid);
+        workSlotRepository.save(workSlot);
+    }
 }

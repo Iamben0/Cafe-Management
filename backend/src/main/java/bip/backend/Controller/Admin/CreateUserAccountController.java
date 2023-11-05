@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 public class CreateUserAccountController {
 
 
-    @PostMapping("/user-account")
+    @PostMapping("/user-account/")
     public ResponseEntity<String> submitUserAcctDetails(@RequestBody String json) {
         try {
             System.out.println("submitUserAcctDetails is called.");

@@ -32,6 +32,7 @@ const WorkSlotLeftTable = ({ workSlots }) => {
 				<Table variant='simple'>
 					<Thead>
 						<Tr>
+							<Th color='white'>ID</Th>
 							<Th color='white'>Date (YYYY-MM-DD)</Th>
 							<Th color='white'>Shift (Morning/Afternoon)</Th>
 							<Th color='white'>Role</Th>
@@ -41,6 +42,7 @@ const WorkSlotLeftTable = ({ workSlots }) => {
 					<Tbody>
 						{workSlots.map((workslot) => (
 							<Tr key={workslot.id}>
+								<Td>{workslot.workSlotId}</Td>
 								<Td>{workslot.date}</Td>
 								<Td>{workslot.shift}</Td>
 								<Td>{workslot.role}</Td>
@@ -56,7 +58,7 @@ const WorkSlotLeftTable = ({ workSlots }) => {
 const WorkSlotLeft = () => {
 	const [dayWorkSlot, setDayWorkSlot] = useState([]);
 	const [weekWorkSlot, setWeekWorkSlot] = useState([]);
-	const [date, setDate] = useState('');
+	const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
 
 	const viewDayWorkSlot = async () => {
 		try {

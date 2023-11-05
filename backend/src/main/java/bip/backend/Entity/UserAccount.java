@@ -2,18 +2,21 @@ package bip.backend.Entity;
 
 import bip.backend.Repository.UserAccountRepository;
 import bip.backend.Repository.UserProfileRepository;
+import bip.backend.Repository.BidRepository;
 import bip.backend.GetRepository;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.util.LinkedHashSet;
+import java.time.LocalDate;
 import java.util.List;
-import java.util.Set;
+
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -133,7 +136,6 @@ public class UserAccount {
         userAccountRepository.save(userAccount);
     }
 
-    // suspend user account
     public void suspendUserAccount(String username) {
         UserAccountRepository userAccountRepository = GetRepository.UserAccount();
         UserAccount userAccount = userAccountRepository.findByUsername(username);
@@ -165,5 +167,103 @@ public class UserAccount {
         userAccount.setRole(role);
 
         userAccountRepository.save(userAccount);
+    }
+
+    //------------------------ Manager --------------------------
+    // check for the name of the user account who belongs to the role of chef, waiter, cashier,
+    // if the bids are approved and work slot is assigned,
+    // return those that are not assigned during the date
+    public String vewDayAvailableStaff(String date) {
+        List<UserAccount> userAccountList = GetRepository.UserAccount().findAll();
+        BidRepository bidRepository = GetRepository.Bid();
+
+        ObjectMapper mapper = new ObjectMapper().registerModule(new JavaTimeModule());
+
+        ArrayNode arrayNode = mapper.createArrayNode();
+
+        LocalDate inputDate = LocalDate.parse(date);
+
+        List<UserAccount> staffList = userAccountList.stream()
+                .filter(userAccount ->
+                        userAccount.getActive() && (
+                        userAccount.getRole().equals("chef") ||
+                        userAccount.getRole().equals("waiter") ||
+                        userAccount.getRole().equals("cashier"))
+                )
+                .toList();
+
+        for (UserAccount userAccount : staffList) {
+            boolean isAvailable = bidRepository.findAllByStaffId(userAccount.getId()).stream()
+                    .filter(bid -> bid.getStatus().equals("approved"))
+                    .map(Bid::getWorkSlot)
+                    .noneMatch(workSlot -> workSlot.getDate().isEqual(inputDate));
+
+            if (isAvailable) {
+                ObjectNode on = mapper.createObjectNode();
+                on.put("date", date);
+                on.put("username", userAccount.getUsername());
+                on.put("name", userAccount.getName());
+                on.put("role", userAccount.getRole());
+                arrayNode.add(on);
+            }
+        }
+
+        return arrayNode.toString();
+    }
+
+    // check for the name of the user account who belongs to the role of chef, waiter, cashier,
+    // if the bids are approved and work slot is assigned on that date
+    // return those that are not assigned during the date + another 6 days
+    public String vewWeekAvailableStaff(String date) {
+        List<UserAccount> userAccountList = GetRepository.UserAccount().findAll();
+        BidRepository bidRepository = GetRepository.Bid();
+        ObjectMapper mapper = new ObjectMapper().registerModule(new JavaTimeModule());
+
+        ArrayNode arrayNode = mapper.createArrayNode();
+
+        LocalDate inputDate = LocalDate.parse(date);
+
+        for (int day = 0; day < 7; day++) {
+            LocalDate checkDate = inputDate.plusDays(day);
+
+            List<UserAccount> staffList = userAccountList.stream()
+                    .filter(userAccount -> userAccount.getActive() && (
+                            userAccount.getRole().equals("chef") ||
+                            userAccount.getRole().equals("waiter") ||
+                            userAccount.getRole().equals("cashier"))
+                    )
+                    .toList();
+
+            for (UserAccount userAccount : staffList) {
+                String status = "available";
+
+                List<Bid> bidList = bidRepository.findAllByStaffId(userAccount.getId());
+
+                for (Bid bid : bidList) {
+                    if (bid.getStatus().equals("approved")) {
+                        WorkSlot workSlot = bid.getWorkSlot();
+                        LocalDate workSlotDate = workSlot.getDate();
+
+                        if (workSlotDate.isEqual(checkDate) ||
+                                (workSlotDate.isAfter(checkDate) && workSlotDate.isBefore(checkDate.plusDays(1)))) {
+                            status = "not available";
+                            break; // No need to continue checking other bids
+                        }
+                    }
+                }
+
+                // Show for all the days
+                if (status.equals("available")) {
+                    ObjectNode on = mapper.createObjectNode();
+                    on.put("date", checkDate.toString());
+                    on.put("username", userAccount.getUsername());
+                    on.put("name", userAccount.getName());
+                    on.put("role", userAccount.getRole());
+                    arrayNode.add(on);
+                }
+            }
+        }
+
+        return arrayNode.toString();
     }
 }

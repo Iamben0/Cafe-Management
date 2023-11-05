@@ -33,7 +33,8 @@ const AvailableStaffTable = ({ availableStaff }) => {
 					<Thead>
 						<Tr>
 							<Th color='white'>Date (YYYY-MM-DD)</Th>
-							<Th color='white'>Shift (Morning/Afternoon)</Th>
+							<Th color='white'>Name</Th>
+							<Th color='white'>Username</Th>
 							<Th color='white'>Role</Th>
 						</Tr>
 					</Thead>
@@ -42,7 +43,8 @@ const AvailableStaffTable = ({ availableStaff }) => {
 						{availableStaff.map((staff) => (
 							<Tr key={staff.id}>
 								<Td>{staff.date}</Td>
-								<Td>{staff.shift}</Td>
+								<Td>{staff.name}</Td>
+								<Td>{staff.username}</Td>
 								<Td>{staff.role}</Td>
 							</Tr>
 						))}
@@ -56,12 +58,12 @@ const AvailableStaffTable = ({ availableStaff }) => {
 const AvailableStaff = () => {
 	const [dayAvailableStaff, setDayAvailableStaff] = useState([]);
 	const [weekAvailableStaff, setWeekAvailableStaff] = useState([]);
-	const [date, setDate] = useState('');
+	const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
 
 	const viewDayAvailableStaff = async () => {
 		try {
 			const response = await fetch(
-				`http://localhost:8080/api/manager/view/day-work-slots/${date}/`
+				`http://localhost:8080/api/manager/view/day-available-staff/${date}/`
 			);
 			if (response.ok) {
 				const data = await response.json();
@@ -81,7 +83,7 @@ const AvailableStaff = () => {
 	const viewWeekAvailableStaff = async () => {
 		try {
 			const response = await fetch(
-				`http://localhost:8080/api/manager/view/week-work-slots/${date}/`
+				`http://localhost:8080/api/manager/view/week-available-staff/${date}/`
 			);
 			if (response.ok) {
 				const data = await response.json();
@@ -103,7 +105,7 @@ const AvailableStaff = () => {
 			<Container maxW='container.xl'>
 				<Flex justifyContent='space-between' align='center'>
 					<Heading as='h1' size='lg' mt={8} mb={4}>
-						View Available Cafe Staff for the Day/Week
+						Available Cafe Staff for the Day/Week
 					</Heading>
 
 					<Flex

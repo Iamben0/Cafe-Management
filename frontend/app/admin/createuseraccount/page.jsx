@@ -56,7 +56,7 @@ const CreateUserAccount = () => {
 
 			// Send userAccountData to your backend controller via an API request
 			const response = await fetch(
-				'http://localhost:8080/api/system-admin/create/user-account',
+				'http://localhost:8080/api/system-admin/create/user-account/',
 				{
 					method: 'POST',
 					headers: {

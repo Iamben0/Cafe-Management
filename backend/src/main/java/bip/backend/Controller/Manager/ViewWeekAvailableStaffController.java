@@ -8,12 +8,12 @@ import org.springframework.web.bind.annotation.*;
 @NoArgsConstructor
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
-@RequestMapping("/manager/view/day-available-staff/")
-public class ViewDayAvailableStaffController {
+@RequestMapping("/manager/view/week-available-staff/")
+public class ViewWeekAvailableStaffController {
     @GetMapping("/{date}/")
-    public ResponseEntity<String> vewDayAvailableStaff(@PathVariable String date) {
+    public ResponseEntity<String> vewWeekAvailableStaff(@PathVariable String date) {
         try {
-            return ResponseEntity.ok(new UserAccount().vewDayAvailableStaff(date));
+            return ResponseEntity.ok(new UserAccount().vewWeekAvailableStaff(date));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

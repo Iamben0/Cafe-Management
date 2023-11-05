@@ -9,10 +9,8 @@ import java.util.List;
 
 public interface BidRepository extends JpaRepository<Bid, Integer> {
     Bid findByWorkSlotId(Integer workSlot_id);
-
     boolean existsByWorkSlotId(int i);
-
     List<Bid> findAllByStaffId(int i);
-
-    List<Bid> findByStaffNameContainsIgnoreCase(String name);
+    boolean existsByWorkSlotIdAndStaffId(Integer integer, Integer integer1);
+    boolean existsByWorkSlotIdAndStatus(Integer integer, String approved);
 }

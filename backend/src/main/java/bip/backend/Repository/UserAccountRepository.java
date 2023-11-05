@@ -13,14 +13,4 @@ public interface UserAccountRepository extends JpaRepository<UserAccount, Intege
     UserAccount findByUsernameAndPassword(String username, String password);
     boolean existsByUsernameAndPassword(String username, String password);
     List<UserAccount> findByNameContainsIgnoreCase(String name);
-
-
-//    @Query("SELECT ua FROM UserAccount ua " +
-//            "WHERE ua.role IN :staffRoles " +
-//            "AND ua.active = true " +
-//            "AND ua NOT IN (" +
-//            "SELECT b.staff FROM Bid b " +
-//            "WHERE b.status = 'approved' " +
-//            "AND b.workSlot.date = :date)")
-    List<UserAccount> findStaffNotWorkingOnDate(String date);
 }

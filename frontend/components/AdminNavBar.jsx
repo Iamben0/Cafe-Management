@@ -1,5 +1,5 @@
 'use client';
-
+import Logout from './Logout';
 import { Disclosure } from '@headlessui/react';
 
 const navigation = [
@@ -52,22 +52,7 @@ const AdminNavbar = () => {
 								</div>
 							</div>
 							<div className='absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0'>
-								<a
-									onClick={() => {
-										// localStorage.removeItem('username');
-										// localStorage.removeItem('profileType');
-										localStorage.clear();
-									}}
-									href='/'
-									className={classNames(
-										true
-											? 'bg-gray-900 text-white'
-											: 'text-gray-300 hover:bg-gray-700 hover:text-white',
-										'rounded-md px-3 py-2 text-sm font-medium'
-									)}
-								>
-									Log Out
-								</a>
+								<Logout />
 							</div>
 						</div>
 					</div>

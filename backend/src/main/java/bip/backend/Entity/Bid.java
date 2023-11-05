@@ -198,38 +198,4 @@ public class Bid {
             return filteredArrayNode.toString();
         }
     }
-
-    // check for the staff availability,
-    // if they are not working on the same day and same shift when comparing to the unassigned work slot,
-    // they are available
-    public String vewDayAvailableStaffController(String date) {
-        BidRepository bidRepository = GetRepository.Bid();
-        List<Bid> bidList = bidRepository.findAll();
-
-        WorkSlotRepository workSlotRepository = GetRepository.WorkSlot();
-        List<WorkSlot> workSlotList = workSlotRepository.findAll();
-
-        ObjectMapper mapper = new ObjectMapper().registerModule(new JavaTimeModule());
-
-        ArrayNode arrayNode = mapper.createArrayNode();
-        for (Bid bid : bidList) {
-            if (Objects.equals(bid.getStatus(), "pending")) {
-                for (WorkSlot workSlot : workSlotList) {
-                    if (workSlot.getDate().toString().equals(date) &&
-                            workSlot.getShift().equals(bid.getWorkSlot().getShift()) &&
-                            workSlot.getRole().equals(bid.getWorkSlot().getRole())) {
-                        ObjectNode on = mapper.createObjectNode();
-                        on.put("name", bid.getStaff().getName());
-                        on.put("role", bid.getWorkSlot().getRole());
-                        on.put("date", bid.getWorkSlot().getDate().toString());
-                        on.put("shift", bid.getWorkSlot().getShift());
-//                        on.put("bidId", bid.getId());
-                        arrayNode.add(on);
-                    }
-                }
-            }
-        }
-        return arrayNode.toString();
-    }
-
 }

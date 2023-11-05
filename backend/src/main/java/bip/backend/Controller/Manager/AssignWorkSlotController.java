@@ -1,9 +1,9 @@
-package bip.backend.Controller.Admin;
+package bip.backend.Controller.Manager;
 
+import bip.backend.Entity.UserProfile;
+import bip.backend.Entity.WorkSlot;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import bip.backend.Entity.UserProfile;
-import bip.backend.Repository.UserProfileRepository;
 import lombok.NoArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,19 +11,18 @@ import org.springframework.web.bind.annotation.*;
 @NoArgsConstructor
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
-
-@RequestMapping("/system-admin/create")
-public class CreateUserProfileController {
-    @PostMapping("/user-profile/")
-    public ResponseEntity<String> submitUserProfileDetails(@RequestBody String json) {
+@RequestMapping("/manager/view/work-slots/assign")
+public class AssignWorkSlotController {
+    @PostMapping("/")
+    public ResponseEntity<String> assignStaffToWorkSlot(@RequestBody String json) {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
             JsonNode jsonNode = objectMapper.readTree(json);
-            new UserProfile().createUserProfile(
-                    jsonNode.get("profileType").asText(),
-                    jsonNode.get("jobTitle").asText()
+            new WorkSlot().assignStaffToWorkSlot(
+                    jsonNode.get("workSlotId").asText(),
+                    jsonNode.get("staffId").asText()
             );
-            return ResponseEntity.ok("User Profile created!");
+            return ResponseEntity.ok("Work Slot Assigned!");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

@@ -11,7 +11,6 @@ CREATE TABLE user_profile
     job_title    VARCHAR(255) NOT NULL UNIQUE,
     active       BOOLEAN      NOT NULL DEFAULT TRUE
 );
-
 INSERT INTO user_profile (profile_type, job_title, active)
 VALUES ('admin', 'senior system admin', TRUE),
        ('admin', 'junior system admin', TRUE),
@@ -32,7 +31,6 @@ CREATE TABLE user_account
     role         VARCHAR(255) NOT NULL DEFAULT 'un-assign' CHECK (role IN ('un-assign', 'non-staff', 'chef', 'waiter', 'cashier')),
     user_profile INTEGER REFERENCES user_profile (id)
 );
-
 INSERT INTO user_account (username, name, password, email, active, role, user_profile) VALUES
        ('admin1'   , 'Robert Downey'      , 'password1' , 'ironman@gmail.com'     , TRUE , 'non-staff' , 1)  ,
        ('admin2'   , 'Chris Evans'        , 'password2' , 'captamerica@gmail.com' , TRUE , 'non-staff' , 2)  ,
@@ -42,10 +40,9 @@ INSERT INTO user_account (username, name, password, email, active, role, user_pr
        ('staff1'   , 'Mark Ruffalo'       , 'password6' , 'hulk@gmail.com'        , TRUE , 'chef'      , 6)  ,
        ('staff2'   , 'Samuel L. Jackson'  , 'password7' , 'nightfury@gmail.com'   , TRUE , 'waiter'    , 7)  ,
        ('staff3'   , 'Peter Parker'       , 'password8' , 'spiderman@gmail.com'   , TRUE , 'cashier'   , 7)  ,
-       ('staff4'   , 'person1'            , 'password6' , 'person1@gmail.com'     , TRUE , 'un-assign' , 6)  ,
-       ('staff5'   , 'person2'            , 'password7' , 'person2@gmail.com'     , TRUE , 'un-assign' , 7)  ,
-       ('staff6'   , 'person3'            , 'password8' , 'person3@gmail.com'     , TRUE , 'un-assign' , 7);
-
+       ('staff4'   , 'person1'            , 'password6' , 'person1@gmail.com'     , TRUE , 'cashier' , 6)  ,
+       ('staff5'   , 'person2'            , 'password7' , 'person2@gmail.com'     , TRUE , 'waiter' , 7)  ,
+       ('staff6'   , 'person3'            , 'password8' , 'person3@gmail.com'     , TRUE , 'chef' , 7);
 
 CREATE TABLE work_slot
 (
@@ -55,7 +52,6 @@ CREATE TABLE work_slot
     date         DATE         NOT NULL,
     assigned     BOOLEAN      NOT NULL DEFAULT FALSE
 );
-
 INSERT INTO work_slot (shift, role, date, assigned) VALUES
     ('morning'   , 'chef'    , '2023-12-01' , TRUE ) ,
     ('morning'   , 'waiter'  , '2023-12-01' , TRUE ) ,
@@ -87,7 +83,6 @@ INSERT INTO work_slot (shift, role, date, assigned) VALUES
     ('afternoon' , 'waiter'  , '2023-12-05' , FALSE ) ,
     ('afternoon' , 'waiter'  , '2023-12-05' , FALSE ) ;
 
-
 CREATE TABLE bid
 (
     id           SERIAL PRIMARY KEY,
@@ -95,7 +90,6 @@ CREATE TABLE bid
     staff_id     INTEGER REFERENCES user_account (id),
     status       VARCHAR(255) NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'approved', 'rejected'))
 );
-
 INSERT INTO bid (work_slot_id, staff_id, status) VALUES
 (1  , 6 , 'approved' )   ,
 (2  , 7 , 'approved' )   ,
@@ -114,9 +108,6 @@ INSERT INTO bid (work_slot_id, staff_id, status) VALUES
 (15 , 8 , 'approved' )   ,
 (16 , 6 , 'approved' )   ,
 (17 , 7 , 'approved' )   ;
-
-
-
 
 
 
