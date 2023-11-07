@@ -6,12 +6,12 @@ const navigation = [
 	{ name: 'Home', href: '/owner', current: true },
 	{
 		name: 'Create Work Slot',
-		href: '/owner/createworkslot',
+		href: '/owner/CreateWorkSlot',
 		current: false,
 	},
 	{
 		name: 'View Work Slots',
-		href: '/owner/workslots',
+		href: '/owner/WorkSlots',
 		current: false,
 	},
 ];

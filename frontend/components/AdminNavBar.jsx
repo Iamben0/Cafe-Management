@@ -6,16 +6,16 @@ const navigation = [
 	{ name: 'Home', href: '/admin', current: true },
 	{
 		name: 'Create User Profile',
-		href: '/admin/createuserprofile',
+		href: '/admin/CreateUserProfile',
 		current: false,
 	},
 	{
 		name: 'Create User Account',
-		href: '/admin/createuseraccount',
+		href: '/admin/CreateUserAccount',
 		current: false,
 	},
-	{ name: 'View User Profiles', href: '/admin/userprofiles', current: false },
-	{ name: 'View User Accounts', href: '/admin/useraccounts', current: false },
+	{ name: 'View User Profiles', href: '/admin/UserProfiles', current: false },
+	{ name: 'View User Accounts', href: '/admin/UserAccounts', current: false },
 ];
 
 function classNames(...classes) {

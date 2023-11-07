@@ -6,22 +6,22 @@ const navigation = [
 	{ name: 'Home', href: '/manager', current: true },
 	{
 		name: 'View Cafe Staff Bids',
-		href: '/manager/viewstaffbids',
+		href: '/manager/ViewStaffBids',
 		current: false,
 	},
 	{
 		name: 'View available Cafe Staff',
-		href: '/manager/viewstaffs',
+		href: '/manager/ViewStaffs',
 		current: false,
 	},
 	{
 		name: 'View Work Slots',
-		href: '/manager/viewworkslots',
+		href: '/manager/ViewWorkSlots',
 		current: false,
 	},
 	{
 		name: 'Assign Staff',
-		href: '/manager/assignstaff',
+		href: '/manager/AssignStaff',
 		current: false,
 	},
 ];

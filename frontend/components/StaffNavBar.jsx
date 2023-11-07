@@ -6,22 +6,22 @@ const navigationForStaff = [
 	{ name: 'Home', href: '/staff', current: true },
 	{
 		name: 'Select Role',
-		href: '/staff/bidworkslots/selectrole',
+		href: '/staff/BidWorkSlots/SelectRole',
 		current: false,
 	},
 	{
 		name: 'Bid Work Slot',
-		href: '/staff/bidworkslots',
+		href: '/staff/BidWorkSlots',
 		current: false,
 	},
 	{
 		name: 'View my Bids Results',
-		href: '/staff/viewbids',
+		href: '/staff/ViewBids',
 		current: false,
 	},
 	{
 		name: 'View my Work Slot',
-		href: '/staff/viewmyworkslots',
+		href: '/staff/ViewMyWorkSlots',
 		current: false,
 	},
 ];

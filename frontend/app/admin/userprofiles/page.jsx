@@ -161,7 +161,7 @@ const UserProfiles = () => {
 											<Td>{user.profileType}</Td>
 											<Td>{user.jobTitle}</Td>
 											<Td>
-												<Link href={`userprofiles/update/${user.jobTitle}`}>
+												<Link href={`UserProfiles/Update/${user.jobTitle}`}>
 													<Button
 														size='sm'
 														onClick={() =>
