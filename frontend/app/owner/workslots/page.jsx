@@ -84,7 +84,7 @@ const WorkSlotTable = ({ workSlots, role, handleDeleteWorkSlot }) => {
 									</Td>
 
 									<Td>
-										<Link href={`WorkSlots/Update/${workslot.id}`}>
+										<Link href={`WorkSlots/UpdateWorkSlot/${workslot.id}`}>
 											<Button
 												size='sm'
 												onClick={() => (

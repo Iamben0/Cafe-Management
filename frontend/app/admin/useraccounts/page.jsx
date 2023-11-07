@@ -166,7 +166,7 @@ const UserAccounts = () => {
 											<Td>{user.email}</Td>
 											<Td>{user.userProfile.jobTitle}</Td>
 											<Td>
-												<Link href={`UserAccounts/Update/${user.username}`}>
+												<Link href={`UserAccounts/UpdateUserAccount/${user.username}`}>
 													<Button
 														size='sm'
 														onClick={() => (
