@@ -1,5 +1,5 @@
 'use client';
-import Logout from './Logout';
+import Logout from '@/components/Logout/Logout';
 import { Disclosure } from '@headlessui/react';
 
 const navigationForStaff = [

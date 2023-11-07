@@ -1,5 +1,5 @@
 'use client';
-import Login from '@/components/Login';
+import Login from '@/components/Login/Login';
 import { useRouter } from 'next/navigation';
 import dynamic from 'next/dynamic';
 
@@ -21,7 +21,7 @@ const Home = () => {
 		}
 	}
 
-	const Login = dynamic(() => import('@/components/Login'));
+	const Login = dynamic(() => import('@/components/Login/Login'));
 
 	return <Login />;
 };
