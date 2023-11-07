@@ -18,10 +18,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -65,12 +62,6 @@ public class WorkSlot {
         workSlot.setDate(LocalDate.parse(date));
 
         workSlotRepository.save(workSlot);
-
-//        Bid bid = new Bid();
-//        bid.setApproved(false);
-//        bid.setStaff(null);
-//        bid.setWorkSlot(workSlot);
-//        bidRepository.save(bid);
     }
 
     public String viewWorkSlot() {
@@ -118,12 +109,18 @@ public class WorkSlot {
     public void deleteWorkSlot(int id) {
         WorkSlotRepository workSlotRepository = GetRepository.WorkSlot();
         BidRepository bidRepository = GetRepository.Bid();
-        WorkSlot workSlot = workSlotRepository.findById(id).orElse(null);
 
-        assert workSlot != null;
-        Bid bid = bidRepository.findByWorkSlotId(workSlot.getId());
-        bidRepository.delete(bid);
-        workSlotRepository.delete(workSlot);
+        Optional<WorkSlot> workSlotOptional = workSlotRepository.findById(id);
+
+        if (workSlotOptional.isPresent()) {
+            WorkSlot workSlot = workSlotOptional.get();
+            Bid bid = bidRepository.findByWorkSlotId(workSlot.getId());
+
+            if (bid != null) {
+                bidRepository.delete(bid);
+            }
+            workSlotRepository.delete(workSlot);
+        }
     }
 
     public String retrieveWorkSlot(String shift) throws JsonProcessingException {
