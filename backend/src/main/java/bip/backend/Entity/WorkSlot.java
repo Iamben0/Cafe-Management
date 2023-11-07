@@ -51,7 +51,6 @@ public class WorkSlot {
     // ------------------------ Owner --------------------------
     public void createWorkSlot(String shift, String role, String date) {
         WorkSlotRepository workSlotRepository = GetRepository.WorkSlot();
-//        BidRepository bidRepository = GetRepository.Bid();
 
         if (shift.isEmpty() || role.isEmpty() || date.isEmpty()) {
             throw new RuntimeException("Please fill in all fields");

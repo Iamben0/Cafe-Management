@@ -1,7 +1,6 @@
 package bip.backend.Controller.Admin;
 
 import bip.backend.Entity.UserProfile;
-import bip.backend.GetRepository;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.NoArgsConstructor;

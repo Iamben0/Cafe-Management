@@ -1,6 +1,7 @@
 package bip.backend.Controller.Share;
 
 import bip.backend.Entity.UserAccount;
+import com.fasterxml.jackson.core.ObjectCodec;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -11,15 +12,9 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping("/")
 public class LoginController {
-
-    private final ObjectMapper objectMapper;
-
-    public LoginController() {
-        this.objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
-    }
-
     @PostMapping("/")
     public ResponseEntity<String> enterCredentials(@RequestBody String json) {
+        ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
         try {
             UserAccount userAccount = new UserAccount();
             JsonNode jsonNode = objectMapper.readTree(json);
