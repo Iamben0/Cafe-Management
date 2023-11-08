@@ -214,7 +214,7 @@ public class UserAccount {
     // check for the name of the user account who belongs to the role of chef, waiter, cashier,
     // if the bids are approved and work slot is assigned on that date
     // return those that are not assigned during the date + another 6 days
-    public String vewWeekAvailableStaff(String date) {
+    public String viewWeekAvailableStaff(String date) {
         List<UserAccount> userAccountList = GetRepository.UserAccount().findAll();
         BidRepository bidRepository = GetRepository.Bid();
         ObjectMapper mapper = new ObjectMapper().registerModule(new JavaTimeModule());
