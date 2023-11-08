@@ -20,8 +20,8 @@ const navigation = [
 		current: false,
 	},
 	{
-		name: 'Assign Staff',
-		href: '/manager/AssignStaff',
+		name: 'Assign Work Slot',
+		href: '/manager/AssignWorkSlot',
 		current: false,
 	},
 ];

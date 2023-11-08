@@ -13,15 +13,15 @@ import {
 } from '@chakra-ui/react';
 import { useState, useEffect } from 'react';
 
-const AssignStaffWorkSlot = () => {
+const AssignWorkSlotToStaff = () => {
 	const [workSlotId, setWorkSlotId] = useState('');
 	const [staffId, setStaffId] = useState('');
 	const [message, setMessage] = useState('');
 	const [availableStaff, setAvailableStaff] = useState([]);
 
-	const assignStaff = async () => {
+	const assignWorkSlot = async () => {
 		try {
-			const assignStaffData = {
+			const assignWorkSlotData = {
 				workSlotId: workSlotId,
 				staffId: staffId,
 			};
@@ -33,7 +33,7 @@ const AssignStaffWorkSlot = () => {
 					headers: {
 						'Content-Type': 'application/json',
 					},
-					body: JSON.stringify(assignStaffData),
+					body: JSON.stringify(assignWorkSlotData),
 				}
 			);
 
@@ -45,7 +45,7 @@ const AssignStaffWorkSlot = () => {
 				setMessage(errorMessage);
 			}
 		} catch (error) {
-			console.error('Error assigning staff', error);
+			console.error('Error assigning Work Slot', error);
 		}
 	};
 
@@ -112,7 +112,7 @@ const AssignStaffWorkSlot = () => {
 						/>
 					</FormControl>
 
-					<Button mt={4} onClick={assignStaff}>
+					<Button mt={4} onClick={assignWorkSlot}>
 						Assign
 					</Button>
 					<Text
@@ -129,4 +129,4 @@ const AssignStaffWorkSlot = () => {
 	);
 };
 
-export default AssignStaffWorkSlot;
+export default AssignWorkSlotToStaff;
