@@ -245,13 +245,14 @@ public class WorkSlot {
         if (bidRepository.existsByWorkSlotIdAndStaffId(Integer.valueOf(workSlotId), Integer.valueOf(staffId))) {
             throw new RuntimeException("Staff has already taken this work slot");
         }
-        if (bidRepository.existsByWorkSlotIdAndStatus(Integer.valueOf(workSlotId), "approved")) {
-            throw new RuntimeException("This work slot has already been taken");
-        }
         WorkSlot workSlot = workSlotRepository.findById(Integer.valueOf(workSlotId)).orElse(null);
         assert workSlot != null;
         if (!workSlot.getRole().equals(Objects.requireNonNull(userAccountRepository.findById(Integer.valueOf(staffId)).orElse(null)).getRole())) {
             throw new RuntimeException("Staff role is not the same as work slot role");
+        }
+
+        if (bidRepository.existsByWorkSlotIdAndStatus(Integer.valueOf(workSlotId), "approved")) {
+            throw new RuntimeException("This work slot has already been taken by another staff");
         }
 
         Bid bid = new Bid();
