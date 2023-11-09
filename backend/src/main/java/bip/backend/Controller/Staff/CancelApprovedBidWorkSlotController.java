@@ -14,7 +14,6 @@ public class CancelApprovedBidWorkSlotController {
     @DeleteMapping("/{bidId}/")
     public ResponseEntity<String> cancelApprovedBidWorkSlot(@PathVariable int bidId) {
         try {
-            System.out.println("bidId: " + bidId);
             new Bid().cancelApprovedBidWorkSlot(bidId);
             return ResponseEntity.ok("Cancelled Successfully!");
         } catch (Exception e) {

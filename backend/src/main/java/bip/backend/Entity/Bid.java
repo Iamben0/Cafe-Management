@@ -117,8 +117,6 @@ public class Bid {
 
         assert bid != null;
         bid.getWorkSlot().setAssigned(false);
-//        bid.setStatus("cancelled");
-//        bidRepository.save(bid);
         bidRepository.delete(bid);
     }
 
