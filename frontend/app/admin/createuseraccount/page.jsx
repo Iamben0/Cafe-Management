@@ -115,7 +115,7 @@ const CreateUserAccount = () => {
 							placeholder='Password'
 							bg='white'
 							color='black'
-							type='text'
+							type='password'
 							value={password}
 							onChange={(e) => setPassword(e.target.value)}
 						/>
