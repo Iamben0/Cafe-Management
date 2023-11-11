@@ -14,18 +14,18 @@ import org.springframework.web.bind.annotation.*;
 public class UpdateUserAccountController {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    @PutMapping("/{username}/")
-    public ResponseEntity<String> updateUserAccount(@PathVariable String username,
+    @PutMapping("/{oldUsername}/")
+    public ResponseEntity<String> updateUserAccount(@PathVariable String oldUsername,
                                                     @RequestBody String json) {
         try {
             JsonNode jsonNode = objectMapper.readTree(json);
 
             new UserAccount().updateUserAccount(
-                    username,
-                    jsonNode.get("username").asText(),
-                    jsonNode.get("name").asText(),
-                    jsonNode.get("password").asText(),
-                    jsonNode.get("email").asText()
+                    oldUsername,
+                    jsonNode.get("newUsername").asText(),
+                    jsonNode.get("newName").asText(),
+                    jsonNode.get("newPassword").asText(),
+                    jsonNode.get("newEmail").asText()
             );
 
             return ResponseEntity.ok("Account Updated!");

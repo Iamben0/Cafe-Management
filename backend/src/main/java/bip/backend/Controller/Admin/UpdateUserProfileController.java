@@ -19,7 +19,7 @@ public class UpdateUserProfileController {
                                                     @RequestBody String json) {
         try {
             JsonNode jsonNode = objectMapper.readTree(json);
-            new UserProfile().updateUserProfile(jobTitle, jsonNode.get("jobTitle").asText());
+            new UserProfile().updateUserProfile(jobTitle, jsonNode.get("newJobTitle").asText());
             return ResponseEntity.ok("Profile Updated!");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());

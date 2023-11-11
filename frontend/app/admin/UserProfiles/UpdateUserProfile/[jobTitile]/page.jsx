@@ -26,7 +26,7 @@ const UpdateUserProfile = () => {
 		// Create a JSON object with the selected values and send it to the backend
 		try {
 			const updatedJobTitle = {
-				jobTitle: newJobTitle, // The new job title value
+				newJobTitle: newJobTitle, // The new job title value
 			};
 
 			// Make an API request to update the job title
@@ -55,39 +55,38 @@ const UpdateUserProfile = () => {
 
 	const handleGoBack = () => {
 		window.history.back(); // This will navigate back to the previous page in the browser's history.
-			localStorage.removeItem('oldJobTitle');
-
+		localStorage.removeItem('oldJobTitle');
 	};
 
 	return (
 		<Center>
-			<Container maxW='container.xl'>
-				<Heading as='h1' size='xl' mt={8} mb={4}>
+			<Container maxW="container.xl">
+				<Heading as="h1" size="xl" mt={8} mb={4}>
 					Update User Profile
 				</Heading>
-				<Box w='300px'>
+				<Box w="300px">
 					<FormControl mt={4}>
 						<FormLabel>Job Title</FormLabel>
 						<Input
-							bg='white'
-							color='black'
-							type='text'
+							bg="white"
+							color="black"
+							type="text"
 							value={newJobTitle}
 							onChange={(e) => setNewJobTitle(e.target.value)}
 							mb={4}
 						/>
 						<Flex>
-							<Button colorScheme='blue' mr={4} onClick={handleUpdateProfile}>
+							<Button colorScheme="blue" mr={4} onClick={handleUpdateProfile}>
 								Update
 							</Button>
-							<Button colorScheme='red' onClick={handleGoBack}>
+							<Button colorScheme="red" onClick={handleGoBack}>
 								Cancel
 							</Button>
 						</Flex>
 						<Text
-							pt='2'
-							pb='2'
-							textAlign='center'
+							pt="2"
+							pb="2"
+							textAlign="center"
 							color={message === 'Profile Updated!' ? 'green.500' : 'red.500'}
 						>
 							{message}

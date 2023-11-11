@@ -31,13 +31,13 @@ import { CloseIcon } from '@chakra-ui/icons';
 const BidWorkSlotTable = ({ workSlots, handleBidWorkSlot }) => {
 	return (
 		workSlots.length > 0 && (
-			<Box overflowY='auto'>
-				<Table variant='simple'>
+			<Box overflowY="auto">
+				<Table variant="simple">
 					<Thead>
 						<Tr>
-							<Th color='white'>Date (YYYY-MM-DD)</Th>
-							<Th color='white'>Shift (Morning/Afternoon)</Th>
-							<Th color='white'>Bid</Th>
+							<Th color="white">Date (YYYY-MM-DD)</Th>
+							<Th color="white">Shift (Morning/Afternoon)</Th>
+							<Th color="white">Bid</Th>
 						</Tr>
 					</Thead>
 					<Tbody>
@@ -61,8 +61,8 @@ const BidWorkSlotTable = ({ workSlots, handleBidWorkSlot }) => {
 									<Td>{workslot.shift}</Td>
 									<Td>
 										<Button
-											size='sm'
-											colorScheme='blue'
+											size="sm"
+											colorScheme="blue"
 											onClick={() => handleBidWorkSlot(workslot.id)}
 										>
 											Bid
@@ -85,7 +85,7 @@ const BidWorkSlots = () => {
 	const staffId = localStorage.getItem('staffId');
 	const role = localStorage.getItem('role');
 
-	const viewWorkSlotsToBid = async () => {
+	const viewWorkSlotToBid = async () => {
 		try {
 			const response = await fetch(
 				`http://localhost:8080/api/staff/view/available-work-slots/${role}/`
@@ -102,7 +102,7 @@ const BidWorkSlots = () => {
 	};
 
 	useEffect(() => {
-		viewWorkSlotsToBid();
+		viewWorkSlotToBid();
 	}, []);
 
 	const handleBidWorkSlot = async (workslotId) => {
@@ -131,7 +131,6 @@ const BidWorkSlots = () => {
 		} catch (error) {
 			console.error('Error bidding workslot', error);
 		}
-
 	};
 
 	const handleSearchBidWorkSlot = async () => {
@@ -158,53 +157,53 @@ const BidWorkSlots = () => {
 
 	return (
 		<Center>
-			<Container maxW='container.xl'>
-				<Flex justifyContent='space-between'>
-					<Heading as='h1' size='xl' mt={8} mb={4}>
+			<Container maxW="container.xl">
+				<Flex justifyContent="space-between">
+					<Heading as="h1" size="xl" mt={8} mb={4}>
 						Available Work Slots
 					</Heading>
 
 					<Flex
-						direction='column'
-						align='center'
-						justifyContent='space-betwen'
-						pt='8'
+						direction="column"
+						align="center"
+						justifyContent="space-betwen"
+						pt="8"
 					>
 						<Text
-							pt='2'
-							pb='2'
-							textAlign='center'
+							pt="2"
+							pb="2"
+							textAlign="center"
 							color={message === 'Bid Work Slot!' ? 'green.500' : 'red.500'}
 						>
 							{message}
 						</Text>
 					</Flex>
 
-					<Flex justifyContent='space-evenly' align='center' maxW='600' pt='5'>
+					<Flex justifyContent="space-evenly" align="center" maxW="600" pt="5">
 						<InputGroup>
 							<Input
-								id='search'
-								type='text'
-								placeholder='Search by Shift'
+								id="search"
+								type="text"
+								placeholder="Search by Shift"
 								value={searchTerm}
 								onChange={(e) => setSearchTerm(e.target.value)}
 							/>
-							<InputRightElement h='auto'>
-								<Button size='md' onClick={() => setSearchTerm('')}>
+							<InputRightElement h="auto">
+								<Button size="md" onClick={() => setSearchTerm('')}>
 									{<CloseIcon />}
 								</Button>
 							</InputRightElement>
 						</InputGroup>
 
-						<Button ml='2' onClick={handleSearchBidWorkSlot} value={searchTerm}>
+						<Button ml="2" onClick={handleSearchBidWorkSlot} value={searchTerm}>
 							Search
 						</Button>
 					</Flex>
 				</Flex>
-				<Tabs isFitted variant='soft-rounded' colorScheme='cyan'>
+				<Tabs isFitted variant="soft-rounded" colorScheme="cyan">
 					<TabList>
 						<Tab>
-							<Heading size='md' color='black'>
+							<Heading size="md" color="black">
 								{role === 'un-assign'
 									? 'Role unassign, please select a role first!'
 									: role}

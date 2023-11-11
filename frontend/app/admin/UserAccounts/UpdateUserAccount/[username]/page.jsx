@@ -43,10 +43,10 @@ const UpdateUserAccount = () => {
 		// Create a JSON object with the selected values and send it to the backend
 		try {
 			const updatedUserAccount = {
-				username: newUsername,
-				name: newName,
-				password: newPassword,
-				email: newEmail,
+				newUsername: newUsername,
+				newName: newName,
+				newPassword: newPassword,
+				newEmail: newEmail,
 			};
 			const response = await fetch(
 				`http://localhost:8080/api/system-admin/update/user-account/${oldUsername}/`,

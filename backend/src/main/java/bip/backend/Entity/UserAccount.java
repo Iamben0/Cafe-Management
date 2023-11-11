@@ -94,7 +94,9 @@ public class UserAccount {
         userAccount.setPassword(password);
         userAccount.setEmail(email);
         userAccount.setUserProfile(userProfile);
-        if (userProfile.getProfileType().equals("admin") || userProfile.getProfileType().equals("manager") || userProfile.getProfileType().equals("owner")) {
+        if (userProfile.getProfileType().equals("admin")   ||
+            userProfile.getProfileType().equals("manager") ||
+            userProfile.getProfileType().equals("owner")) {
             userAccount.setRole("non-staff");
         } else {
             userAccount.setRole("un-assign");
@@ -112,16 +114,16 @@ public class UserAccount {
     }
 
     // update user account
-    public void updateUserAccount(String username,
+    public void updateUserAccount(String oldUsername,
                                   String newUsername,
                                   String newName,
                                   String newPassword,
                                   String newEmail) {
 
         UserAccountRepository userAccountRepository = GetRepository.UserAccount();
-        UserAccount userAccount = userAccountRepository.findByUsername(username);
+        UserAccount userAccount = userAccountRepository.findByUsername(oldUsername);
 
-        if (newUsername.equals(username) &&
+        if (newUsername.equals(oldUsername) &&
                 newName.equals(userAccount.getName()) &&
                 newPassword.equals(userAccount.getPassword()) &&
                 newEmail.equals(userAccount.getEmail())) {
