@@ -57,46 +57,46 @@ const CreateWorkSlot = () => {
 
 	return (
 		<Center>
-			<Container maxW='container.xl'>
-				<Heading as='h1' size='xl' mt={8} mb={4}>
+			<Container maxW="container.xl">
+				<Heading as="h1" size="xl" mt={8} mb={4}>
 					Create Work Slot
 				</Heading>
-				<Box w='300px'>
+				<Box w="300px">
 					<FormControl mt={4}>
 						<FormLabel>Shift</FormLabel>
 						<Select
-							placeholder='Select Shift'
-							bg='white'
-							color='black'
+							placeholder="Select Shift"
+							bg="white"
+							color="black"
 							value={shift}
 							onChange={(e) => setShift(e.target.value)}
 						>
-							<option value='morning'>morning</option>
-							<option value='afternoon'>afternoon</option>
+							<option value="morning">morning</option>
+							<option value="afternoon">afternoon</option>
 						</Select>
 					</FormControl>
 
 					<FormControl mt={4}>
 						<FormLabel>Role</FormLabel>
 						<Select
-							placeholder='Select Role'
-							bg='white'
-							color='black'
+							placeholder="Select Role"
+							bg="white"
+							color="black"
 							value={role}
 							onChange={(e) => setRole(e.target.value)}
 						>
-							<option value='waiter'>waiter</option>
-							<option value='cashier'>cashier</option>
-							<option value='chef'>chef</option>
+							<option value="waiter">waiter</option>
+							<option value="cashier">cashier</option>
+							<option value="chef">chef</option>
 						</Select>
 					</FormControl>
 
 					<FormControl mt={4}>
 						<FormLabel>Date</FormLabel>
 						<Input
-							bg='white'
-							color='black'
-							type='date'
+							bg="white"
+							color="black"
+							type="date"
 							value={date}
 							onChange={(e) => setDate(e.target.value)}
 						/>
@@ -106,9 +106,9 @@ const CreateWorkSlot = () => {
 						Create Work Slot
 					</Button>
 					<Text
-						pt='2'
-						pb='2'
-						textAlign='center'
+						pt="2"
+						pb="2"
+						textAlign="center"
 						color={message === 'Work Slot created!' ? 'green.500' : 'red.500'}
 					>
 						{message}

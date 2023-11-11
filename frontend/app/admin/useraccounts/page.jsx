@@ -98,62 +98,62 @@ const UserAccounts = () => {
 	};
 	return (
 		<Center>
-			<Container maxW='container.xl'>
-				<Flex justifyContent='space-between'>
-					<Heading as='h1' size='xl' mt={8} mb={4}>
+			<Container maxW="container.xl">
+				<Flex justifyContent="space-between">
+					<Heading as="h1" size="xl" mt={8} mb={4}>
 						User Accounts
 					</Heading>
 
 					<Flex
-						direction='column'
-						align='center'
-						justifyContent='space-betwen'
-						pt='8'
+						direction="column"
+						align="center"
+						justifyContent="space-betwen"
+						pt="8"
 					>
 						<Text
-							pt='2'
-							pb='2'
-							textAlign='center'
+							pt="2"
+							pb="2"
+							textAlign="center"
 							color={message === 'Account Suspended!' ? 'green.500' : 'red.500'}
 						>
 							{message}
 						</Text>
 					</Flex>
 
-					<Flex justifyContent='space-evenly' align='center' maxW='600' pt='5'>
+					<Flex justifyContent="space-evenly" align="center" maxW="600" pt="5">
 						<InputGroup>
 							<Input
-								id='search'
-								w='50'
-								type='text'
-								placeholder='Search by Name'
+								id="search"
+								w="50"
+								type="text"
+								placeholder="Search by Name"
 								value={searchTerm}
 								onChange={(e) => setSearchTerm(e.target.value)}
 							/>
-							<InputRightElement h='auto'>
-								<Button size='md' onClick={() => setSearchTerm('')}>
+							<InputRightElement h="auto">
+								<Button size="md" onClick={() => setSearchTerm('')}>
 									{<CloseIcon />}
 								</Button>
 							</InputRightElement>
 						</InputGroup>
 
-						<Button ml='2' onClick={handleSearchAccount} value={searchTerm}>
+						<Button ml="2" onClick={handleSearchAccount} value={searchTerm}>
 							Search
 						</Button>
 					</Flex>
 				</Flex>
 
 				{userAccount.length > 0 && (
-					<Box overflowY='auto'>
-						<Table variant='simple'>
+					<Box overflowY="auto">
+						<Table variant="simple">
 							<Thead>
 								<Tr>
-									<Th color='white'>Username</Th>
-									<Th color='white'>Name</Th>
-									<Th color='white'>Email</Th>
-									<Th color='white'>Job Title</Th>
-									<Th color='white'>Update</Th>
-									<Th color='white'>Suspend</Th>
+									<Th color="white">Username</Th>
+									<Th color="white">Name</Th>
+									<Th color="white">Email</Th>
+									<Th color="white">Job Title</Th>
+									<Th color="white">Update</Th>
+									<Th color="white">Suspend</Th>
 								</Tr>
 							</Thead>
 							<Tbody>
@@ -166,9 +166,11 @@ const UserAccounts = () => {
 											<Td>{user.email}</Td>
 											<Td>{user.userProfile.jobTitle}</Td>
 											<Td>
-												<Link href={`UserAccounts/UpdateUserAccount/${user.username}`}>
+												<Link
+													href={`UserAccounts/UpdateUserAccount/${user.username}`}
+												>
 													<Button
-														size='sm'
+														size="sm"
 														onClick={() => (
 															localStorage.setItem(
 																'oldUsername',
@@ -192,8 +194,8 @@ const UserAccounts = () => {
 											</Td>
 											<Td>
 												<Button
-													size='sm'
-													colorScheme='red'
+													size="sm"
+													colorScheme="red"
 													onClick={() => handleSuspendAccount(user.username)}
 												>
 													Suspend

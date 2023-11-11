@@ -72,22 +72,22 @@ const SelectStaffRole = () => {
 
 	return (
 		<Center>
-			<Container maxW='container.xl'>
-				<Heading as='h1' size='xl' mt={8} mb={4}>
+			<Container maxW="container.xl">
+				<Heading as="h1" size="xl" mt={8} mb={4}>
 					Select Role to Book Work Slot
 				</Heading>
-				<Box w='300px'>
+				<Box w="300px">
 					<FormControl mt={4}>
 						<FormLabel>Role</FormLabel>
 						<Select
-							placeholder='Select Role'
-							bg='white'
-							color='black'
+							placeholder="Select Role"
+							bg="white"
+							color="black"
 							onChange={(e) => setRole(e.target.value)}
 						>
-							<option value='waiter'>waiter</option>
-							<option value='cashier'>cashier</option>
-							<option value='chef'>chef</option>
+							<option value="waiter">waiter</option>
+							<option value="cashier">cashier</option>
+							<option value="chef">chef</option>
 						</Select>
 					</FormControl>
 
@@ -95,9 +95,9 @@ const SelectStaffRole = () => {
 						Select
 					</Button>
 					<Text
-						pt='2'
-						pb='2'
-						textAlign='center'
+						pt="2"
+						pb="2"
+						textAlign="center"
 						color={message === 'Role Selected!' ? 'green.500' : 'red.500'}
 					>
 						{message}

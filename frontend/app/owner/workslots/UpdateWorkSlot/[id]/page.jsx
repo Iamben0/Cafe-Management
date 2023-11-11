@@ -81,18 +81,18 @@ const UpdateWorkSlot = () => {
 
 	return (
 		<Center>
-			<Container maxW='container.xl'>
-				<Heading as='h1' size='xl' mt={8} mb={4}>
+			<Container maxW="container.xl">
+				<Heading as="h1" size="xl" mt={8} mb={4}>
 					Update Work Slot
 				</Heading>
-				<Box w='300px'>
+				<Box w="300px">
 					<FormControl mt={4}>
 						<FormLabel>Date</FormLabel>
 						<Input
-							placeholder='dd/mm/yyyy'
-							bg='white'
-							color='black'
-							type='date'
+							placeholder="dd/mm/yyyy"
+							bg="white"
+							color="black"
+							type="date"
 							value={newDate}
 							onChange={(e) => setNewDate(e.target.value)}
 						/>
@@ -101,32 +101,32 @@ const UpdateWorkSlot = () => {
 					<FormControl mt={4}>
 						<FormLabel>Shift</FormLabel>
 						<Select
-							bg='white'
-							color='black'
+							bg="white"
+							color="black"
 							value={newShift}
 							onChange={(e) => setNewShift(e.target.value)}
 						>
-							<option value='morning'>morning</option>
-							<option value='afternoon'>afternoon</option>
+							<option value="morning">morning</option>
+							<option value="afternoon">afternoon</option>
 						</Select>
 						<Flex>
 							<Button
-								colorScheme='blue'
+								colorScheme="blue"
 								mt={4}
 								mr={4}
 								onClick={handleUpdateWorkSlot}
 							>
 								Update
 							</Button>
-							<Button colorScheme='red' mt={4} mr={4} onClick={handleGoBack}>
+							<Button colorScheme="red" mt={4} mr={4} onClick={handleGoBack}>
 								Cancel
 							</Button>
 						</Flex>
 
 						<Text
-							pt='2'
-							pb='2'
-							textAlign='center'
+							pt="2"
+							pb="2"
+							textAlign="center"
 							color={message === 'Work Slot Updated!' ? 'green.500' : 'red.500'}
 						>
 							{message}

@@ -52,34 +52,34 @@ const CreateUserProfile = () => {
 
 	return (
 		<Center>
-			<Container maxW='container.xl'>
-				<Heading as='h1' size='xl' mt={8} mb={4}>
+			<Container maxW="container.xl">
+				<Heading as="h1" size="xl" mt={8} mb={4}>
 					Create User Profile
 				</Heading>
-				<Box w='300px'>
+				<Box w="300px">
 					<FormControl mt={4}>
 						<FormLabel>Profile Type</FormLabel>
 						<Select
 							value={profileType}
-							placeholder='Select Profile Type'
-							bg='white'
-							color='black'
+							placeholder="Select Profile Type"
+							bg="white"
+							color="black"
 							onChange={(e) => setProfileType(e.target.value)}
 						>
-							<option value='staff'>staff</option>
-							<option value='owner'>owner</option>
-							<option value='manager'>manager</option>
-							<option value='admin'>admin</option>
+							<option value="staff">staff</option>
+							<option value="owner">owner</option>
+							<option value="manager">manager</option>
+							<option value="admin">admin</option>
 						</Select>
 					</FormControl>
 
 					<FormControl mt={4}>
 						<FormLabel>Job Title</FormLabel>
 						<Input
-							placeholder='Job Ttile'
-							bg='white'
-							color='black'
-							type='text'
+							placeholder="Job Ttile"
+							bg="white"
+							color="black"
+							type="text"
 							value={jobTitle}
 							onChange={(e) => setJobTitle(e.target.value)}
 						/>
@@ -89,9 +89,9 @@ const CreateUserProfile = () => {
 						Create User Profile
 					</Button>
 					<Text
-						pt='2'
-						pb='2'
-						textAlign='center'
+						pt="2"
+						pb="2"
+						textAlign="center"
 						color={
 							message === 'User Profile created!' ? 'green.500' : 'red.500'
 						}

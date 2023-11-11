@@ -99,22 +99,22 @@ const ViewApprovedBidWorkSlot = () => {
 
 	return (
 		<Center>
-			<Container maxW='container.xl'>
-				<Flex justifyContent='space-between'>
-					<Heading as='h1' size='xl' mt={8} mb={4}>
+			<Container maxW="container.xl">
+				<Flex justifyContent="space-between">
+					<Heading as="h1" size="xl" mt={8} mb={4}>
 						My Work Slots
 					</Heading>
 
 					<Flex
-						direction='column'
-						align='center'
-						justifyContent='space-betwen'
-						pt='8'
+						direction="column"
+						align="center"
+						justifyContent="space-betwen"
+						pt="8"
 					>
 						<Text
-							pt='2'
-							pb='2'
-							textAlign='center'
+							pt="2"
+							pb="2"
+							textAlign="center"
 							color={
 								message === 'Cancelled Successfully!' ? 'green.500' : 'red.500'
 							}
@@ -123,25 +123,25 @@ const ViewApprovedBidWorkSlot = () => {
 						</Text>
 					</Flex>
 
-					<Flex justifyContent='space-evenly' align='center' maxW='600' pt='5'>
+					<Flex justifyContent="space-evenly" align="center" maxW="600" pt="5">
 						<InputGroup>
 							<Input
-								id='search'
-								w='50'
-								type='text'
-								placeholder='Search by Shift'
+								id="search"
+								w="50"
+								type="text"
+								placeholder="Search by Shift"
 								value={searchTerm}
 								onChange={(e) => setSearchTerm(e.target.value)}
 							/>
-							<InputRightElement h='auto'>
-								<Button size='md' onClick={() => setSearchTerm('')}>
+							<InputRightElement h="auto">
+								<Button size="md" onClick={() => setSearchTerm('')}>
 									{<CloseIcon />}
 								</Button>
 							</InputRightElement>
 						</InputGroup>
 
 						<Button
-							ml='2'
+							ml="2"
 							onClick={handleSearchApprovedBidWS}
 							value={searchTerm}
 						>
@@ -151,14 +151,14 @@ const ViewApprovedBidWorkSlot = () => {
 				</Flex>
 
 				{approvedBidWS.length > 0 && (
-					<Box overflowY='auto'>
-						<Table variant='simple'>
+					<Box overflowY="auto">
+						<Table variant="simple">
 							<Thead>
 								<Tr>
-									<Th color='white'>Role</Th>
-									<Th color='white'>Date</Th>
-									<Th color='white'>Shift</Th>
-									<Th color='white'>Cancel</Th>
+									<Th color="white">Role</Th>
+									<Th color="white">Date</Th>
+									<Th color="white">Shift</Th>
+									<Th color="white">Cancel</Th>
 								</Tr>
 							</Thead>
 							<Tbody>
@@ -169,8 +169,8 @@ const ViewApprovedBidWorkSlot = () => {
 										<Td>{bid.shift}</Td>
 										<Td>
 											<Button
-												size='sm'
-												colorScheme='red'
+												size="sm"
+												colorScheme="red"
 												onClick={() => handleCancelApprovedBidWS(bid.bidId)}
 											>
 												Cancel

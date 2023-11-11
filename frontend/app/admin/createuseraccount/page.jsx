@@ -80,18 +80,18 @@ const CreateUserAccount = () => {
 
 	return (
 		<Center>
-			<Container maxW='container.xl'>
-				<Heading as='h1' size='xl' mt={8} mb={4}>
+			<Container maxW="container.xl">
+				<Heading as="h1" size="xl" mt={8} mb={4}>
 					Create User Account
 				</Heading>
-				<Box w='300px'>
+				<Box w="300px">
 					<FormControl mt={4}>
 						<FormLabel>Username</FormLabel>
 						<Input
-							placeholder='Username'
-							bg='white'
-							color='black'
-							type='text'
+							placeholder="Username"
+							bg="white"
+							color="black"
+							type="text"
 							value={username}
 							onChange={(e) => setUsername(e.target.value)}
 						/>
@@ -100,10 +100,10 @@ const CreateUserAccount = () => {
 					<FormControl mt={4}>
 						<FormLabel>Name</FormLabel>
 						<Input
-							placeholder='Name'
-							bg='white'
-							color='black'
-							type='text'
+							placeholder="Name"
+							bg="white"
+							color="black"
+							type="text"
 							value={name}
 							onChange={(e) => setName(e.target.value)}
 						/>
@@ -112,10 +112,10 @@ const CreateUserAccount = () => {
 					<FormControl mt={4}>
 						<FormLabel>Password</FormLabel>
 						<Input
-							placeholder='Password'
-							bg='white'
-							color='black'
-							type='password'
+							placeholder="Password"
+							bg="white"
+							color="black"
+							type="password"
 							value={password}
 							onChange={(e) => setPassword(e.target.value)}
 						/>
@@ -124,10 +124,10 @@ const CreateUserAccount = () => {
 					<FormControl mt={4}>
 						<FormLabel>Email</FormLabel>
 						<Input
-							placeholder='Email'
-							bg='white'
-							color='black'
-							type='text'
+							placeholder="Email"
+							bg="white"
+							color="black"
+							type="text"
 							value={email}
 							onChange={(e) => setEmail(e.target.value)}
 						/>
@@ -137,9 +137,9 @@ const CreateUserAccount = () => {
 						<FormLabel>Job Title</FormLabel>
 						<Select
 							value={jobTitle}
-							placeholder='Select Job Title'
-							bg='white'
-							color='black'
+							placeholder="Select Job Title"
+							bg="white"
+							color="black"
 							onChange={(e) => setJobTitle(e.target.value)}
 						>
 							{userProfile
@@ -156,9 +156,9 @@ const CreateUserAccount = () => {
 						Create User Account
 					</Button>
 					<Text
-						pt='2'
-						pb='2'
-						textAlign='center'
+						pt="2"
+						pb="2"
+						textAlign="center"
 						color={
 							message === 'User Account created!' ? 'green.500' : 'red.500'
 						}

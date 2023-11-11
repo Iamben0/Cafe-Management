@@ -45,22 +45,22 @@ const ViewBidResult = () => {
 
 	return (
 		<Center>
-			<Container maxW='container.xl'>
-				<Flex justifyContent='space-between'>
-					<Heading as='h1' size='xl' mt={8} mb={4}>
+			<Container maxW="container.xl">
+				<Flex justifyContent="space-between">
+					<Heading as="h1" size="xl" mt={8} mb={4}>
 						My Bid Result
 					</Heading>
 				</Flex>
 
 				{bidResult.length > 0 && (
-					<Box overflowY='auto'>
-						<Table variant='simple'>
+					<Box overflowY="auto">
+						<Table variant="simple">
 							<Thead>
 								<Tr>
-									<Th color='white'>Role</Th>
-									<Th color='white'>Date</Th>
-									<Th color='white'>Shift</Th>
-									<Th color='white'>Status</Th>
+									<Th color="white">Role</Th>
+									<Th color="white">Date</Th>
+									<Th color="white">Shift</Th>
+									<Th color="white">Status</Th>
 								</Tr>
 							</Thead>
 							<Tbody>

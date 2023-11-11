@@ -82,18 +82,18 @@ const UpdateUserAccount = () => {
 
 	return (
 		<Center>
-			<Container maxW='container.xl'>
-				<Heading as='h1' size='xl' mt={8} mb={4}>
+			<Container maxW="container.xl">
+				<Heading as="h1" size="xl" mt={8} mb={4}>
 					Update User Account
 				</Heading>
-				<Box w='300px'>
+				<Box w="300px">
 					<FormControl mt={4}>
 						<FormLabel>Username</FormLabel>
 						<Input
-							placeholder='Username'
-							bg='white'
-							color='black'
-							type='text'
+							placeholder="Username"
+							bg="white"
+							color="black"
+							type="text"
 							value={newUsername}
 							onChange={(e) => setNewUsername(e.target.value)}
 						/>
@@ -102,10 +102,10 @@ const UpdateUserAccount = () => {
 					<FormControl mt={4}>
 						<FormLabel>Name</FormLabel>
 						<Input
-							placeholder='Name'
-							bg='white'
-							color='black'
-							type='text'
+							placeholder="Name"
+							bg="white"
+							color="black"
+							type="text"
 							value={newName}
 							onChange={(e) => setNewName(e.target.value)}
 						/>
@@ -114,10 +114,10 @@ const UpdateUserAccount = () => {
 					<FormControl mt={4}>
 						<FormLabel>Password</FormLabel>
 						<Input
-							placeholder='Password'
-							bg='white'
-							color='black'
-							type='text'
+							placeholder="Password"
+							bg="white"
+							color="black"
+							type="text"
 							value={newPassword}
 							onChange={(e) => setNewPassword(e.target.value)}
 						/>
@@ -126,31 +126,31 @@ const UpdateUserAccount = () => {
 					<FormControl mt={4}>
 						<FormLabel>Email</FormLabel>
 						<Input
-							placeholder='Email'
-							bg='white'
-							color='black'
-							type='text'
+							placeholder="Email"
+							bg="white"
+							color="black"
+							type="text"
 							value={newEmail}
 							onChange={(e) => setNewEmail(e.target.value)}
 						/>
 						<Flex>
 							<Button
-								colorScheme='blue'
+								colorScheme="blue"
 								mt={4}
 								mr={4}
 								onClick={handleUpdateAccount}
 							>
 								Update
 							</Button>
-							<Button colorScheme='red' mt={4} mr={4} onClick={handleGoBack}>
+							<Button colorScheme="red" mt={4} mr={4} onClick={handleGoBack}>
 								Cancel
 							</Button>
 						</Flex>
 
 						<Text
-							pt='2'
-							pb='2'
-							textAlign='center'
+							pt="2"
+							pb="2"
+							textAlign="center"
 							color={message === 'Account Updated!' ? 'green.500' : 'red.500'}
 						>
 							{message}

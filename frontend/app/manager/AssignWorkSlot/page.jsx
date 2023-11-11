@@ -71,18 +71,18 @@ const AssignWorkSlotToStaff = () => {
 
 	return (
 		<Center>
-			<Container maxW='container.xl'>
-				<Heading as='h1' size='xl' mt={8} mb={4}>
+			<Container maxW="container.xl">
+				<Heading as="h1" size="xl" mt={8} mb={4}>
 					Assign Staff to Work Slot
 				</Heading>
-				<Box w='300px'>
+				<Box w="300px">
 					<FormControl mt={4}>
 						<FormLabel>Staff</FormLabel>
 						<Select
 							value={staffId}
-							placeholder='Select Staff'
-							bg='white'
-							color='black'
+							placeholder="Select Staff"
+							bg="white"
+							color="black"
 							onChange={(e) => setStaffId(e.target.value)}
 						>
 							{availableStaff
@@ -103,10 +103,10 @@ const AssignWorkSlotToStaff = () => {
 					<FormControl mt={4}>
 						<FormLabel>Work Slot</FormLabel>
 						<Input
-							placeholder='Work Slot ID'
-							bg='white'
-							color='black'
-							type='text'
+							placeholder="Work Slot ID"
+							bg="white"
+							color="black"
+							type="text"
 							value={workSlotId}
 							onChange={(e) => setWorkSlotId(e.target.value)}
 						/>
@@ -116,9 +116,9 @@ const AssignWorkSlotToStaff = () => {
 						Assign
 					</Button>
 					<Text
-						pt='2'
-						pb='2'
-						textAlign='center'
+						pt="2"
+						pb="2"
+						textAlign="center"
 						color={message === 'Work Slot Assigned!' ? 'green.500' : 'red.500'}
 					>
 						{message}

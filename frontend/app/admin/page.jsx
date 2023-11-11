@@ -29,23 +29,23 @@ const Admin = () => {
 	}, []);
 
 	return (
-		<Center h='100vh' flexDirection='column' justifyContent='flex-start'>
+		<Center h="100vh" flexDirection="column" justifyContent="flex-start">
 			{userAccount
 				.filter((user) => user.username === username)
 				.map((user) => (
 					<>
-						<Heading m='5'>Hello, {user.username}</Heading>
+						<Heading m="5">Hello, {user.username}</Heading>
 						<Container
-							maxW='container.sm'
-							p='4'
-							borderWidth='1px'
-							borderRadius='lg'
-							boxShadow='lg'
+							maxW="container.sm"
+							p="4"
+							borderWidth="1px"
+							borderRadius="lg"
+							boxShadow="lg"
 						>
 							<Flex
-								justifyContent='space-around'
-								flexDir='column'
-								align='center'
+								justifyContent="space-around"
+								flexDir="column"
+								align="center"
 							>
 								<FormLabel>User Name: {user.username}</FormLabel>
 								<FormLabel>Name: {user.name}</FormLabel>
