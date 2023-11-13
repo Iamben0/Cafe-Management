@@ -52,7 +52,7 @@ public class UserAccount {
     private String role;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_profile")
+    @JoinColumn(name = "user_profile_id")
     private UserProfile userProfile;
 
     // verify user account when logging in, after wards return the user account details
@@ -74,6 +74,7 @@ public class UserAccount {
         };
     }
 
+    // ------------------------ Admin --------------------------
     // create user account
     public void createUserAcct(String username, String name, String password, String email, String jobTitle) {
         UserProfileRepository userProfileRepository = GetRepository.UserProfile();
@@ -127,7 +128,7 @@ public class UserAccount {
                 newName.equals(userAccount.getName()) &&
                 newPassword.equals(userAccount.getPassword()) &&
                 newEmail.equals(userAccount.getEmail())) {
-            throw new RuntimeException("No changes detected");
+            throw new RuntimeException("No changes detected!");
         }
 
         userAccount.setUsername(newUsername);
@@ -158,24 +159,11 @@ public class UserAccount {
         return arrayNode.toString();
     }
 
-    public void selectRole(String username, String role) {
-        UserAccountRepository userAccountRepository = GetRepository.UserAccount();
-        UserAccount userAccount = userAccountRepository.findByUsername(username);
-
-        if (userAccount.getRole().equals("chef") || userAccount.getRole().equals("waiter") || userAccount.getRole().equals("cashier")) {
-            throw new RuntimeException("Role has been set, cannot be changed!");
-        }
-
-        userAccount.setRole(role);
-
-        userAccountRepository.save(userAccount);
-    }
-
     //------------------------ Manager --------------------------
     // check for the name of the user account who belongs to the role of chef, waiter, cashier,
     // if the bids are approved and work slot is assigned,
     // return those that are not assigned during the date
-    public String vewDayAvailableStaff(String date) {
+    public String viewDayAvailableStaff(String date) {
         List<UserAccount> userAccountList = GetRepository.UserAccount().findAll();
         BidRepository bidRepository = GetRepository.Bid();
 
@@ -268,4 +256,19 @@ public class UserAccount {
 
         return arrayNode.toString();
     }
+
+    // ------------------------ Staff --------------------------
+    public void selectRole(String username, String role) {
+        UserAccountRepository userAccountRepository = GetRepository.UserAccount();
+        UserAccount userAccount = userAccountRepository.findByUsername(username);
+
+        if (userAccount.getRole().equals("chef") || userAccount.getRole().equals("waiter") || userAccount.getRole().equals("cashier")) {
+            throw new RuntimeException("Role has been set, cannot be changed!");
+        }
+
+        userAccount.setRole(role);
+
+        userAccountRepository.save(userAccount);
+    }
 }
+

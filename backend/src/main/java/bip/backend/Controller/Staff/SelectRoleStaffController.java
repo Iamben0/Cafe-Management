@@ -19,7 +19,6 @@ public class SelectRoleStaffController {
                                              @RequestBody String json) {
         try {
             JsonNode jsonNode = objectMapper.readTree(json);
-
             new UserAccount().selectRole(
                     username,
                     jsonNode.get("role").asText()

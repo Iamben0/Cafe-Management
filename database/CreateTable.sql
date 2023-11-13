@@ -14,14 +14,15 @@ CREATE TABLE user_profile
 
 CREATE TABLE user_account
 (
-    id           SERIAL PRIMARY KEY,
-    username     VARCHAR(255) NOT NULL UNIQUE,
-    name         VARCHAR(255) NOT NULL,
-    password     VARCHAR(255) NOT NULL,
-    email        VARCHAR(255) NOT NULL,
-    active       BOOLEAN      NOT NULL DEFAULT TRUE,
-    role         VARCHAR(255) NOT NULL DEFAULT 'un-assign' CHECK (role IN ('un-assign', 'non-staff', 'chef', 'waiter', 'cashier')),
-    user_profile INTEGER REFERENCES user_profile (id)
+    id              SERIAL PRIMARY KEY                                                    ,
+    username        VARCHAR(255) NOT NULL UNIQUE                                          ,
+    name            VARCHAR(255) NOT NULL                                                 ,
+    password        VARCHAR(255) NOT NULL                                                 ,
+    email           VARCHAR(255) NOT NULL                                                 ,
+    active          BOOLEAN      NOT NULL DEFAULT TRUE                                    ,
+    role            VARCHAR(255) NOT NULL DEFAULT 'un-assign' CHECK (role IN ('un-assign' , 'non-staff' , 'chef' , 'waiter' , 'cashier')) ,
+    user_profile_id INTEGER REFERENCES user_profile (id)
+
 );
 
 CREATE TABLE work_slot

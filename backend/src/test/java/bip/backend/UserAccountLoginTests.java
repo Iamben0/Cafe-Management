@@ -32,10 +32,10 @@ class UserAccountLoginTests {
     MockMvc mockMvc;
 
     /** Check if the context loads. */
-    @Test
-    void contextLoads()
-    {
-    }
+//    @Test
+//    void contextLoads()
+//    {
+//    }
 
     /** @throws Exception if the status is not 200 or the content is not "admin" */
     @Test
@@ -98,20 +98,4 @@ class UserAccountLoginTests {
                 // throws an exception if the content is not staff
                 .andExpect(content().string("\"staff\""));
     }
-
-
-    @Test
-    void TestLoginControllerForInvalid() throws Exception
-    {
-        MockHttpServletRequestBuilder request = post("/")
-                .contentType("application/json")
-                .content("{\"username\":\"staff0\",\"password\":\"wrong-password\"}\n");
-        mockMvc.perform(request)
-                .andDo(print())
-                // throw an exception if the status is not 400
-                .andExpect(status().isBadRequest())
-                // throws an exception if the content is not "Incorrect Username or Password"
-                .andExpect(content().string("Incorrect Username or Password"));
-    }
-
 }

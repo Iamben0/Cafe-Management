@@ -120,10 +120,14 @@ public class Bid {
         bidRepository.delete(bid);
     }
 
-    public String retrieveApprovedBidWorkSlot(int staffId, String shift) throws JsonProcessingException {
+    public String retrieveApprovedBidWorkSlot(int staffId, String shift) {
         String list = viewApprovedBidWorkSlot(staffId);
         ArrayNode arrayNode = new ObjectMapper().createArrayNode();
-        arrayNode.addAll((ArrayNode) new ObjectMapper().readTree(list));
+        try {
+            arrayNode.addAll((ArrayNode) new ObjectMapper().readTree(list));
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
 
         if (shift.isBlank()) {
             return arrayNode.toString();
@@ -179,10 +183,14 @@ public class Bid {
         bidRepository.save(bid);
     }
 
-    public String retrievesStaffBid(String name) throws JsonProcessingException {
+    public String retrievesStaffBid(String name) {
         String list = viewStaffBid();
         ArrayNode arrayNode = new ObjectMapper().createArrayNode();
-        arrayNode.addAll((ArrayNode) new ObjectMapper().readTree(list));
+        try {
+            arrayNode.addAll((ArrayNode) new ObjectMapper().readTree(list));
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
 
         if (name.isBlank()) {
             return arrayNode.toString();

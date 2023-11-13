@@ -39,7 +39,7 @@ const SelectStaffRole = () => {
 		viewAccount();
 	}, []);
 
-	const handleUpdateAccount = async () => {
+	const handleSelectRole = async () => {
 		// Create a JSON object with the selected values and send it to the backend
 		try {
 			const updatedUserAccount = {
@@ -56,7 +56,6 @@ const SelectStaffRole = () => {
 				}
 			);
 			if (response.ok) {
-				console.log('Account Updated!');
 				const msg = await response.text();
 				localStorage.setItem('role', role);
 				setMessage(msg);
@@ -91,7 +90,7 @@ const SelectStaffRole = () => {
 						</Select>
 					</FormControl>
 
-					<Button mt={4} onClick={handleUpdateAccount}>
+					<Button mt={4} onClick={handleSelectRole}>
 						Select
 					</Button>
 					<Text

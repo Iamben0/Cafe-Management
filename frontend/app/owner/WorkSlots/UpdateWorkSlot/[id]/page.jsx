@@ -42,9 +42,9 @@ const UpdateWorkSlot = () => {
 		// create a JSON object with the selected values and send it to the backend
 		try {
 			const updatedWorkSlot = {
-				role: newRole,
-				shift: newShift,
-				date: newDate,
+				newRole: newRole,
+				newShift: newShift,
+				newDate: newDate,
 			};
 			console.log(updatedWorkSlot);
 			const response = await fetch(

@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/manager/view/day-available-staff/")
 public class ViewDayAvailableStaffController {
     @GetMapping("/{date}/")
-    public ResponseEntity<String> vewDayAvailableStaff(@PathVariable String date) {
+    public ResponseEntity<String> viewDayAvailableStaff(@PathVariable String date) {
         try {
-            return ResponseEntity.ok(new UserAccount().vewDayAvailableStaff(date));
+            return ResponseEntity.ok(new UserAccount().viewDayAvailableStaff(date));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

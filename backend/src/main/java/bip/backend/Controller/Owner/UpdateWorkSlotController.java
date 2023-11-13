@@ -19,8 +19,10 @@ public class UpdateWorkSlotController {
                                                  @RequestBody String json) {
         try {
             JsonNode jsonNode = objectMapper.readTree(json);
-            new WorkSlot().updateWorkSlot(id, jsonNode.get("shift").asText(),
-                    jsonNode.get("role").asText(), jsonNode.get("date").asText());
+            new WorkSlot().updateWorkSlot(id,
+                    jsonNode.get("newRole").asText(),
+                    jsonNode.get("newShift").asText(),
+                    jsonNode.get("newDate").asText());
             return ResponseEntity.ok("Work Slot Updated!");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());

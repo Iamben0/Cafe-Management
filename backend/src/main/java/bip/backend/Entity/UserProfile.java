@@ -87,7 +87,6 @@ public class UserProfile {
         userProfileRepository.save(userProfile);
     }
 
-
     // Search user profile by job title and return as json
     public String retrieveUserProfile(String jobTitle) {
         List<UserProfile> userProfileList;

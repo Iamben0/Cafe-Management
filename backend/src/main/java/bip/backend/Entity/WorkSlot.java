@@ -91,9 +91,10 @@ public class WorkSlot {
         return arrayNode.toString();
     }
 
-    public void updateWorkSlot(int id, String newShift, String newRole, String newDate) {
+    public void updateWorkSlot(int id, String newRole, String newShift, String newDate) {
         WorkSlotRepository workSlotRepository = GetRepository.WorkSlot();
-        WorkSlot workSlot = workSlotRepository.findById(id).orElseThrow(() -> new RuntimeException("Work Slot not found"));
+        WorkSlot workSlot = workSlotRepository.findById(id).orElse(null);
+        assert workSlot != null;
         if (newShift.equals(workSlot.getShift()) &&
                 newRole.equals(workSlot.getRole()) &&
                 newDate.equals(workSlot.getDate().toString())) {
@@ -122,10 +123,14 @@ public class WorkSlot {
         }
     }
 
-    public String retrieveWorkSlot(String shift) throws JsonProcessingException {
+    public String retrieveWorkSlot(String shift) {
         String list = viewWorkSlot();
         ArrayNode arrayNode = new ObjectMapper().createArrayNode();
-        arrayNode.addAll((ArrayNode) new ObjectMapper().readTree(list));
+        try {
+            arrayNode.addAll((ArrayNode) new ObjectMapper().readTree(list));
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
 
         if (shift.isBlank()) {
             return arrayNode.toString();
@@ -163,10 +168,14 @@ public class WorkSlot {
         return arrayNode.toString();
     }
 
-    public String retrieveWorkSlotToBid(String role, String shift) throws JsonProcessingException {
+    public String retrieveWorkSlotToBid(String role, String shift) {
         String list = viewWorkSlotToBid(role);
         ArrayNode arrayNode = new ObjectMapper().createArrayNode();
-        arrayNode.addAll((ArrayNode) new ObjectMapper().readTree(list));
+        try {
+            arrayNode.addAll((ArrayNode) new ObjectMapper().readTree(list));
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
 
         if (shift.isBlank()) {
             return arrayNode.toString();
