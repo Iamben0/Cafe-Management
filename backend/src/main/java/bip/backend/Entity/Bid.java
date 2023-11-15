@@ -47,11 +47,21 @@ public class Bid {
         WorkSlotRepository workSlotRepository = GetRepository.WorkSlot();
         WorkSlot workSlot = workSlotRepository.findById(workSlotId).orElse(null);
 
+        // if staff already has a max of 2 bids that is approved and the date has not passed, throw error
+        int approvedBidCount = 0;
         for (Bid bid : bidList) {
             assert workSlot != null;
-            if (bid.getWorkSlot().getDate().isEqual(workSlot.getDate()) &&
+            if (Objects.equals(bid.getStatus(), "approved") &&
+                    bid.getWorkSlot().getDate().isAfter(LocalDate.now())) {
+                approvedBidCount += 1;
+            }
+            if (approvedBidCount > 1) {
+                throw new RuntimeException("You are already working the max work slots: 2");
+            } else if (bid.getWorkSlot().getDate().isEqual(workSlot.getDate()) &&
                     bid.getWorkSlot().getShift().equals(workSlot.getShift())) {
                 throw new RuntimeException("You have already bid for this work slot");
+            } else if (bid.getWorkSlot().getDate().isEqual(workSlot.getDate())) {
+                throw new RuntimeException("You have already bid for a work slot on this date");
             }
         }
 
