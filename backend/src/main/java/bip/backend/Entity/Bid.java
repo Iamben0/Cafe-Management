@@ -47,7 +47,6 @@ public class Bid {
         WorkSlotRepository workSlotRepository = GetRepository.WorkSlot();
         WorkSlot workSlot = workSlotRepository.findById(workSlotId).orElse(null);
 
-        // if staff already has a max of 2 bids that is approved and the date has not passed, throw error
         int approvedBidCount = 0;
         for (Bid bid : bidList) {
             assert workSlot != null;
@@ -108,7 +107,8 @@ public class Bid {
 
         for (Bid bid : bidList) {
             if (Objects.equals(bid.getStatus(), "approved") &&
-                    bid.getWorkSlot().getDate().isAfter(LocalDate.now())) {
+                    // only show date now and in the future
+                    bid.getWorkSlot().getDate().isAfter(LocalDate.now().minusDays(1))) {
                 ObjectNode on = mapper.createObjectNode();
                 on.put("bidId", bid.getId());
                 on.put("role", bid.getWorkSlot().getRole());

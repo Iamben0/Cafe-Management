@@ -19,7 +19,7 @@ public class BidWorkSlotController {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
             JsonNode jsonNode = objectMapper.readTree(json);
-            new Bid().bidWorkSlot(workSlotId, Integer.parseInt(jsonNode.get("staff_id").asText()));
+            new Bid().bidWorkSlot(workSlotId, Integer.parseInt(jsonNode.get("staffId").asText()));
             return ResponseEntity.ok("Bid Work Slot!");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());

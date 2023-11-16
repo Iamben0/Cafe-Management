@@ -108,7 +108,7 @@ const BidWorkSlots = () => {
 	const handleBidWorkSlot = async (workslotId) => {
 		try {
 			const bidWorkSlot = {
-				staff_id: staffId,
+				staffId: staffId,
 			};
 			const response = await fetch(
 				`http://localhost:8080/api/staff/view/available-work-slots/bid/${workslotId}/`,
